@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "files.exclude": {
+      "client": true
+    },
+    "search.exclude": {
+      "client": true
+    },
+    "files.watcherExclude": {
+      "client": true
+    }
+  }
+}

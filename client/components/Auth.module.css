@@ -1,0 +1,42 @@
+.formWrapper {
+  padding: 0 15px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.formInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 75vw;
+}
+
+.formInner input {
+  margin: 0.3rem 0;
+  padding: 1rem;
+  width: 85%;
+  border: 2px solid #eeeeff;
+  outline-color: #999;
+  font-size: 1.8rem;
+  border-radius: 0.85em;
+}
+
+@media (max-width: 380px) {
+  .formInner input {
+    font-size: 1.5rem;
+  }
+}
+
+.formInner input[type='submit'] {
+  cursor: pointer;
+  background-color: transparent;
+  color: inherit;
+}
+
+.container {
+  color: #fff;
+  background-image: linear-gradient(to right, #fc5c7d, #6a82fb);
+}
