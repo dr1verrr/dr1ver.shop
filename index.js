@@ -131,7 +131,6 @@ app.post('/users/register', async (req, res) => {
       errors.push({ message: 'Password should be at least 6 characters long' })
     }
 
-    
     if (errors.length > 0) {
       res.render('register', { errors })
     } else {
@@ -144,7 +143,7 @@ app.post('/users/register', async (req, res) => {
 
         if (results.rows.length > 0) {
           errors.push({ message: 'Email already registered' })
-          res.render('register', { errors })
+          res.json(errors)
         } else {
           pool.query(
             `INSERT INTO users (username, email, password)
