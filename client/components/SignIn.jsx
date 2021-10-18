@@ -1,72 +1,70 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
+import axios from '../axios/config'
 import styles from './Auth.module.css'
 
 export default function SignIn() {
-  const emailRef = useRef()
-  const passwordRef = useRef()
-  const confirmPasswordRef = useRef()
-  const [isPasswordsEqual, setIsPasswordsEqual] = useState(true)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState([])
 
-  function signinHandler(e) {
-    const password = passwordRef.current.value
+  async function signinHandler(e) {
     e.preventDefault()
-    if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-      setIsPasswordsEqual(false)
-      setTimeout(() => {
-        setIsPasswordsEqual(true)
-      }, 3000)
+    try {
+      await axios.post('/users/login', { email, password }).then(res => setError(res.data))
+    } catch (err) {
+      console.error(err)
     }
-    console.log(password)
+
+    console.log(error)
+  }
+
+  function inputHandler(e, setState) {
+    if (e.target.id !== 'username') {
+      setState(e.target.value.replace(/ /g, '').trim())
+    }
   }
 
   return (
     <>
-      {!isPasswordsEqual && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            fontSize: '1.5rem',
-            textAlign: 'center',
-            backgroundColor: 'violet',
-            padding: '0.5rem',
-          }}
-        >
-          <span>passwords do not match</span>
-        </div>
-      )}
-
       <div className={styles.container}>
         <section className={styles.formWrapper}>
-          <form onSubmit={signinHandler} action='/users/signin' method='POST'>
+          {error &&
+            error.map(err => (
+              <div
+                key={Object.keys(error)}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <span style={{ fontSize: '3rem', padding: '2rem' }}>{err.message}</span>
+              </div>
+            ))}
+          <form onSubmit={signinHandler}>
             <div className={styles.formInner}>
               <input
                 type='email'
                 name='email'
                 id='email'
-                ref={emailRef}
+                value={email}
                 placeholder='Type your email address'
+                onChange={e => inputHandler(e, setEmail)}
                 required
               />
               <input
                 type='password'
                 name='password'
                 id='password'
-                ref={passwordRef}
                 placeholder='Type your password'
+                value={password}
+                onChange={e => inputHandler(e, setPassword)}
                 required
               />
-              <input
-                type='password'
-                name='confirmPassword'
-                id='confirmPassword'
-                ref={confirmPasswordRef}
-                placeholder='Confirm your password'
-                required
-              />
-              <input type='submit' value='Sign in' />
+              <input type='submit' value='Sign In' />
             </div>
           </form>
         </section>

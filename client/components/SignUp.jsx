@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './Auth.module.css'
 import axios from '../axios/config'
 
-export default function SignUp() {
-  const [isPasswordsEqual, setIsPasswordsEqual] = useState(true)
-  const [username, setUsername] = useState('')
+export default function Dashboard() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
@@ -12,48 +12,30 @@ export default function SignUp() {
 
   async function signupHandler(e) {
     e.preventDefault()
-    if (password !== passwordConfirm) {
-      return setIsPasswordsEqual(false)
-    }
-    setUsername(username.trim())
+    setFirstName(firstName.trim())
+    setLastName(lastName.trim())
 
     try {
       await axios
-        .post('/users/register', { username, email, password })
+        .post('/users/register', { firstName, lastName, email, password })
         .then(res => setError(res.data))
     } catch (err) {
-      console.err(err)
+      console.error(err)
     }
   }
 
   function inputHandler(e, setState) {
-    if (e.target.id !== 'username') {
+    if (e.target.name !== 'username') {
       setState(e.target.value.replace(/ /g, '').trim())
     }
 
-    if (e.target.id === 'username') {
+    if (e.target.name === 'username') {
       setState(e.target.value.replace(/ +(?= )/g, ''))
     }
   }
 
   return (
     <>
-      {!isPasswordsEqual && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            fontSize: '1.5rem',
-            textAlign: 'center',
-            backgroundColor: 'limegreen',
-            padding: '0.5rem',
-          }}
-        >
-          <span>passwords do not match</span>
-        </div>
-      )}
       <div className={styles.container}>
         <section className={styles.formWrapper}>
           {error.map(err => (
@@ -76,11 +58,20 @@ export default function SignUp() {
               <input
                 type='text'
                 name='username'
-                id='username'
-                placeholder='Type your username'
+                id='firstName'
+                placeholder='Type your First Name'
+                value={firstName}
+                onChange={e => inputHandler(e, setFirstName)}
                 required
-                value={username}
-                onChange={e => inputHandler(e, setUsername)}
+              />
+              <input
+                type='text'
+                name='username'
+                id='lastName'
+                placeholder='Type your Last Name'
+                value={lastName}
+                onChange={e => inputHandler(e, setLastName)}
+                required
               />
               <input
                 type='email'
@@ -88,8 +79,8 @@ export default function SignUp() {
                 id='email'
                 value={email}
                 placeholder='Type your email address'
-                required
                 onChange={e => inputHandler(e, setEmail)}
+                required
               />
               <input
                 type='password'
@@ -97,8 +88,8 @@ export default function SignUp() {
                 id='password'
                 placeholder='Type your password'
                 value={password}
-                required
                 onChange={e => inputHandler(e, setPassword)}
+                required
               />
               <input
                 type='password'
@@ -106,9 +97,10 @@ export default function SignUp() {
                 id='password2'
                 value={passwordConfirm}
                 placeholder='Confirm your password'
-                required
                 onChange={e => inputHandler(e, setPasswordConfirm)}
+                required
               />
+
               <input type='submit' value='Sign up' />
             </div>
           </form>
