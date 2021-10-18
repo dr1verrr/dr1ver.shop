@@ -8,7 +8,6 @@ export default function Dashboard() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [error, setError] = useState([])
 
   async function signupHandler(e) {
     e.preventDefault()
@@ -16,9 +15,7 @@ export default function Dashboard() {
     setLastName(lastName.trim())
 
     try {
-      await axios
-        .post('/users/register', { firstName, lastName, email, password })
-        .then(res => setError(res.data))
+      await axios.post('/users/signup', { firstName, lastName, email, password })
     } catch (err) {
       console.error(err)
     }
@@ -38,21 +35,6 @@ export default function Dashboard() {
     <>
       <div className={styles.container}>
         <section className={styles.formWrapper}>
-          {error.map(err => (
-            <div
-              key={Object.keys(error)}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <span style={{ fontSize: '3rem', padding: '2rem' }}>{err.message}</span>
-            </div>
-          ))}
           <form onSubmit={signupHandler}>
             <div className={styles.formInner}>
               <input

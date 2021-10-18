@@ -1,34 +1,22 @@
-require('dotenv').config()
-//const bcrypt = require('bcrypt')
-const express = require('express')
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const cors = require('cors')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const express = require('express')
 const app = express()
 const port = 5000
 const pool = require('./db').pool
-//const session = require('express-session')
-//const flash = require('express-flash')
-//const passport = require('passport')
 
-//const initializePassport = require('./passportConfig')
-
-//initializePassport(passport)
-
-//app.set('view engine', 'ejs')
-//middleware
-app.use(express.urlencoded({ extended: false }))
-//app.use(
-//  session({
-//    secret: 'secret',
-//    resave: false,
-//    saveUninitialized: false,
-//  })
-//)
-
-//app.use(passport.initialize())
-//app.use(passport.session())
-//app.use(flash())
-app.use(cors())
+//middlewares
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors({ origin: 'http://localhost:3000' }))
+
+app.get('/', async (req, res) => {
+  res.send('Hey yoh!')
+})
 
 //create a product
 
@@ -94,102 +82,118 @@ app.delete('/products/:id', async (req, res) => {
   }
 })
 
-//app.get('/users/register', checkAuthenticated, (req, res) => {
-//  res.render('register')
-//})
+//Registration Function
 
-//app.get('/users/login', checkAuthenticated, (req, res) => {
-//  res.render('login')
-//})
+app.post('/users/signup', async (req, res) => {
+  const { firstName, lastName, email, password } = req.body
+  try {
+    const data = await pool.query(`SELECT * FROM users WHERE email= $1;`, [email]) //Checking if user already exists
+    const arr = data.rows
+    if (arr.length !== 0) {
+      return res.status(400).json({
+        error: 'Email already there, No need to register again.',
+      })
+    } else {
+      bcrypt.hash(password, 10, (err, hash) => {
+        if (err)
+          res.status(err).json({
+            error: 'Server error',
+          })
+        const user = {
+          firstName,
+          lastName,
+          email,
+          password: hash,
+        }
+        let flag = 1
 
-//////////////////////////
-
-//app.get('/users/logout', async (req, res) => {
-//  req.logOut()
-//  req.flash('success_msg', 'You have logged out')
-//  res.redirect('/users/login')
-//})
-
-//app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-//  res.render('dashboard', { user: req.user.username })
-//})
-
-//app.post('/users/register', async (req, res) => {
-//  try {
-//    const { username, email, password } = req.body
-//    console.log({
-//      username,
-//      email,
-//      password,
-//    })
-
-//    const errors = []
-
-//    if (!username || !email || !password) {
-//      errors.push({ message: 'All fields are required' })
-//    }
-
-//    if (password.length < 6) {
-//      errors.push({ message: 'Password should be at least 6 characters long' })
-//    }
-
-//    if (errors.length > 0) {
-//      res.json({ errors })
-//    } else {
-//      const hashedPassword = await bcrypt.hash(password, 10)
-//      console.log(hashedPassword)
-
-//      pool.query(`SELECT * FROM users WHERE email = $1`, [email], (err, results) => {
-//        if (err) throw err
-//        console.log(results.rows)
-
-//        if (results.rows.length > 0) {
-//          errors.push({ message: 'Email already registered' })
-//          res.json(errors)
-//        } else {
-//          pool.query(
-//            `INSERT INTO users (username, email, password)
-//          VALUES ($1, $2, $3)
-//          RETURNING id, password`,
-//            [username, email, hashedPassword],
-//            (err, results) => {
-//              if (err) throw err
-//              console.log(results.rows)
-//              //req.flash('success_msg', 'You are now registered. Please log in')
-//              //res.redirect('/users/login')
-//            }
-//          )
-//        }
-//      })
-//    }
-//  } catch (err) {
-//    console.error(err)
-//  }
-//})
-
-//app.post(
-//  '/users/login',
-//  passport.authenticate('local', {
-//    successRedirect: '/users/dashboard',
-//    failureRedirect: '/users/login',
-//    failureFlash: true,
-//  })
-//)
-
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/users/dashboard')
+        pool.query(
+          `INSERT INTO users (firstname, lastname, email, password) VALUES ($1,$2,$3,$4);`,
+          [user.firstName, user.lastName, user.email, user.password],
+          err => {
+            if (err) {
+              flag = 0 //If user is not inserted is not inserted to database assigning flag as 0/false.
+              console.error(err)
+              return res.status(500).json({
+                error: 'Database error',
+              })
+            } else {
+              flag = 1
+              res.status(200).send({ message: 'User added to database, not verified' })
+            }
+          }
+        )
+        if (flag) {
+          const token = jwt.sign(
+            //Signing a jwt token
+            {
+              email: user.email,
+            },
+            process.env.PRIVATE_KEY
+          )
+          console.log(token)
+        }
+      })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      error: 'Database error while registring user!', //Database connection error
+    })
   }
-  next()
-}
+})
 
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
+//Login Function
+app.post('/users/signin', async (req, res) => {
+  const { email, password } = req.body
+  try {
+    const data = await pool.query(`SELECT * FROM users WHERE email= $1;`, [email])
+    const user = data.rows
+    if (user.length === 0) {
+      res.status(400).json({
+        error: 'User is not registered, Sign Up first',
+      })
+    } else {
+      console.log(user[0])
+      bcrypt.compare(password, user[0].password, (err, result) => {
+        //Comparing the hashed password
+        if (err) {
+          res.status(500).json({
+            error: 'Server error',
+          })
+        } else if (result) {
+          //Checking if credentials match
+          const token = jwt.sign(
+            {
+              email: email,
+            },
+            process.env.SECRET_KEY,
+            {
+              algorithm: 'RS256',
+              expiresIn: '3 days',
+            }
+          )
+          res.status(200).json({
+            message: 'User signed in!',
+            token: token,
+          })
+        } else {
+          //Declaring the errors
+          if (!result)
+            res.status(400).json({
+              error: 'Enter correct password!',
+            })
+        }
+      })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      error: 'Database error occurred while signing in!', //Database connection error
+    })
   }
-  res.redirect('/users/login')
-}
+})
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Here we go, Engines started at ${port}`)
 })
