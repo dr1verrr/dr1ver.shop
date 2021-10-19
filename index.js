@@ -5,12 +5,15 @@ const cors = require('cors')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
 const port = 5000
 const pool = require('./db').pool
+const loggedIn = require('./helpers/auth.middleware').loggedIn
 
 //middlewares
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: 'http://localhost:3000' }))
 
@@ -105,38 +108,23 @@ app.post('/users/signup', async (req, res) => {
           email,
           password: hash,
         }
-        let flag = 1
 
         pool.query(
           `INSERT INTO users (firstname, lastname, email, password) VALUES ($1,$2,$3,$4);`,
           [user.firstName, user.lastName, user.email, user.password],
           err => {
             if (err) {
-              flag = 0 //If user is not inserted is not inserted to database assigning flag as 0/false.
-              console.error(err)
               return res.status(500).json({
                 error: 'Database error',
               })
             } else {
-              flag = 1
               res.status(200).send({ message: 'User added to database, not verified' })
             }
           }
         )
-        if (flag) {
-          const token = jwt.sign(
-            //Signing a jwt token
-            {
-              email: user.email,
-            },
-            process.env.PRIVATE_KEY
-          )
-          console.log(token)
-        }
       })
     }
   } catch (err) {
-    console.log(err)
     res.status(500).json({
       error: 'Database error while registring user!', //Database connection error
     })
@@ -144,55 +132,52 @@ app.post('/users/signup', async (req, res) => {
 })
 
 //Login Function
-app.post('/users/signin', async (req, res) => {
-  const { email, password } = req.body
-  try {
-    const data = await pool.query(`SELECT * FROM users WHERE email= $1;`, [email])
-    const user = data.rows
-    if (user.length === 0) {
-      res.status(400).json({
-        error: 'User is not registered, Sign Up first',
-      })
-    } else {
-      console.log(user[0])
-      bcrypt.compare(password, user[0].password, (err, result) => {
-        //Comparing the hashed password
-        if (err) {
-          res.status(500).json({
-            error: 'Server error',
-          })
-        } else if (result) {
-          //Checking if credentials match
-          const token = jwt.sign(
-            {
-              email: email,
-            },
-            process.env.SECRET_KEY,
-            {
-              algorithm: 'RS256',
-              expiresIn: '3 days',
-            }
-          )
-          res.status(200).json({
-            message: 'User signed in!',
-            token: token,
-          })
-        } else {
-          //Declaring the errors
-          if (!result)
-            res.status(400).json({
-              error: 'Enter correct password!',
+
+app.post(
+  '/users/signin',
+  async (req, res) => {
+    const { email, password } = req.body
+    try {
+      const data = await pool.query(`SELECT * FROM users WHERE email= $1;`, [email])
+      const user = data.rows
+      if (user.length === 0) {
+        res.status(400).json({
+          error: 'User is not registered, Sign Up first',
+        })
+      } else {
+        bcrypt.compare(password, user[0].password, (err, result) => {
+          //Comparing the hashed password
+          if (err) {
+            res.status(500).json({
+              error: 'Server error',
             })
-        }
+          } else if (result) {
+            const token = jwt.sign(
+              { id: user.id, user_type_id: user.user_type_id },
+              process.env.TOKEN_SECRET
+            )
+            res.cookie('token', token, {
+              expires: new Date(Date.now() + 4500000), // time until expiration
+              secure: false, // set to true if your using https
+              httpOnly: true,
+            })
+            res.redirect('http://localhost:3000/users/dashboard')
+          } else {
+            if (!result)
+              res.status(401).json({
+                error: 'Enter correct password!',
+              })
+          }
+        })
+      }
+    } catch (err) {
+      res.status(500).json({
+        error: 'Database error occurred while signing in!', //Database connection error
       })
     }
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({
-      error: 'Database error occurred while signing in!', //Database connection error
-    })
-  }
-})
+  },
+  loggedIn
+)
 
 app.listen(port, () => {
   console.log(`Here we go, Engines started at ${port}`)

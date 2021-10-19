@@ -1,15 +1,17 @@
-CREATE DATABASE products;
+create database products;
 
-CREATE TABLE product (
-  product_id SERIAL PRIMARY KEY,
-  description VARCHAR(255)
+create table product (
+  product_id serial primary key,
+  description varchar(255)
 );
 
-CREATE TABLE users (
-   id SERIAL PRIMARY KEY,
-   firstName VARCHAR(255) NOT NULL,
-   lastName VARCHAR(255) NOT NULL,
-   email VARCHAR(255) NOT NULL UNIQUE,
-   phonenumber VARCHAR(255) UNIQUE,
-   password VARCHAR(255) NOT NULL
+create table users (
+   id serial primary key,
+   user_type_id numeric default 2 not null,
+   firstname varchar(255) not null,
+   lastname varchar(255) not null,
+   email varchar(255) not null unique,
+   phonenumber varchar(255) unique,
+   password varchar(255) not null,
+   createdAt timestamp
 );
