@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import axios from '../axios/config'
 import styles from './Auth.module.css'
-import Router from 'next/router'
 
 export default function SignIn() {
   const [email, setEmail] = useState('')

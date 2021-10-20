@@ -157,11 +157,12 @@ app.post(
               process.env.TOKEN_SECRET
             )
             res.cookie('token', token, {
-              expires: new Date(Date.now() + 4500000), // time until expiration
+              expires: new Date(Date.now() + 4500000 * 4), // time until expiration
               secure: false, // set to true if your using https
               httpOnly: true,
             })
-            res.redirect('http://localhost:3000/users/dashboard')
+
+            res.json(token)
           } else {
             if (!result)
               res.status(401).json({
