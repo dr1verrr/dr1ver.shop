@@ -9,7 +9,7 @@ export default function SignIn() {
   async function signinHandler(e) {
     e.preventDefault()
     try {
-      await axios.post('/users/signin', { email, password })
+      await axios.post('/api/auth/signin', { email, password }, { withCredentials: true })
     } catch (err) {
       console.error(err)
     }

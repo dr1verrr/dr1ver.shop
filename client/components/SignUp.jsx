@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import styles from './Auth.module.css'
+import React, { useState } from 'react'
 import axios from '../axios/config'
+import styles from './Auth.module.css'
 
 export default function Dashboard() {
   const [firstName, setFirstName] = useState('')
@@ -15,7 +15,7 @@ export default function Dashboard() {
     setLastName(lastName.trim())
 
     try {
-      await axios.post('/users/signup', { firstName, lastName, email, password })
+      await axios.post('/api/auth/signup', { firstName, lastName, email, password })
     } catch (err) {
       console.error(err)
     }

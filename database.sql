@@ -8,6 +8,7 @@ create table product (
 create table users (
    id serial primary key,
    user_type_id numeric default 2 not null,
+   session_id UUID,
    firstname varchar(255) not null,
    lastname varchar(255) not null,
    email varchar(255) not null unique,
