@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from '../axios/config'
 import styles from './Auth.module.css'
 
-export default function Dashboard() {
+export default function Register() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
