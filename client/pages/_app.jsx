@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }) {
     }
   }
 
-  if (isLoading) return <div style={{ fontSize: '5rem', textAlign: 'center' }}>Loading...</div>
+  if (isLoading) return null
 
   if (!isLoading && render) {
     return (
