@@ -1,14 +1,5 @@
 import Head from 'next/head'
 
-export const getServerSideProps = async ctx => {
-  const { req, res } = ctx
-  const { cookies } = req
-
-  const user = JSON.parse(cookies.user)
-
-  return { props: { user } }
-}
-
 export default function Home(req, res) {
   return (
     <>

@@ -71,7 +71,7 @@ exports.signin = async (req, res) => {
             error: 'Server error',
           })
         } else if (result) {
-          const sessionId = uuid(`${user.id + email}`, 'ad06a31b-0b41-4bff-8a49-55fd3e17bdf4')
+          const sessionId = uuid(`${user.id + email}`, process.env.SESS_NAMESPACE)
 
           pool.query(
             'UPDATE users SET session_id = $1 WHERE email = $2;',

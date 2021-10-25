@@ -1,5 +1,5 @@
-import SignUp from '../../components/SignUp'
+import Register from '../../components/Register'
 
-export default function signup(req, res) {
-  return <SignUp />
+export default function SignUp(req, res) {
+  return <Register />
 }

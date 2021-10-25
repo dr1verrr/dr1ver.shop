@@ -1,3 +1,4 @@
+import router from 'next/router'
 import React, { useState } from 'react'
 import axios from '../axios/config'
 import styles from './Auth.module.css'
@@ -10,6 +11,7 @@ export default function Login() {
     e.preventDefault()
     try {
       await axios.post('/api/auth/signin', { email, password }, { withCredentials: true })
+      router.push('/')
     } catch (err) {
       console.error(err)
     }

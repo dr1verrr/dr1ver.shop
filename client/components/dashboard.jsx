@@ -1,5 +1,5 @@
 import React from 'react'
 
-export default function dashboard() {
-  return <div>Welcome, user</div>
+export default function Dashboard() {
+  return <div style={{ fontSize: '5rem', textAlign: 'center' }}>Welcome, user</div>
 }
