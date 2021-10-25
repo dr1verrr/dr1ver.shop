@@ -29,14 +29,16 @@ function MyApp({ Component, pageProps }) {
     try {
       setLoading(true)
       const user = await axios.get('/api/auth').then(res => res.data.user)
-      const authRouteCondition = user && authRoutes.includes(router.pathname)
-      const privateRouteCondition = !user && privateRoutes.includes(router.pathname)
+      const authenticated = user && authRoutes.includes(router.pathname)
+      const notAuthenticated = !user && privateRoutes.includes(router.pathname)
 
-      if (authRouteCondition) {
-        router.replace('/').then(() => setRender(true))
+      if (authenticated) {
+        router.back('/').then(() => setRender(true))
       }
 
-      if (privateRouteCondition) {
+      if (!user && authRoutes.includes(router.pathname)) setRender(true)
+
+      if (notAuthenticated) {
         router.replace('/signin').then(() => setRender(true))
       }
       if (user && privateRoutes.includes(router.pathname)) {
