@@ -12,12 +12,9 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 
-//app.get('/', (req, res) => {
-//res.json({ message: 'Hello wrld' })
-//})
-
 require('./routes/auth.routes')(app)
 require('./routes/products.routes')(app)
+require('./routes/user.routes')(app)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)

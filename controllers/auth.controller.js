@@ -124,7 +124,7 @@ exports.logout = async (req, res) => {
           res.send(err)
         }
 
-        if (result) res.clearCookie('sid')
+        if (result) res.clearCookie('user')
       }
     )
   } catch (err) {

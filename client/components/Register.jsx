@@ -8,7 +8,6 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [count, setCount] = useState(0)
 
   async function signupHandler(e) {
     e.preventDefault()

@@ -1,11 +1,13 @@
+import { GET_USERNAME } from '../types'
+
 const initialState = {}
 
-export const rootReducer = (initialState, action) => {
+export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case '':
-      return
+      return action.payload
 
     default:
-      return
+      return state
   }
 }

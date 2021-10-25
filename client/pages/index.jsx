@@ -1,8 +1,17 @@
 import Head from 'next/head'
+import React from 'react'
+
+export async function getServerSideProps(ctx) {
+  const user = JSON.parse(ctx.req.cookies.user)
+
+  return {
+    props: { user: user },
+  }
+}
 
 export default function Home(req, res) {
   return (
-    <>
+    <React.Fragment>
       <Head>
         <meta charset='utf-8' />
         <title>Create Next App</title>
@@ -10,6 +19,6 @@ export default function Home(req, res) {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <span style={{ fontSize: '5rem' }}>Hello!</span>
-    </>
+    </React.Fragment>
   )
 }
