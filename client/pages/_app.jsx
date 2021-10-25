@@ -39,6 +39,9 @@ function MyApp({ Component, pageProps }) {
       if (privateRouteCondition) {
         router.replace('/signin').then(() => setRender(true))
       }
+      if (user && privateRoutes.includes(router.pathname)) {
+        setRender(true)
+      }
     } catch (err) {
       console.error(err)
     } finally {
