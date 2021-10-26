@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       const notAuthenticated = !user && privateRoutes.includes(router.pathname)
 
       if (authenticated) {
-        router.back('/').then(() => setRender(true))
+        router.back('/')
       }
 
       if (!user && authRoutes.includes(router.pathname)) setRender(true)
@@ -44,6 +44,8 @@ function MyApp({ Component, pageProps }) {
       if (user && privateRoutes.includes(router.pathname)) {
         setRender(true)
       }
+
+      if (user && !routeCondition) setRender(true)
     } catch (err) {
       console.error(err)
     } finally {
