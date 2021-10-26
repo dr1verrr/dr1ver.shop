@@ -6,7 +6,7 @@ exports.signup = async (req, res) => {
   const { firstName, lastName, email, password } = req.body
 
   try {
-    const data = await pool.query(`SELECT * FROM users WHERE email = $1;`, [email]) //Checking if user already exists
+    const data = await pool.query(`SELECT * FROM users WHERE email = $1;`, [email])
     const arr = data.rows
 
     if (arr.length !== 0) {
@@ -26,9 +26,11 @@ exports.signup = async (req, res) => {
           password: hash,
         }
 
+        const timeCreated = new Date(Date.now())
+
         pool.query(
-          `INSERT INTO users (firstname, lastname, email, password) VALUES ($1,$2,$3,$4);`,
-          [user.firstName, user.lastName, user.email, user.password],
+          `INSERT INTO users (firstname, lastname, email, password, createdat) VALUES ($1,$2,$3,$4,$5);`,
+          [user.firstName, user.lastName, user.email, user.password, timeCreated],
           err => {
             if (err) {
               return res.status(500).json({
@@ -43,7 +45,7 @@ exports.signup = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      error: 'Database error while registring user!', //Database connection error
+      error: 'Database error while registring user!',
     })
   }
 }
@@ -53,11 +55,10 @@ exports.signin = async (req, res) => {
 
   try {
     const data = await pool.query(
-      `SELECT id, user_type_id, password FROM users WHERE email = $1;`,
+      `SELECT id, user_type_id, password, firstname, lastname, createdat FROM users WHERE email = $1;`,
       [email]
     )
     const user = data.rows[0]
-    console.log(user)
 
     if (!user) {
       res.status(400).json({
@@ -65,13 +66,15 @@ exports.signin = async (req, res) => {
       })
     } else {
       bcrypt.compare(password, user.password, (err, result) => {
-        //Comparing the hashed password
         if (err) {
           res.status(500).json({
             error: 'Server error',
           })
         } else if (result) {
-          const sessionId = uuid(`${user.id + email}`, process.env.SESS_NAMESPACE)
+          const sessionId = uuid(
+            `${user.id + email + Date.now() + Math.random()}`,
+            process.env.SESS_NAMESPACE
+          )
 
           pool.query(
             'UPDATE users SET session_id = $1 WHERE email = $2;',
@@ -85,11 +88,20 @@ exports.signin = async (req, res) => {
               if (result) {
                 res.cookie(
                   'user',
-                  JSON.stringify({ id: user.id, email, sessionId, userTypeId: user.user_type_id }),
+                  JSON.stringify({
+                    id: user.id,
+                    email,
+                    sessionId,
+                    userTypeId: user.user_type_id,
+                    firstName: user.firstname,
+                    lastName: user.lastname,
+                    timeCreated: user.createdat,
+                    signedIn: new Date(Date.now()),
+                  }),
                   {
                     httpOnly: true,
-                    secure: false,
-                    expires: new Date(Date.now() + 60 * 24 * 3600000),
+                    secure: process.env.NODE_ENV === 'production',
+                    expires: new Date(Date.now() + 60 * 24 * 7200),
                   }
                 )
                 res.send({ id: user.id, email, sessionId, userTypeId: user.user_type_id })
@@ -106,13 +118,15 @@ exports.signin = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      error: 'Database error occurred while signing in!', //Database connection error
+      error: 'Database error occurred while signing in!',
     })
   }
 }
 
 exports.logout = async (req, res) => {
-  const { sessionId, email } = req.cookies.user
+  const cookies = req.cookies
+  const user = JSON.parse(cookies.user)
+  const { sessionId, email } = user
 
   try {
     pool.query(

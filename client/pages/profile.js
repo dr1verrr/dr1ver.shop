@@ -1,10 +1,9 @@
-import axios from '../axios/config'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Dashboard from '../components/Dashboard'
 
 export async function getServerSideProps(ctx) {
-  const user = ctx.req.cookies.user
-  if (user) JSON.parse(user)
+  const cookies = ctx.req.cookies
+  const user = cookies.user && JSON.parse(cookies.user)
 
   return {
     props: { user: user || null },
@@ -12,17 +11,6 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Profile(req, res) {
-  const [userData, setUserData] = useState({})
-  useEffect(
-    () =>
-      req.user &&
-      axios.get('/api/user', { withCredentials: true }).then(result => setUserData(result.data)),
-    [req.user]
-  )
-
-  useEffect(() => {
-    console.log(userData)
-  }, [userData])
-
+  const [userData, setUserData] = useState(req.user)
   return userData ? <Dashboard userData={userData} /> : null
 }
