@@ -1,7 +1,7 @@
 export default function handler(req, res) {
   try {
-    const user = req.cookies.user
-    if (user) JSON.parse(user)
+    const cookies = req.cookies
+    const user = cookies.user && JSON.parse(cookies.user)
 
     res.json({ user: user || null })
   } catch (err) {

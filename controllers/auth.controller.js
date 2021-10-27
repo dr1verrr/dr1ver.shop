@@ -124,23 +124,24 @@ exports.signin = async (req, res) => {
 }
 
 exports.logout = async (req, res) => {
-  const cookies = req.cookies
-  const user = JSON.parse(cookies.user)
-  const { sessionId, email } = user
+  const user = req.cookies.user
+  const parsed = user && JSON.parse(user)
+
+  console.log(parsed)
 
   try {
     pool.query(
-      'UPDATE users SET session_id = $1 WHERE email = $2, session_id = $3;',
-      [null, email, sessionId],
+      'UPDATE users SET session_id = $1 WHERE email = $2 AND session_id = $3;',
+      [null, parsed.email, parsed.sessionId],
       (err, result) => {
         if (err) {
           console.error(err)
           res.send(err)
         }
-
-        if (result) res.clearCookie('user')
       }
     )
+    res.clearCookie('user')
+    return res.sendStatus(200)
   } catch (err) {
     console.error(err)
     res.send(err)
