@@ -1,0 +1,23 @@
+.header {
+  background: #333;
+  padding: 1rem;
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
+
+.navbarList {
+  font-size: 2.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  list-style: none;
+}
+
+.navbarList li {
+  margin: 0 1rem;
+}
+
+.navbarList :first-child {
+  margin-left: 0;
+}
