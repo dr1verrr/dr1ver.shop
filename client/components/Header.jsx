@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
 import React from 'react'
 import styles from './Header.module.css'
+import Image from 'next/image'
 
 export default function Header({ isAuthenticated }) {
   const { navbarList, header } = styles
@@ -10,7 +12,9 @@ export default function Header({ isAuthenticated }) {
       <nav className='navbar'>
         <ul className={navbarList}>
           <li>
-            <Link href='/'>Home</Link>
+            <Link href='/' passHref={true}>
+              <img src='/logo.svg' alt='logo' style={{ cursor: 'pointer' }} />
+            </Link>
           </li>
           <li>
             <Link href='/profile'>Profile</Link>
@@ -18,16 +22,34 @@ export default function Header({ isAuthenticated }) {
           <li style={{ flex: 1 }}>
             <Link href='/contacts'>Contacts</Link>
           </li>
-          {isAuthenticated && (
-            <React.Fragment>
-              <li>
-                <Link href='/signin'>Sign in</Link>
-              </li>
-              <li>
-                <Link href='/signup'>Sign up</Link>
-              </li>
-            </React.Fragment>
-          )}
+          <React.Fragment>
+            <li>
+              <Link href='/signin'>
+                <a
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid #fff',
+                    borderRadius: '1rem',
+                  }}
+                >
+                  Sign in
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href='/signup'>
+                <a
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid #fff',
+                    borderRadius: '1rem',
+                  }}
+                >
+                  Sign up
+                </a>
+              </Link>
+            </li>
+          </React.Fragment>
         </ul>
       </nav>
     </header>

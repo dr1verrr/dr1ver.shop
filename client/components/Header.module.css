@@ -1,9 +1,9 @@
 .header {
   background: #333;
-  padding: 1rem;
   color: #fff;
   position: sticky;
   top: 0;
+  padding: 1.5rem;
 }
 
 .navbarList {
