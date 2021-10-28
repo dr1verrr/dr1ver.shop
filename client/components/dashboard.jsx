@@ -1,16 +1,9 @@
-import { useRouter } from 'next/router'
 import React from 'react'
-import axios from '../axios/config'
+import { useAuth } from '../contexts/Auth.context'
 
-export default function Dashboard({ userData }) {
-  const { firstName, lastName, signedIn, timeCreated, email, sessionId, userTypeId, id } = userData
-  const router = useRouter()
-
-  async function logout() {
-    await axios
-      .delete('/api/auth/logout', { withCredentials: true })
-      .then(() => router.push('/signin'))
-  }
+export default function Dashboard({ auth }) {
+  const { firstName, lastName, signedIn, timeCreated, email, sessionId, userTypeId, id } = auth.user
+  const { logout } = useAuth()
 
   return (
     <div

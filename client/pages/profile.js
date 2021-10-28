@@ -1,16 +1,10 @@
-import { useState } from 'react'
 import Dashboard from '../components/Dashboard'
-
-export async function getServerSideProps(ctx) {
-  const cookies = ctx.req.cookies
-  const user = cookies.user && JSON.parse(cookies.user)
-
-  return {
-    props: { user: user || null },
-  }
-}
+import { useAuth } from '../contexts/Auth.context'
 
 export default function Profile(req, res) {
-  const [userData, setUserData] = useState(req.user)
-  return userData ? <Dashboard userData={userData} /> : null
+  const { auth } = useAuth()
+  console.log(auth)
+
+  if (auth.status === 'SIGNED_OUT') return <div>User not authorized</div>
+  return <Dashboard auth={auth} />
 }

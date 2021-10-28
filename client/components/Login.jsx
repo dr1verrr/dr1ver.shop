@@ -1,21 +1,15 @@
-import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import axios from '../axios/config'
+import { useAuth } from '../contexts/Auth.context'
 import styles from './Auth.module.css'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const router = useRouter()
+  const { login } = useAuth()
 
   async function signinHandler(e) {
     e.preventDefault()
-    try {
-      await axios.post('/api/auth/signin', { email, password }, { withCredentials: true })
-      router.push('/')
-    } catch (err) {
-      console.error(err)
-    }
+    return await login(email, password)
   }
 
   function inputHandler(e, setState) {

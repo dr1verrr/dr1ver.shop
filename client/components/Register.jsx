@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from '../axios/config'
+import { useAuth } from '../contexts/Auth.context'
 import styles from './Auth.module.css'
 
 export default function Register() {
@@ -8,17 +8,16 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const { register } = useAuth()
 
   async function signupHandler(e) {
     e.preventDefault()
-    setFirstName(firstName.trim())
-    setLastName(lastName.trim())
-
-    try {
-      await axios.post('/api/auth/signup', { firstName, lastName, email, password })
-    } catch (err) {
-      console.error(err)
-    }
+    return await register({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email,
+      password,
+    })
   }
 
   function inputHandler(e, setState) {

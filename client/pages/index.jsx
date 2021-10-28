@@ -1,14 +1,6 @@
 import Head from 'next/head'
 import React from 'react'
 
-//export async function getServerSideProps(ctx) {
-//  const user = JSON.parse(ctx.req.cookies.user)
-
-//  return {
-//    props: { user: user },
-//  }
-//}
-
 export default function Home(req, res) {
   return (
     <React.Fragment>

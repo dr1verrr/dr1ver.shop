@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import React from 'react'
 import styles from './Header.module.css'
-import Image from 'next/image'
 
 export default function Header({ isAuthenticated }) {
   const { navbarList, header } = styles
