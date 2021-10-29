@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
-import router from 'next/router'
 import getConfig from 'next/config'
+import { useRouter } from 'next/dist/client/router'
 
 const { publicRuntimeConfig } = getConfig()
 const AuthContext = createContext()
@@ -20,14 +20,38 @@ export async function getUser() {
 
 export const AuthProvider = props => {
   const [auth, setAuth] = useState({ status: 'SIGNED_OUT', user: null })
+  const router = useRouter()
+  const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
     checkAuth()
   }, [])
 
   async function checkAuth() {
-    return await getUser().then(res => setAuth(res))
+    await getUser().then(res => setAuth(res))
   }
+
+  const authRoutes = ['/signin', '/signup']
+  const privateRoutes = ['/profile', '/dashboard']
+  const authCondition = authRoutes.includes(router.pathname) && auth.status === 'SIGNED_IN'
+  const privateCondition = privateRoutes.includes(router.pathname) && auth.status === 'SIGNED_OUT'
+  const routeCondition = authCondition || privateCondition
+
+  function checkRoute() {
+    if (routeCondition) {
+      setLoading(true)
+      if (authCondition) {
+        router.replace('/')
+        setLoading(false)
+      }
+      if (privateCondition) {
+        router.replace('/signin')
+        setLoading(false)
+      }
+    }
+  }
+
+  useEffect(() => checkRoute())
 
   async function login(email, password) {
     try {
@@ -84,7 +108,7 @@ export const AuthProvider = props => {
       }}
       {...props}
     >
-      {props.children}
+      {!isLoading && props.children}
     </AuthContext.Provider>
   )
 }
