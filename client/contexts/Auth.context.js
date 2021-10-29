@@ -43,8 +43,18 @@ export const AuthProvider = props => {
   function checkRoute() {
     if (routeCondition) {
       setLoading(true)
-      authCondition && router.replace('/')
-      privateCondition && router.replace('/signin')
+      authCondition &&
+        router.replace('/').then(
+          setTimeout(() => {
+            alert('You are already logged in')
+          }, 200)
+        )
+      privateCondition &&
+        router.replace('/signin').then(
+          setTimeout(() => {
+            alert('You are not authorized')
+          }, 200)
+        )
     }
     console.log('test')
     isLoading && setLoading(false)
