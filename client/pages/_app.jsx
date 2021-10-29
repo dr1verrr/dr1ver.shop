@@ -16,8 +16,8 @@ function MyApp({ Component, pageProps }) {
         <link rel='icon' href='/favicon.ico' />
         <title>Next.js app</title>
       </Head>
+      <Header />
       <AuthProvider>
-        <Header />
         <Component {...pageProps} />
       </AuthProvider>
     </React.Fragment>

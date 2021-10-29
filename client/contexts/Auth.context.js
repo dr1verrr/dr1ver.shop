@@ -21,37 +21,38 @@ export async function getUser() {
 export const AuthProvider = props => {
   const [auth, setAuth] = useState({ status: 'SIGNED_OUT', user: null })
   const router = useRouter()
-  const [isLoading, setLoading] = useState(false)
-
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  async function checkAuth() {
-    await getUser().then(res => setAuth(res))
-  }
-
+  const [isLoading, setLoading] = useState(true)
+  const [authChecked, setAuthChecked] = useState(false)
   const authRoutes = ['/signin', '/signup']
   const privateRoutes = ['/profile', '/dashboard']
   const authCondition = authRoutes.includes(router.pathname) && auth.status === 'SIGNED_IN'
   const privateCondition = privateRoutes.includes(router.pathname) && auth.status === 'SIGNED_OUT'
   const routeCondition = authCondition || privateCondition
 
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  async function checkAuth() {
+    return await getUser().then(res => {
+      setAuth(res)
+      setAuthChecked(true)
+    })
+  }
+
   function checkRoute() {
     if (routeCondition) {
       setLoading(true)
-      if (authCondition) {
-        router.replace('/')
-        setLoading(false)
-      }
-      if (privateCondition) {
-        router.replace('/signin')
-        setLoading(false)
-      }
+      authCondition && router.replace('/')
+      privateCondition && router.replace('/signin')
     }
+    console.log('test')
+    isLoading && setLoading(false)
   }
 
-  useEffect(() => checkRoute())
+  useEffect(() => {
+    if (authChecked) checkRoute()
+  }, [router.pathname, authChecked && authChecked])
 
   async function login(email, password) {
     try {
