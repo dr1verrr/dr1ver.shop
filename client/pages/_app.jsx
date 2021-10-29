@@ -1,32 +1,22 @@
+import axios from 'axios'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { AuthProvider, getUser } from '../contexts/Auth.context'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
-  const [auth, setAuth] = useState({ status: 'SIGNED_OUT', user: null })
-  const router = useRouter()
-  const authCondition = auth.status === 'SIGNED_OUT'
-  const privateRoutes = ['/profile', '/dashboard']
-  const routeCondition = privateRoutes.includes(router.pathname)
+  const preloadedAuth = { status: 'SIGNED_OUT', user: null }
+  const [auth, setAuth] = useState(preloadedAuth)
 
   useEffect(() => {
-    if (authCondition) {
-      getUser().then(res => {
-        if (res.status !== 'SIGNED_OUT') {
-          return setAuth(res)
-        } else {
-          if (routeCondition) router.push('/')
-        }
-      })
-    }
-  }, [auth])
+    checkAuth()
+  }, [])
 
-  useEffect(() => {
-    console.log(auth)
-  }, [auth])
+  async function checkAuth() {
+    return await getUser().then(auth => setAuth(auth))
+  }
+
   return (
     <React.Fragment>
       <Head>
@@ -35,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         <link rel='icon' href='/favicon.ico' />
         <title>Next.js app</title>
       </Head>
-      <AuthProvider myAuth={auth}>
+      <AuthProvider myAuth={{ auth, checkAuth }}>
         <Header />
         <Component {...pageProps} />
       </AuthProvider>

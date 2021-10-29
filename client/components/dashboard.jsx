@@ -3,7 +3,11 @@ import { useAuth } from '../contexts/Auth.context'
 
 export default function Dashboard({ auth }) {
   const { firstName, lastName, signedIn, timeCreated, email, sessionId, userTypeId, id } = auth.user
-  const { logout } = useAuth()
+  const { logout, checkAuth } = useAuth()
+
+  async function handleLogout() {
+    return await logout().then(checkAuth())
+  }
 
   return (
     <div
@@ -30,7 +34,7 @@ export default function Dashboard({ auth }) {
         <div>Last login: {signedIn}</div>
         <div>User permissions: {userTypeId === '2' ? 'user' : 'admin'}</div>
         <div>Session id: {sessionId}</div>
-        <button style={{ padding: '1rem', fontSize: '2rem' }} onClick={logout}>
+        <button style={{ padding: '1rem', fontSize: '2rem' }} onClick={handleLogout}>
           Logout
         </button>
       </div>

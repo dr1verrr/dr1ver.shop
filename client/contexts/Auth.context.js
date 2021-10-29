@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import router from 'next/router'
 import getConfig from 'next/config'
 
@@ -19,7 +19,15 @@ export async function getUser() {
 }
 
 export const AuthProvider = props => {
-  const auth = props.myAuth || { status: 'SIGNED_OUT', user: null }
+  const [auth, setAuth] = useState({ status: 'SIGNED_OUT', user: null })
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  async function checkAuth() {
+    return await getUser().then(res => setAuth(res))
+  }
 
   async function login(email, password) {
     try {
@@ -30,6 +38,7 @@ export const AuthProvider = props => {
       )
 
       if (response) router.push('/')
+      return checkAuth()
     } catch (err) {
       console.error(err, 'Incorrect email or password entered')
     }
@@ -45,6 +54,7 @@ export const AuthProvider = props => {
       })
 
       if (response) router.push('/')
+      return checkAuth()
     } catch (err) {
       console.error(err)
     }
@@ -57,13 +67,23 @@ export const AuthProvider = props => {
       })
 
       if (response) router.push('/')
+      return checkAuth()
     } catch (err) {
       console.error(err)
     }
   }
 
   return (
-    <AuthContext.Provider value={{ auth, logout, register, login }} {...props}>
+    <AuthContext.Provider
+      value={{
+        auth,
+        checkAuth,
+        logout,
+        register,
+        login,
+      }}
+      {...props}
+    >
       {props.children}
     </AuthContext.Provider>
   )
