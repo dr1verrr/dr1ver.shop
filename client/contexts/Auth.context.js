@@ -29,9 +29,7 @@ export const AuthProvider = props => {
   const privateCondition = privateRoutes.includes(router.pathname) && auth.status === 'SIGNED_OUT'
   const routeCondition = authCondition || privateCondition
 
-  useEffect(() => {
-    checkAuth()
-  }, [])
+  useEffect(() => checkAuth(), [])
 
   async function checkAuth() {
     return await getUser().then(res => {

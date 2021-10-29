@@ -1,4 +1,3 @@
-import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
 import Header from '../components/Header'
