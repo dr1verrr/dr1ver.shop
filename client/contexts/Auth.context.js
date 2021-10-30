@@ -21,13 +21,12 @@ export async function getUser() {
 export const AuthProvider = props => {
   const [auth, setAuth] = useState({ status: 'SIGNED_OUT', user: null })
   const router = useRouter()
-  const [isLoading, setLoading] = useState(true)
   const [authChecked, setAuthChecked] = useState(false)
   const authRoutes = ['/signin', '/signup']
   const privateRoutes = ['/profile', '/dashboard']
   const authCondition = authRoutes.includes(router.pathname) && auth.status === 'SIGNED_IN'
   const privateCondition = privateRoutes.includes(router.pathname) && auth.status === 'SIGNED_OUT'
-  const routeCondition = authCondition || privateCondition
+  const routeCondition = authCondition || privateCondition || router.pathname.includes('/admin')
 
   useEffect(() => checkAuth(), [])
 
@@ -40,26 +39,27 @@ export const AuthProvider = props => {
 
   function checkRoute() {
     if (routeCondition) {
-      setLoading(true)
-      authCondition &&
+      if (authCondition) {
         router.replace('/').then(
           setTimeout(() => {
             alert('You are already logged in')
           }, 200)
         )
-      privateCondition &&
+      }
+
+      if (privateCondition) {
         router.replace('/signin').then(
           setTimeout(() => {
             alert('You are not authorized')
           }, 200)
         )
+      }
     }
     console.log('test')
-    isLoading && setLoading(false)
   }
 
   useEffect(() => {
-    if (authChecked) checkRoute()
+    if (routeCondition && authChecked) checkRoute()
   }, [router.pathname, authChecked && authChecked])
 
   async function login(email, password) {
@@ -117,7 +117,7 @@ export const AuthProvider = props => {
       }}
       {...props}
     >
-      {!isLoading && props.children}
+      {props.children}
     </AuthContext.Provider>
   )
 }
