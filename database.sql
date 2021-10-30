@@ -2,7 +2,9 @@ create database products;
 
 create table product (
   product_id serial primary key,
-  description varchar(255)
+  product_name text not null,
+  product_price decimal(4,2) NOT NULL,
+  product_description varchar(255)
 );
 
 create table users (
