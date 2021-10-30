@@ -1,4 +1,4 @@
-const controller = require('../controllers/user.controller')
+const controller = require('../controllers/admin.controller')
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -6,6 +6,5 @@ module.exports = function (app) {
     next()
   })
 
-  app.get('/api/user', controller.user)
+  app.post('/admin', controller.adminLogin)
 }
-

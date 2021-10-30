@@ -8,5 +8,4 @@ module.exports = function (app) {
   app.post('/api/auth/signup', controller.signup)
   app.post('/api/auth/signin', controller.signin)
   app.delete('/api/auth/logout', controller.logout)
-  app.post('/admin', controller.admin)
 }

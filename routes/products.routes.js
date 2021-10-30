@@ -1,9 +1,10 @@
-const controller = require('../controllers/products.controllers')
+const controller = require('../controllers/products.controller')
+const { userMiddleware } = require('../middlewares/user.middleware')
 
 module.exports = function (app) {
-  app.post('/api/products', controller.addProduct)
   app.get('/api/products', controller.getProducts)
   app.get('/api/products/:id', controller.getProduct)
-  app.delete('/api/products/:id', controller.deleteProduct)
-  app.put('/api/products/:id', controller.updateProduct)
+  app.post('/api/products', userMiddleware, controller.addProduct)
+  app.put('/api/products/:id', userMiddleware, controller.updateProduct)
+  app.delete('/api/products/:id', userMiddleware, controller.deleteProduct)
 }

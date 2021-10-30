@@ -24,9 +24,11 @@ export const AuthProvider = props => {
   const [authChecked, setAuthChecked] = useState(false)
   const authRoutes = ['/signin', '/signup']
   const privateRoutes = ['/profile', '/dashboard']
+  const adminRoutes = ['/admin/dashboard']
   const authCondition = authRoutes.includes(router.pathname) && auth.status === 'SIGNED_IN'
   const privateCondition = privateRoutes.includes(router.pathname) && auth.status === 'SIGNED_OUT'
-  const routeCondition = authCondition || privateCondition || router.pathname.includes('/admin')
+  const adminCondition = adminRoutes.includes(router.pathname)
+  const routeCondition = authCondition || privateCondition || adminCondition
 
   useEffect(() => checkAuth(), [])
 
@@ -53,6 +55,10 @@ export const AuthProvider = props => {
             alert('You are not authorized')
           }, 200)
         )
+      }
+
+      if (adminCondition && auth.user.userTypeId !== 1) {
+        router.replace('/')
       }
     }
     console.log('test')
