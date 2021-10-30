@@ -6,10 +6,6 @@ export default function AdminDashboard(req, res) {
   const [mounted, setMounted] = useState(false)
   const [products, setProducts] = useState([])
   const [productKeys, setProductKeys] = useState([])
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('')
   const { auth } = useAuth()
 
   async function submitHandler(e) {
