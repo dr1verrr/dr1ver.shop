@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/Auth.context'
 import styles from './Auth.module.css'
+import Link from 'next/link'
 
 export default function Register() {
   const [firstName, setFirstName] = useState('')
@@ -81,8 +82,10 @@ export default function Register() {
                 onChange={e => inputHandler(e, setPasswordConfirm)}
                 required
               />
-
               <input type='submit' value='Sign up' />
+              <div style={{ fontSize: '2rem' }}>
+                Already have an account ? <Link href='/signin'>Log in</Link>
+              </div>
             </div>
           </form>
         </section>

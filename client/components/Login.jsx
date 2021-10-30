@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../contexts/Auth.context'
 import styles from './Auth.module.css'
+import Link from 'next/link'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -43,6 +44,9 @@ export default function Login() {
                 required
               />
               <input type='submit' value='Sign In' />
+              <div style={{ fontSize: '2rem' }}>
+                Want to create an account ? <Link href='/signup'>Register</Link>
+              </div>
             </div>
           </form>
         </section>
