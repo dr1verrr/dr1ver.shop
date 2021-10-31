@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import TableColumn from './TableColumn'
 
-function TableRow({ originalRow, productKeys, index }) {
+function TableRow({ originalRow, productKeys, index, total }) {
   const [row, setRow] = useState(originalRow)
-
-  //useEffect(() => {
-  //  console.log(row)
-  //}, [row])
-
-  //useEffect(() => {
-  //  setRow(originalRow)
-  //}, [originalRow])
 
   return (
     <tr>
