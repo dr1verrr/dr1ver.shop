@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../axios/config'
-import TableColumn from '../../components/TableColumn'
-import TableRow from '../../components/TableRow'
+import Table from '../../components/Table'
 import { useAuth } from '../../contexts/Auth.context'
 
 export default function AdminDashboard(req, res) {
@@ -42,31 +41,14 @@ export default function AdminDashboard(req, res) {
           <thead>
             <tr>
               <td>#</td>
-              {products[0] &&
-                productKeys.map(item => {
-                  return <td key={item}>{item}</td>
-                })}
+              {productKeys?.map(item => {
+                return <td key={item}>{item}</td>
+              })}
             </tr>
           </thead>
           <tbody>
-            {/* TODO: create smart component(for each row special component and also for each column) */}
-            {products &&
-              products.map((item, index) => {
-                return (
-                  <TableRow originalRow={item} key={item.product_id}>
-                    <td>{index}</td>
-                    {Object.values(item).map((data, index) => {
-                      return (
-                        <TableColumn
-                          key={data}
-                          originalColumn={data}
-                          inputProps={{ productKeys, index }}
-                        />
-                      )
-                    })}
-                  </TableRow>
-                )
-              })}
+            {/* TODO: check values difference and store it in each TableRow component */}
+            <Table products={products} productKeys={productKeys} />
           </tbody>
         </table>
         <style jsx>
@@ -101,4 +83,18 @@ export default function AdminDashboard(req, res) {
       </form>
     </div>
   ) : null
+}
+
+{
+  /*<td>{index}</td>
+                  {Object.values(item).map((data, index) => {
+                    return (
+                      <TableColumn
+                        key={data}
+                        originalColumn={data}
+                        inputProps={{ productKeys, index }}
+                      />
+                    )
+                  })}
+                </TableRow>*/
 }

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-function TableColumn({ originalColumn, inputProps: { productKeys, index } }) {
+function TableColumn({
+  originalColumn,
+  originalRow,
+  row: { state, setRow },
+  inputProps: { productKeys, index },
+}) {
   const [column, setColumn] = useState(originalColumn)
-
-  useEffect(() => {
-    console.log(column)
-  }, [column])
 
   useEffect(() => {
     setColumn(originalColumn)
