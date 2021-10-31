@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const TableColumn = ({ originalColumn, inputProps: { productKeys, index } }) => {
+function TableColumn({ originalColumn, inputProps: { productKeys, index } }) {
   const [column, setColumn] = useState(originalColumn)
 
   useEffect(() => {

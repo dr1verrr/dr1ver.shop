@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const TableRow = ({ originalRow, children }) => {
+function TableRow({ originalRow, children }) {
   const [row, setRow] = useState(originalRow)
 
   useEffect(() => {
@@ -10,6 +10,7 @@ const TableRow = ({ originalRow, children }) => {
   useEffect(() => {
     setRow(originalRow)
   }, [originalRow])
+
   return (
     <React.Fragment>
       <tr>{children}</tr>
