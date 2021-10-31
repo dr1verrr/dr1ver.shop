@@ -11,12 +11,19 @@ function TableColumn({ originalColumn, inputProps: { productKeys, index } }) {
     setColumn(originalColumn)
   }, [originalColumn])
 
-  function inputHandler(e) {}
+  function handleChange(e) {
+    setColumn(e.target.value)
+  }
 
   return (
     <React.Fragment>
       <td>
-        <input key={column} value={column} name={productKeys[index]} onChange={inputHandler} />
+        <input
+          key={productKeys[index]}
+          value={column}
+          name={productKeys[index]}
+          onChange={handleChange}
+        />
       </td>
     </React.Fragment>
   )

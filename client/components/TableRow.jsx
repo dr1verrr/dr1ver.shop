@@ -7,9 +7,9 @@ function TableRow({ originalRow, children }) {
     console.log(row)
   }, [row])
 
-  useEffect(() => {
-    setRow(originalRow)
-  }, [originalRow])
+  //useEffect(() => {
+  //  setRow(originalRow)
+  //}, [originalRow])
 
   return (
     <React.Fragment>

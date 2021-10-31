@@ -21,8 +21,6 @@ export default function AdminDashboard(req, res) {
     })
   }
 
-  function inputHandler(e) {}
-
   useEffect(() => {
     //console.log(products)
   }, [products])
@@ -43,6 +41,7 @@ export default function AdminDashboard(req, res) {
         <table className='table'>
           <thead>
             <tr>
+              <td>#</td>
               {products[0] &&
                 productKeys.map(item => {
                   return <td key={item}>{item}</td>
@@ -52,9 +51,10 @@ export default function AdminDashboard(req, res) {
           <tbody>
             {/* TODO: create smart component(for each row special component and also for each column) */}
             {products &&
-              products.map(item => {
+              products.map((item, index) => {
                 return (
                   <TableRow originalRow={item} key={item.product_id}>
+                    <td>{index}</td>
                     {Object.values(item).map((data, index) => {
                       return (
                         <TableColumn
