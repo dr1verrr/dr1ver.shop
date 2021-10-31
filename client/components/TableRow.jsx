@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
 const TableRow = ({ originalRow, children }) => {
-  const [row, setRow] = useState({})
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => setMounted(true), [])
+  const [row, setRow] = useState(originalRow)
 
   useEffect(() => {
     console.log(row)
   }, [row])
 
   useEffect(() => {
-    if (mounted) setRow(originalRow)
-  }, [originalRow, mounted])
+    setRow(originalRow)
+  }, [originalRow])
   return (
     <React.Fragment>
-      <tr>{mounted && children}</tr>
+      <tr>{children}</tr>
     </React.Fragment>
   )
 }

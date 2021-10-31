@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 const TableColumn = ({ originalColumn, inputProps: { productKeys, index } }) => {
-  const [column, setColumn] = useState({})
+  const [column, setColumn] = useState(originalColumn)
 
   useEffect(() => {
     console.log(column)
