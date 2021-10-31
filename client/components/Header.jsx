@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import styles from './Header.module.css'
 
-export default function Header({ isAuthenticated }) {
+export default function Header() {
   const { navbarList, header } = styles
 
   return (

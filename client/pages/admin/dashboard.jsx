@@ -1,5 +1,7 @@
-import axios from '../../axios/config'
 import React, { useEffect, useState } from 'react'
+import axios from '../../axios/config'
+import TableColumn from '../../components/TableColumn'
+import TableRow from '../../components/TableRow'
 import { useAuth } from '../../contexts/Auth.context'
 
 export default function AdminDashboard(req, res) {
@@ -22,7 +24,7 @@ export default function AdminDashboard(req, res) {
   function inputHandler(e) {}
 
   useEffect(() => {
-    console.log(products)
+    //console.log(products)
   }, [products])
 
   useEffect(() => {
@@ -48,23 +50,21 @@ export default function AdminDashboard(req, res) {
             </tr>
           </thead>
           <tbody>
+            {/* TODO: create smart component(for each row special component and also for each column) */}
             {products &&
               products.map(item => {
                 return (
-                  <tr key={item.product_id}>
+                  <TableRow originalRow={item} key={item.product_id}>
                     {Object.values(item).map((data, index) => {
                       return (
-                        <td key={data}>
-                          <input
-                            key={data}
-                            value={data}
-                            name={productKeys[index]}
-                            onChange={inputHandler}
-                          />
-                        </td>
+                        <TableColumn
+                          key={data}
+                          originalColumn={data}
+                          inputProps={{ productKeys, index }}
+                        />
                       )
                     })}
-                  </tr>
+                  </TableRow>
                 )
               })}
           </tbody>

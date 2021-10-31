@@ -1,7 +1,7 @@
 import axios from 'axios'
-import React, { createContext, useEffect, useState } from 'react'
 import getConfig from 'next/config'
 import { useRouter } from 'next/dist/client/router'
+import React, { createContext, useEffect, useState } from 'react'
 
 const { publicRuntimeConfig } = getConfig()
 const AuthContext = createContext()
@@ -61,7 +61,6 @@ export const AuthProvider = props => {
         router.replace('/')
       }
     }
-    console.log('test')
   }
 
   useEffect(() => {
