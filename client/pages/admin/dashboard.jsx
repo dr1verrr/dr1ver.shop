@@ -31,7 +31,8 @@ export default function AdminDashboard(req, res) {
   }, [mounted])
 
   return mounted ? (
-    <div className='container'>
+    <div className='container' style={{ padding: '0 1.5rem' }}>
+      <div style={{ fontSize: '4rem' }}>Products table</div>
       <Table products={products} productKeys={productKeys} />
     </div>
   ) : null

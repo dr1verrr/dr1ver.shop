@@ -1,33 +1,51 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-function TableColumn({
+export default function TableColumn({
   originalColumn,
   originalRow,
-  row: { state, setRow },
-  inputProps: { productKeys, index },
+  row: { state, setNewRow, toSave, isUnsaved },
+  inputProps: { productKeys, index, editMode, setUnsaved },
 }) {
   const [column, setColumn] = useState(originalColumn)
-
-  useEffect(() => {
-    setColumn(originalColumn)
-  }, [originalColumn])
+  const [newColumn, setNewColumn] = useState(originalColumn)
 
   function handleChange(e) {
-    setColumn(e.target.value)
+    if (editMode) {
+      setNewColumn(() => ({
+        [e.target.name]: e.target.value,
+      }))
+    }
   }
 
+  useEffect(() => {
+    console.log(newColumn)
+  }, [newColumn])
+
+  useEffect(() => {
+    if (isUnsaved && toSave) {
+      //setNewRow(newColumn)
+      setNewRow(prev => [...prev, newColumn])
+    }
+  }, [newColumn, toSave, isUnsaved])
+
+  useEffect(() => {
+    if ((editMode && newColumn !== column) || newColumn[productKeys[index]] !== column) {
+      setUnsaved(true)
+      setTimeout(() => setUnsaved(false))
+    } else {
+      setUnsaved(false)
+    }
+  }, [column, newColumn])
+
   return (
-    <React.Fragment>
-      <td>
-        <input
-          key={productKeys[index]}
-          value={column}
-          name={productKeys[index]}
-          onChange={handleChange}
-        />
-      </td>
-    </React.Fragment>
+    <td>
+      <input
+        key={productKeys[index]}
+        value={editMode ? newColumn[productKeys[index]] : column}
+        name={productKeys[index]}
+        onChange={handleChange}
+        style={{ padding: '1rem', border: '1px solid #999' }}
+      />
+    </td>
   )
 }
-
-export default TableColumn

@@ -101,7 +101,7 @@ exports.signin = async (req, res) => {
                   {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    expires: new Date(Date.now() + 60 * 24 * 7200),
+                    expires: new Date(Date.now() + 60 * 24 * 21600),
                   }
                 )
                 res.send({ id: user.id, email, sessionId, userTypeId: user.user_type_id })

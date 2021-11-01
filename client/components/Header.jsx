@@ -18,34 +18,62 @@ export default function Header() {
           <li>
             <Link href='/profile'>Profile</Link>
           </li>
-          <li style={{ flex: 1 }}>
+          <li>
             <Link href='/contacts'>Contacts</Link>
+          </li>
+          <li style={{ flex: 1 }}>
+            <Link href='/admin/dashboard'>Admin Dashboard</Link>
           </li>
           <React.Fragment>
             <li>
-              <Link href='/signin'>
-                <a
+              <Link href='/signin' passHref>
+                <button
                   style={{
                     padding: '0.5rem',
                     border: '1px solid #fff',
                     borderRadius: '1rem',
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '2.5rem',
                   }}
                 >
                   Sign in
-                </a>
+                </button>
               </Link>
             </li>
             <li>
-              <Link href='/signup'>
-                <a
+              <Link href='/signup' passHref>
+                <button
                   style={{
                     padding: '0.5rem',
                     border: '1px solid #fff',
                     borderRadius: '1rem',
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '2.5rem',
                   }}
                 >
                   Sign up
-                </a>
+                </button>
+              </Link>
+            </li>
+            <li>
+              <Link href='/admin' passHref>
+                <button
+                  style={{
+                    padding: '0.5rem',
+                    border: '1px solid #fff',
+                    borderRadius: '1rem',
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '2.5rem',
+                  }}
+                >
+                  Admin access
+                </button>
               </Link>
             </li>
           </React.Fragment>
