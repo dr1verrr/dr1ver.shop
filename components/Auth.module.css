@@ -1,5 +1,4 @@
 .formWrapper {
-  padding: 0 15px;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -26,7 +25,7 @@
 
 @media (max-width: 380px) {
   .formInner input {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
   }
 }
 

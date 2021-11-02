@@ -1,34 +1,43 @@
 import React, { useState } from 'react'
 import styles from './Auth.module.css'
 import Link from 'next/link'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+export default function LoginComponent() {
+  const router = useRouter()
+  const [userData, setUserData] = useState({
+    identifier: '',
+    password: '',
+  })
 
-  async function signinHandler(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+    try {
+      await axios.post('/api/login', { ...userData }).then(() => router.push('/profile'))
+    } catch (err) {
+      console.log(err.response.data)
+    }
   }
 
-  function inputHandler(e, setState) {
-    if (e.target.id !== 'username') {
-      setState(e.target.value.replace(/ /g, '').trim())
-    }
+  function handleChange(e) {
+    const { name, value } = e.target
+    setUserData({ ...userData, [name]: value })
   }
 
   return (
     <>
       <div className={styles.container}>
         <section className={styles.formWrapper}>
-          <form onSubmit={signinHandler}>
+          <form onSubmit={handleSubmit}>
             <div className={styles.formInner}>
               <input
                 type='email'
-                name='email'
+                name='identifier'
                 id='email'
-                value={email}
+                value={userData.identifier}
                 placeholder='Type your email address'
-                onChange={e => inputHandler(e, setEmail)}
+                onChange={handleChange}
                 required
               />
               <input
@@ -36,13 +45,13 @@ export default function Login() {
                 name='password'
                 id='password'
                 placeholder='Type your password'
-                value={password}
-                onChange={e => inputHandler(e, setPassword)}
+                value={userData.password}
+                onChange={handleChange}
                 required
               />
               <input type='submit' value='Sign In' />
               <div style={{ fontSize: '2rem' }}>
-                Want to create an account ? <Link href='/signup'>Register</Link>
+                Want to create an account ? <Link href='/register'>Register</Link>
               </div>
             </div>
           </form>
