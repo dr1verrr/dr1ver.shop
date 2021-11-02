@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useAuth } from '../contexts/Auth.context'
 import styles from './Auth.module.css'
 import Link from 'next/link'
 
@@ -9,16 +8,9 @@ export default function Register() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
-  const { register } = useAuth()
 
   async function signupHandler(e) {
     e.preventDefault()
-    return await register({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email,
-      password,
-    })
   }
 
   function inputHandler(e, setState) {

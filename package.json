@@ -1,22 +1,27 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "author": "dr1verrr",
-  "license": "MIT",
+  "name": "ecommerce-app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "cookie-parser": "^1.4.5",
+    "axios": "^0.23.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "http-proxy-middleware": "^2.0.1",
-    "nodemon": "^2.0.13",
-    "pg": "^8.7.1",
-    "uuid": "^8.3.2"
+    "next": "11.1.2",
+    "next-auth": "^3.29.0",
+    "next-connect": "^0.10.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2"
   }
 }
