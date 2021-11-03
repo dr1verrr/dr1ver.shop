@@ -1,51 +1,18 @@
-import { useRouter } from 'next/router'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import nookies from 'nookies'
+import { useEffect } from 'react'
 import LoginComponent from '../components/loginComponent'
+import { useAuth } from '../contexts/auth'
 
 function Home() {
-  const router = useRouter()
-  function goToRegister() {
-    router.push('/register')
-  }
+  const { isAuthenticated, user } = useAuth()
 
-  return (
-    <div>
-      <LoginComponent />
-      <button onClick={goToRegister}>Register</button>
-    </div>
-  )
-}
+  useEffect(() => {
+    console.log(isAuthenticated, user)
+  }, [isAuthenticated, user])
 
-export const getServerSideProps = async ctx => {
-  const cookies = nookies.get(ctx)
-  let user = null
-
-  if (cookies?.jwt) {
-    try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${cookies.jwt}`,
-        },
-      })
-      user = data
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  if (user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/profile',
-      },
-    }
-  }
-
-  return {
-    props: {},
-  }
+  return <div style={{ fontSize: '1.6rem' }}>Welcome {JSON.stringify(user, null, 2)}</div>
 }
 
 export default Home

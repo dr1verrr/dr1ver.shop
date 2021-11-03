@@ -14,9 +14,9 @@ export default function LoginComponent() {
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      await axios.post('/api/login', { ...userData }).then(() => router.push('/profile'))
+      await axios.post('/api/login', userData).then(() => router.push('/profile'))
     } catch (err) {
-      console.log(err.response.data)
+      console.log(err)
     }
   }
 

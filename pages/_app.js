@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import '../styles/globals.css'
 import Head from 'next/head'
+import { AuthProvider } from '../contexts/auth'
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => (document.documentElement.lang = 'en-us'), [])
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Next.js app</title>
       </Head>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </React.Fragment>
   )
 }
