@@ -1,8 +1,7 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 import { setCookie } from 'nookies'
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   const { password, identifier } = req.body
 
   try {
@@ -20,6 +19,7 @@ export default async (req, res) => {
 
     res.status(200).end()
   } catch (e) {
-    res.status(400).send(e.response.data.message[0].messages[0])
+    console.error(e)
+    res.status(400).send(e.response.data?.message[0]?.messages[0])
   }
 }
