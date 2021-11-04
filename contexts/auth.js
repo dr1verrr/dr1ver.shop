@@ -26,13 +26,17 @@ export const AuthProvider = ({ children }) => {
       }
     }
 
-    if (privateCondition && !user) {
-      router.replace('/login').then(() => setRouteChecked(true))
+    if (privateCondition) {
+      if (!!user) {
+        setRouteChecked(true)
+      } else {
+        router.replace('/login').then(() => setRouteChecked(true))
+      }
     }
   }
 
   useEffect(() => {
-    if (routeCondition) {
+    if (routeCondition && !loading) {
       setRouteChecked(false)
       checkRoute()
     }
@@ -40,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     if (!routeChecked && !routeCondition) {
       setRouteChecked(true)
     }
-  }, [router.pathname])
+  }, [router.pathname, loading])
 
   useEffect(() => {
     async function loadUserFromCookies() {
@@ -61,7 +65,7 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false)
     }
-    loadUserFromCookies().then(() => checkRoute())
+    loadUserFromCookies()
   }, [])
 
   return (

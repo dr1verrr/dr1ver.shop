@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { setCookie } from 'nookies'
 
 export default async function handler(req, res) {
   const { password, identifier } = req.body
@@ -10,7 +9,7 @@ export default async function handler(req, res) {
       password,
     })
 
-    setCookie({ res }, 'jwt', postRes.data.jwt, {
+    res.cookie('jwt', postRes?.data?.jwt, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== 'development',
       maxAge: 30 * 24 * 60 * 60,
