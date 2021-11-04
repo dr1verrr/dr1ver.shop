@@ -19,19 +19,26 @@ export const AuthProvider = ({ children }) => {
 
   function checkRoute() {
     if (authCondition) {
-      if (!!user) router.replace('/')
-      setRouteChecked(true)
+      if (!!user) {
+        router.replace('/').then(() => setRouteChecked(true))
+      } else {
+        setRouteChecked(true)
+      }
     }
 
     if (privateCondition && !user) {
-      router.replace('/login')
-      setRouteChecked(true)
+      router.replace('/login').then(() => setRouteChecked(true))
     }
   }
 
   useEffect(() => {
     if (routeCondition) {
+      setRouteChecked(false)
       checkRoute()
+    }
+
+    if (!routeChecked && !routeCondition) {
+      setRouteChecked(true)
     }
   }, [router.pathname])
 
@@ -59,7 +66,8 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading }}>
-      {routeCondition ? routeChecked && children : children}
+      {routeChecked && !routeCondition && children}
+      {routeChecked && routeCondition && children}
     </AuthContext.Provider>
   )
 }
