@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
-import '../styles/globals.css'
 import Head from 'next/head'
+import React, { useEffect } from 'react'
 import { AuthProvider } from '../contexts/auth'
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => (document.documentElement.lang = 'en-us'), [])

@@ -1,16 +1,18 @@
-import axios from 'axios'
-import { useRouter } from 'next/router'
-import nookies from 'nookies'
-import { useEffect } from 'react'
-import LoginComponent from '../components/loginComponent'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/auth'
+import api from '../config/api'
 
 function Home() {
   const { isAuthenticated, user } = useAuth()
+  const [products, Products] = useState([])
 
   useEffect(() => {
     console.log(isAuthenticated, user)
   }, [isAuthenticated, user])
+
+  useEffect(() => {
+    api.get('/products').then(res => res.data)
+  }, [])
 
   return <div style={{ fontSize: '1.6rem' }}>Welcome {JSON.stringify(user, null, 2)}</div>
 }
