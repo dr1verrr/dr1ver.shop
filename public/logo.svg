@@ -1,10 +1,10 @@
 <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 75 50" width="75px" height="50px" >
   <style>
-    .heavy { font: bold 12px sans-serif; fill: #333 }
+    .heavy { font: bold 12px sans-serif; fill: #1d1f21 }
   </style>
    <g>
         <g id="one">
-            <text x="0" y="48" class="heavy" style="stroke:#333; stroke-width:0.3em; ">dr1verShop</text>
+            <text x="0" y="48" class="heavy" style="stroke:#1d1f21; stroke-width:0.3em; ">dr1verShop</text>
             <text x="0" y="48" class="heavy" style="fill: #fff">dr1verShop</text>
         </g>
         <g id="two">

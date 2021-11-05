@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import React, { useEffect } from 'react'
+import Header from '../components/Header'
 import { AuthProvider } from '../contexts/auth'
 import '../styles/globals.css'
 
@@ -11,6 +12,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Next.js app</title>
       </Head>
+      <Header />
       <AuthProvider>
         <Component {...pageProps} />
       </AuthProvider>

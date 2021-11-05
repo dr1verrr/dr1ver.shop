@@ -1,20 +1,28 @@
-import { useEffect, useState } from 'react'
-import { useAuth } from '../contexts/auth'
+import React, { useEffect, useState } from 'react'
+import Product from '../components/Product'
 import api from '../config/api'
 
 function Home() {
-  const { isAuthenticated, user } = useAuth()
-  const [products, Products] = useState([])
+  const [products, setProducts] = useState([])
+
+  async function getProducts() {
+    const response = await api.get('/products').then(res => setProducts(res.data))
+  }
 
   useEffect(() => {
-    console.log(isAuthenticated, user)
-  }, [isAuthenticated, user])
-
-  useEffect(() => {
-    api.get('/products').then(res => res.data)
+    getProducts()
   }, [])
 
-  return <div style={{ fontSize: '1.6rem' }}>Welcome {JSON.stringify(user, null, 2)}</div>
+  useEffect(() => {
+    console.log(products)
+  }, [products])
+
+  return (
+    <React.Fragment>
+      <h1 style={{ textAlign: 'center' }}>All cards</h1>
+      <Product products={products} />
+    </React.Fragment>
+  )
 }
 
 export default Home
