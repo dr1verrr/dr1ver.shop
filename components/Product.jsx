@@ -30,6 +30,7 @@ export default function Product({ products }) {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 3rem;
+          padding-bottom: 5rem;
         }
         .product-price {
           position: absolute;
