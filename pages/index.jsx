@@ -19,7 +19,8 @@ function Home() {
 
   return (
     <React.Fragment>
-      <h1 style={{ textAlign: 'center' }}>All cards</h1>
+      <div style={{ textAlign: 'center', fontSize: '4rem', padding: '4rem 0' }}>All cards</div>
+
       <Product products={products} />
     </React.Fragment>
   )

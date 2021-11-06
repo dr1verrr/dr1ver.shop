@@ -33,6 +33,8 @@ export default function Product({ products }) {
           padding-bottom: 5rem;
         }
         .product-price {
+          z-index: 5;
+          pointer-events: none;
           position: absolute;
           left: 0;
           top: 0;
@@ -42,6 +44,7 @@ export default function Product({ products }) {
           background-color: #1d1f21;
           border-top-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
+          font-size: 2rem;
         }
         @media (max-width: 1140px) {
           .container {
@@ -66,6 +69,7 @@ export default function Product({ products }) {
         }
         .product-image {
           align-self: center;
+          margin-top: 5rem;
         }
         .product-link {
           transition: opacity 0.25s ease !important;

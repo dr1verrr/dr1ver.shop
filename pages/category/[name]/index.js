@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { ContainerStyled } from '../../../components/Container.styled'
 import Product from '../../../components/Product'
 import api from '../../../config/api'
 
@@ -11,7 +10,7 @@ function Category(props) {
   const [products, setProducts] = useState([])
 
   useEffect(() => {
-    !!name && api.get(`/categories/${name}`).then(res => setProducts(res.data))
+    if (!!name) api.get(`/categories/${name}`).then(res => setProducts(res.data))
   }, [name])
 
   useEffect(() => {
@@ -20,7 +19,7 @@ function Category(props) {
 
   return (
     <React.Fragment>
-      <h1 style={{ textAlign: 'center' }}>{products?.name}</h1>
+      <div style={{ textAlign: 'center', fontSize: '4rem', padding: '4rem 0' }}>{products?.name}</div>
       <Product products={products.products} />
     </React.Fragment>
   )
