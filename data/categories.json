@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Back",
+    "slug": "back"
+  },
+  {
+    "id": 2,
+    "name": "Front",
+    "slug": "front"
+  },
+  {
+    "id": 3,
+    "name": "SSG",
+    "slug": "ssg"
+  },
+  {
+    "id": 4,
+    "name": "Container",
+    "slug": "container"
+  },
+  {
+    "id": 5,
+    "name": "Database",
+    "slug": "database"
+  },
+  {
+    "id": 6,
+    "name": "Other",
+    "slug": "other"
+  }
+]

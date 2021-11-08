@@ -1,21 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import api from '../config/api'
+import React, { useEffect } from 'react'
+import categories from '../data/categories.json'
 
 export default function Header() {
-  const [categories, setCategories] = useState([])
-
-  async function getCategories() {
-    return await api.get('/categories').then(res => setCategories(res.data))
-  }
-
-  useEffect(() => getCategories(), [])
-
   useEffect(() => {
     console.log(categories)
-  }, [categories])
-
+  }, [])
   return (
     <header className='header'>
       <div className='container'>
@@ -34,9 +24,11 @@ export default function Header() {
         </div>
         <div className='header-second'>
           <div className='header-menu'>
-            {categories.map(category => (
+            {categories?.map(category => (
               <div key={category.id} className='header-menu-link'>
-                <Link href={`/category/${category.slug}`}>{category.name?.toUpperCase()}</Link>
+                <Link href='/category/[slug]' as={`/category/${category.slug}`}>
+                  {category.name?.toUpperCase()}
+                </Link>
               </div>
             ))}
           </div>

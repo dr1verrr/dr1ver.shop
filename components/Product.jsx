@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { ContainerStyled } from './Container.styled'
+import Link from 'next/link'
 
 export default function Product({ products }) {
   return (
@@ -19,7 +20,9 @@ export default function Product({ products }) {
                 </h2>
                 <p className='product-description'>{product.description}</p>
               </div>
-              <a href={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`} className='product-link'></a>
+              <Link href={`/product/${product.slug}`}>
+                <a className='product-link'></a>
+              </Link>
             </div>
           )
         })}
@@ -57,7 +60,6 @@ export default function Product({ products }) {
           }
         }
         .product {
-          transition: all 1s ease !important;
           display: flex;
           flex-direction: column;
           border-radius: 3rem;
@@ -72,7 +74,7 @@ export default function Product({ products }) {
           margin-top: 5rem;
         }
         .product-link {
-          transition: opacity 0.25s ease !important;
+          transition: opacity 0.5s ease !important;
           opacity: 0;
           display: none;
           cursor: pointer;
@@ -89,8 +91,9 @@ export default function Product({ products }) {
           display: block;
           background-color: #333;
         }
+
         .product-link:hover {
-          opacity: 0.55;
+          opacity: 0.45;
         }
       `}</style>
     </ContainerStyled>
