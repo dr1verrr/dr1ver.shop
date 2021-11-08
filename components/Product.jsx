@@ -21,7 +21,7 @@ export default function Product({ products }) {
                 <p className='product-description'>{product.description}</p>
               </div>
               <Link href={`/product/${product.slug}`}>
-                <a className='product-link'></a>
+                <a className='product-link' onClick={() => scrollTo({ left: 0, top: 0, behavior: 'smooth' })}></a>
               </Link>
             </div>
           )

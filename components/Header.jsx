@@ -126,7 +126,7 @@ export default function Header() {
           }
 
           .header-menu-link::before {
-            transition: width 0.3s ease;
+            transition: width 0.4s cubic-bezier(0,.5,0,1);
             content: '';
             position: absolute;
             bottom: -0.25rem;
@@ -137,7 +137,7 @@ export default function Header() {
           }
 
           .header-menu-link::after {
-            transition: width 0.3s ease;
+            transition: width 0.4s cubic-bezier(0,.5,0,1);
             content: '';
             position: absolute;
             bottom: -0.25rem;

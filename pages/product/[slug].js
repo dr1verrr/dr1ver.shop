@@ -2,14 +2,13 @@ import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { ContainerStyled } from '../../components/Container.styled'
-import isObjTrue from '../../functions/isObjTrue'
 
 export default function Product({ product }) {
   useEffect(() => {
     console.log(product)
   }, [product])
 
-  if (isObjTrue(product))
+  if (product) {
     return (
       <ContainerStyled>
         <div className='product'>
@@ -45,6 +44,7 @@ export default function Product({ product }) {
         </style>
       </ContainerStyled>
     )
+  }
 
   return <div style={{ fontSize: '5rem', textAlign: 'center' }}>Loading...</div>
 }
