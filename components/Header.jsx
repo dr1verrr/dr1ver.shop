@@ -160,11 +160,11 @@ export default function Header() {
             background-color: #fff;
           }
 
-          .header-menu-link span:hover ::before {
+          .header-menu-link:hover span::before {
             width: 50%;
           }
 
-          .header-menu-link span:hover ::after {
+          .header-menu-link:hover span::after {
             width: 50%
           }
 

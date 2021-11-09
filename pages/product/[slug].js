@@ -115,6 +115,7 @@ export default function Product({ product }) {
           border-radius: 3rem;
           max-width: fit-content;
           border: none;
+          white-space: nowrap;
         }
 
         .product-title {
