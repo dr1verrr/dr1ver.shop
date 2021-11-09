@@ -89,13 +89,17 @@ export default function Product({ product }) {
           padding: 1.5rem;
         }
 
+        .product-info-description {
+          font-size: 1.8rem;
+        }
+
         .product-info-sizes {
           padding: 1.5rem 0;
         }
         .product-inner {
           display: flex;
           flex-wrap: wrap;
-          gap: 3rem;
+          gap: 4rem;
         }
         .product-info {
           padding: 0 1.5rem;
@@ -115,11 +119,10 @@ export default function Product({ product }) {
 
         .product-title {
           font-size: 4rem;
-          text-align: center;
         }
         .product-redirect {
           cursor: pointer;
-          flex: 0.45;
+          flex: 0.49;
           padding: 1.5rem 2rem;
           position: relative;
         }
@@ -159,7 +162,7 @@ export default function Product({ product }) {
 
         .container {
           margin: 0 auto;
-          max-width: 1200px;
+          max-width: 91vw;
           padding: 0 1.5rem;
         }
       `}</style>

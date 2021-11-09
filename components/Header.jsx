@@ -27,7 +27,9 @@ export default function Header() {
             {categories?.map(category => (
               <div key={category.id} className='header-menu-category'>
                 <Link href='/category/[slug]' as={`/category/${category.slug}`}>
-                  <a className='header-menu-link'>{category.name?.toUpperCase()}</a>
+                  <a className='header-menu-link'>
+                    <span>{category.name?.toUpperCase()}</span>
+                  </a>
                 </Link>
               </div>
             ))}
@@ -91,24 +93,23 @@ export default function Header() {
             align-items: center;
             justify-content: center;
             gap: 1rem;
-            min-height: 75px;
           }
 
           @media(max-width: 970px) {
-            .header-second {
-              min-height: 120px;
-              flex-direction: column;
-            }
-
             .header-menu {
-              position: relative;
-              margin-top: -50px;
-              width: 100%
+              width: 100%;
+              overflow-x: auto;
+              scrollbar-width: none; /* Firefox */
+              -ms-overflow-style: none; /* IE 10+ */
             }
 
             .header-second-other {
               bottom: 15px;
               right: 0!important;
+            }
+
+            .header-menu-link {
+              padding: 1.5rem 0 6.5rem!important;
             }
 
           }
@@ -129,10 +130,15 @@ export default function Header() {
 
           .header-menu-link {
             display: block;
-            padding-bottom: 0.5rem;
+            padding: 2rem 0;
           }
 
-          .header-menu-link::before {
+          .header-menu-link span {
+            display: block;
+            position: relative;
+          }
+
+          .header-menu-link span::before {
             transition: width 0.4s ease;
             content: '';
             position: absolute;
@@ -143,7 +149,7 @@ export default function Header() {
             background-color: #fff;
           }
 
-          .header-menu-link::after {
+          .header-menu-link span::after {
             transition: width 0.4s ease;
             content: '';
             position: absolute;
@@ -154,11 +160,11 @@ export default function Header() {
             background-color: #fff;
           }
 
-          .header-menu-link:hover ::before {
+          .header-menu-link span:hover ::before {
             width: 50%;
           }
 
-          .header-menu-link:hover ::after {
+          .header-menu-link span:hover ::after {
             width: 50%
           }
 
