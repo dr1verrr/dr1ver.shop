@@ -54,7 +54,7 @@ export default function Product({ products }) {
             grid-template-columns: repeat(2, 1fr);
           }
         }
-        @media (max-width: 710px) {
+        @media (max-width: 760px) {
           .container {
             grid-template-columns: 1fr;
           }
