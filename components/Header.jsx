@@ -25,9 +25,9 @@ export default function Header() {
         <div className='header-second'>
           <div className='header-menu'>
             {categories?.map(category => (
-              <div key={category.id} className='header-menu-link'>
+              <div key={category.id} className='header-menu-category'>
                 <Link href='/category/[slug]' as={`/category/${category.slug}`}>
-                  {category.name?.toUpperCase()}
+                  <a className='header-menu-link'>{category.name?.toUpperCase()}</a>
                 </Link>
               </div>
             ))}
@@ -115,18 +115,25 @@ export default function Header() {
 
           .header-menu {
             display: flex;
+            height: 100%;
             gap: 1rem;
             letter-spacing: 0.15rem;
             align-items: center;
             justify-content: space-between;
+            height: 100%;
           }
 
-          .header-menu-link {
+          .header-menu-category {
             position: relative;
           }
 
+          .header-menu-link {
+            display: block;
+            padding-bottom: 0.5rem;
+          }
+
           .header-menu-link::before {
-            transition: width 0.4s cubic-bezier(0,.5,0,1);
+            transition: width 0.4s ease;
             content: '';
             position: absolute;
             bottom: -0.25rem;
@@ -137,7 +144,7 @@ export default function Header() {
           }
 
           .header-menu-link::after {
-            transition: width 0.4s cubic-bezier(0,.5,0,1);
+            transition: width 0.4s ease;
             content: '';
             position: absolute;
             bottom: -0.25rem;

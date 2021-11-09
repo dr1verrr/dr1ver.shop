@@ -77,7 +77,7 @@ export default function Product({ products }) {
           transition: opacity 0.5s ease !important;
           opacity: 0;
           display: none;
-          cursor: pointer;
+          cursor: default;
           position: absolute;
           top: 0;
           left: 0;
