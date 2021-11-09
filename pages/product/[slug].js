@@ -91,6 +91,7 @@ export default function Product({ product }) {
 
         .product-info-description {
           font-size: 1.8rem;
+          min-width: 300px;
         }
 
         .product-info-sizes {
@@ -108,7 +109,7 @@ export default function Product({ product }) {
         }
         .product-info-price {
           background-color: #fff;
-          color: #000;
+          color: #1d1f21;
           padding: 1rem 4rem;
           font-weight: bold;
           font-size: 2.5rem;
