@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [routeChecked, setRouteChecked] = useState(false)
   const router = useRouter()
 
-  const privateRoutes = ['/profile']
+  const privateRoutes = ['/profile', '/cart']
   const authRoutes = ['/login', '/register']
   const authCondition = authRoutes.includes(router.pathname)
   const privateCondition = privateRoutes.includes(router.pathname)

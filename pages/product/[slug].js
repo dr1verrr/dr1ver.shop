@@ -2,14 +2,14 @@ import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import NextNProgress from 'nextjs-progressbar'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Product({ product }) {
   const router = useRouter()
   const [selected, setSelected] = useState('')
   const [active, setActive] = useState(false)
   const [count, setCount] = useState(1)
-  const [price, setPrice] = useState(product.price)
+  const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
   const [totalPrice, setTotalPrice] = useState(price)
 
@@ -158,6 +158,12 @@ export default function Product({ product }) {
           padding: 1.5rem;
         }
 
+        @media (max-width: 870px) {
+          .product-inner {
+            flex-direction: column;
+          }
+        }
+
         @media (max-width: 460px) {
           .product-info-description {
             font-size: 1.6rem !important;
@@ -287,7 +293,10 @@ export default function Product({ product }) {
         }
         .product-image {
           position: relative;
-          align-self: flex-start;
+          align-items: flex-start;
+          display: flex;
+          justify-content: center;
+          flex: 1;
         }
         .product-redirect:hover {
           text-decoration: underline;
