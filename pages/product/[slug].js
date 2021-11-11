@@ -2,15 +2,32 @@ import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import NextNProgress from 'nextjs-progressbar'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Product({ product }) {
   const router = useRouter()
-  const selectRef = useRef()
+  const [selected, setSelected] = useState('')
+  const [active, setActive] = useState(false)
+  const [count, setCount] = useState(1)
+  const [price, setPrice] = useState(product.price)
+  const [optionPrice, setOptionPrice] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(price)
 
   useEffect(() => {
     console.log(product)
   }, [product])
+
+  useEffect(() => {
+    console.log(selected)
+  }, [selected])
+
+  function addToCart() {
+    setTotalPrice(price + optionPrice)
+  }
+
+  useEffect(() => {
+    console.log(totalPrice)
+  }, [totalPrice])
 
   return (
     <>
@@ -19,7 +36,7 @@ export default function Product({ product }) {
         <div className='container'>
           <div className='product'>
             <div className='product-header'>
-              <div onClick={() => router.back()} className='product-redirect'>
+              <div onClick={router.back} className='product-redirect'>
                 <span>Go back</span>
               </div>
               <div className='product-title'>{product.title}</div>
@@ -34,7 +51,9 @@ export default function Product({ product }) {
                 />
               </div>
               <div className='product-info'>
-                <button className='product-info-price'>{product.price + ' USD'}</button>
+                <button type='button' className='product-info-price'>
+                  {parseFloat(product.price + optionPrice)}
+                </button>
                 <p className='product-info-description'>{product.description}</p>
                 {product.Custom_field.map(fld => {
                   const select = fld.options.split('|')
@@ -44,23 +63,21 @@ export default function Product({ product }) {
                       <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '1.5rem' }}>
                         {select.map(s => {
+                          const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
+                          const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
+
                           return (
                             <input
-                              type='text'
-                              value={s}
-                              onClick={() => (selectRef.current.style.backgroundColor = '#fff')}
-                              readOnly
-                              ref={selectRef}
-                              style={{
-                                cursor: 'pointer',
-                                borderStyle: 'none',
-                                background: 'transparent',
-                                color: '#fff',
-                                background: '#636573',
-                                borderRadius: '3rem',
-                                padding: '1rem',
-                              }}
+                              type='button'
                               key={s}
+                              className='product-info-sizes-input'
+                              active={active && selected === option ? 'true' : 'false'}
+                              value={option}
+                              onClick={e => {
+                                setSelected(e.target.value)
+                                setActive(true)
+                                setOptionPrice(price)
+                              }}
                             />
                           )
                         })}
@@ -68,6 +85,58 @@ export default function Product({ product }) {
                     </div>
                   )
                 })}
+                <div className='product-info-count'>
+                  <div className='product-info-count-title'>Count:</div>
+                  <div className='product-info-count-counter'>
+                    <button
+                      className='product-info-count-counter-minus button-counter'
+                      type='button'
+                      onClick={() =>
+                        setCount(prev => {
+                          const value = prev - 1
+                          if (value > 0) {
+                            return value
+                          } else {
+                            return prev
+                          }
+                        })
+                      }
+                    >
+                      <svg xmlns='http://www.w3.org/2000/svg'>
+                        <path d='M9 4v1H0V4z'></path>
+                      </svg>
+                    </button>
+                    <input
+                      type='text'
+                      value={count}
+                      className='product-info-count-input'
+                      onChange={e =>
+                        e.target.value <= 20 && e.target.value > 0 && setCount(e.target.value.replace(/\D/g, ''))
+                      }
+                    />
+                    <button
+                      className='product-info-count-counter-plus button-counter'
+                      type='button'
+                      onClick={() =>
+                        setCount(prev => {
+                          const value = prev + 1
+                          if (value <= 20) {
+                            return value
+                          } else {
+                            return prev
+                          }
+                        })
+                      }
+                    >
+                      <svg xmlns='http://www.w3.org/2000/svg'>
+                        <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <button type='button' className='product-info-add-to-cart' onClick={addToCart}>
+                  Add to cart
+                </button>
               </div>
             </div>
           </div>
@@ -89,9 +158,97 @@ export default function Product({ product }) {
           padding: 1.5rem;
         }
 
+        @media (max-width: 460px) {
+          .product-info-description {
+            font-size: 1.6rem !important;
+          }
+
+          .product {
+            padding: 1.5rem 0 !important;
+          }
+
+          .container {
+            padding: 1rem !important;
+          }
+        }
+
+        .product-info-add-to-cart {
+          transition: filter 0.3s ease;
+          background-color: #fff;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          border-radius: 3rem;
+        }
+
+        .product-info-add-to-cart:hover {
+          filter: brightness(80%);
+        }
+
+        .product-info-count-counter {
+          display: flex;
+          max-width: fit-content;
+          border-radius: 3rem;
+          border: 2px solid #fff;
+        }
+
+        .product-info-count-title {
+          color: #636573;
+          padding: 1rem 0;
+          font-weight: 600;
+        }
+
+        .product-info-count {
+          display: inline-block;
+        }
+        .product-info-count-input {
+          width: 5rem;
+          text-align: center;
+          font-weight: 600;
+          outline: none;
+          border: none;
+        }
+
+        .product-info-count {
+          margin: 2rem 2rem 2rem 0;
+        }
+
+        button {
+          outline: none;
+          background-color: transparent;
+          padding: 1.7rem;
+          border: none;
+          cursor: pointer;
+        }
+
+        svg {
+          fill: #fff;
+          height: 9px;
+          width: 9px;
+        }
+
+        .product-info-sizes-input[active='true'] {
+          background-color: #fff;
+          color: #000;
+        }
+
+        .product-info-sizes-input {
+          color: #797b8c;
+          transition: all 0.2s ease;
+          transition-property: color, background-color;
+          cursor: pointer;
+          border-style: none;
+          background: #474852;
+          border-radius: 3rem;
+          padding: 1rem 2rem;
+          margin-right: 0.25rem;
+        }
+
+        .product-info-sizes-input:last-child {
+          margin-right: 0;
+        }
         .product-info-description {
           font-size: 1.8rem;
-          min-width: 300px;
+          min-width: 225px;
         }
 
         .product-info-sizes {
@@ -103,7 +260,6 @@ export default function Product({ product }) {
           gap: 4rem;
         }
         .product-info {
-          padding: 0 1.5rem;
           flex: 1;
           font-size: 1.7rem;
         }
@@ -111,12 +267,13 @@ export default function Product({ product }) {
           background-color: #fff;
           color: #1d1f21;
           padding: 1rem 4rem;
-          font-weight: bold;
+          font-weight: 600;
           font-size: 2.5rem;
           border-radius: 3rem;
           max-width: fit-content;
           border: none;
           white-space: nowrap;
+          cursor: default;
         }
 
         .product-title {

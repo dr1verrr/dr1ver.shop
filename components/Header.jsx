@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React from 'react'
 import categories from '../data/categories.json'
 
 export default function Header() {
-  useEffect(() => {
-    console.log(categories)
-  }, [])
   return (
     <header className='header'>
       <div className='container'>

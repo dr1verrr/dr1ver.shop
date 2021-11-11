@@ -15,9 +15,7 @@ export default function Product({ products }) {
                 <Image src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`} width={200} height={200} alt='' />
               </div>
               <div style={{ padding: '1.5rem' }}>
-                <h2 style={{ margin: 0 }} className='product-title'>
-                  {product.title}
-                </h2>
+                <div className='product-title'>{product.title}</div>
                 <p className='product-description'>{product.description}</p>
               </div>
               <Link href={`/product/${product.slug}`}>
@@ -43,12 +41,17 @@ export default function Product({ products }) {
           top: 0;
           padding: 1rem 2rem;
           color: #fff;
-          font-weight: bold;
+          font-weight: 600;
           background-color: #1d1f21;
           border-top-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
           font-size: 2rem;
         }
+        .product-title {
+          font-size: 2rem;
+          font-weight: 600;
+        }
+
         @media (max-width: 1140px) {
           .container {
             grid-template-columns: repeat(2, 1fr);
