@@ -255,6 +255,7 @@ export default function Product({ product }) {
         .product-info-description {
           font-size: 1.8rem;
           min-width: 225px;
+          word-break: break-all;
         }
 
         .product-info-sizes {
