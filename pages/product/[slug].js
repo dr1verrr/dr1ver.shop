@@ -326,7 +326,7 @@ export default function Product({ product }) {
           content: '';
           position: absolute;
           left: 0;
-          width: 13px;
+          width: 0.6rem;
           height: 1px;
           top: 50%;
           background-color: #fff;
