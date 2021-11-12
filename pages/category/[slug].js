@@ -6,7 +6,7 @@ import Product from '../../components/Product'
 function Category({ products }) {
   return (
     <React.Fragment>
-      <div style={{ textAlign: 'center', fontSize: '4rem', padding: '4rem 0' }}>{products?.name}</div>
+      <div style={{ textAlign: 'center', fontSize: '2rem', padding: '2rem 0' }}>{products?.name}</div>
       {products && <Product products={products.products} />}
     </React.Fragment>
   )

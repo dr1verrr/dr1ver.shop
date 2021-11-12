@@ -50,7 +50,7 @@ export default function LoginComponent() {
                 required
               />
               <input type='submit' value='Sign In' />
-              <div style={{ fontSize: '2rem' }}>
+              <div style={{ fontSize: '1.2rem' }}>
                 Want to create an account ? <Link href='/register'>Register</Link>
               </div>
             </div>

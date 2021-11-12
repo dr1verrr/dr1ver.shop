@@ -1,8 +1,21 @@
 import Link from 'next/link'
 import React from 'react'
+import { useSelector } from 'react-redux'
 import categories from '../data/categories.json'
 
 export default function Header() {
+  const cartItems = useSelector(state => state)
+
+  function getTotal(state) {
+    const itemsInCart = state.filter(item => item.price > 0)
+    let value = 0
+    const total = itemsInCart.map(result => {
+      value += result.price * result.count
+    })
+
+    return value.toFixed(2)
+  }
+
   return (
     <header className='header'>
       <div className='container'>
@@ -14,7 +27,7 @@ export default function Header() {
                 scrollTo({ left: 0, top: 0, behavior: 'smooth' })
               }}
             >
-              <div className='header-logo-first logo'>DR!VER</div>
+              <div className='header-logo-first logo'>DR1VER</div>
               <div className='header-logo-second logo'>SHOP</div>
             </div>
           </Link>
@@ -64,7 +77,7 @@ export default function Header() {
                 </svg>
               </Link>
             </div>
-            <a href='/cart' className='header-cart-total-cost'>{`0 USD`}</a>
+            <Link href='/cart' className='header-cart-total-cost'>{`${cartItems ? getTotal(cartItems) : 0} USD`}</Link>
           </div>
         </div>
       </div>
@@ -74,22 +87,22 @@ export default function Header() {
             background: #1d1f21;
             color: #fff;
             min-height: 75px;
-            font-size: 1.7rem;
+            font-size: 0.9rem;
           }
 
           .header-first {
-            padding-top: 3rem;
+            padding-top: 1.5rem;
           }
 
           .header-second {
             margin: 0 auto;
-            max-width: 85vw;
+            max-width: 93vw;
             position: relative;
-            padding: 1rem 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
           }
 
           @media(max-width: 970px) {
@@ -100,22 +113,16 @@ export default function Header() {
               -ms-overflow-style: none; /* IE 10+ */
             }
 
-            .header-second-other {
-              bottom: 15px;
-              right: 0!important;
+            .header-second {
+              justify-content: flex-end;
             }
-
-            .header-menu-link {
-              padding: 1.5rem 0 6.5rem!important;
-            }
-
           }
 
           .header-menu {
             display: flex;
             height: 100%;
-            gap: 1rem;
-            letter-spacing: 0.15rem;
+            gap: 0.7rem;
+            letter-spacing: 1.5px;
             align-items: center;
             justify-content: space-between;
             height: 100%;
@@ -127,7 +134,7 @@ export default function Header() {
 
           .header-menu-link {
             display: block;
-            padding: 2rem 0;
+            padding: 1rem 0;
           }
 
           .header-menu-link span {
@@ -169,11 +176,11 @@ export default function Header() {
             display: flex;
             justify-content:center;
             align-items:center;
-            font-size: 3rem;
             text-align: center;
             font-weight: bold;
             cursor: pointer;
             position: relative;
+            font-size: 1.2rem;
           }
           .header-logo-first {
             color: #1d1f21;
@@ -205,8 +212,7 @@ export default function Header() {
           .header-second-other {
             display: flex;
             align-items: center;
-            position: absolute;
-            right: 3vw;
+            padding: 0.5rem 0;
           }
 
           .icon {
@@ -222,7 +228,7 @@ export default function Header() {
             width: 32px;
             height: 32px;
             fill: #fff;
-            margin: 0 1rem;
+            margin: 0 0.5rem;
           }
 
           .cls-1 {

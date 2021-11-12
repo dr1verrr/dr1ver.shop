@@ -14,7 +14,7 @@ export default function Product({ products }) {
               <div className='product-image'>
                 <Image src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`} width={200} height={200} alt='' />
               </div>
-              <div style={{ padding: '1.5rem' }}>
+              <div style={{ padding: '0.25rem' }}>
                 <div className='product-title'>{product.title}</div>
                 <p className='product-description'>{product.description}</p>
               </div>
@@ -30,9 +30,10 @@ export default function Product({ products }) {
         .container {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          grid-gap: 3rem;
-          padding-bottom: 5rem;
+          grid-gap: 1.5rem;
+          padding-bottom: 2rem;
         }
+
         .product-price {
           z-index: 5;
           pointer-events: none;
@@ -41,27 +42,28 @@ export default function Product({ products }) {
           top: 0;
           padding: 1rem 2rem;
           color: #fff;
-          font-weight: 600;
+          font-weight: 700;
           background-color: #1d1f21;
           border-top-left-radius: 2rem;
           border-bottom-right-radius: 2rem;
-          font-size: 2rem;
-        }
-        .product-title {
-          font-size: 2rem;
-          font-weight: 600;
         }
 
-        @media (max-width: 1140px) {
+        .product-title {
+          font-weight: 700;
+          font-size: 1.3rem;
+        }
+
+        @media (max-width: 1170px) {
           .container {
             grid-template-columns: repeat(2, 1fr);
           }
         }
-        @media (max-width: 760px) {
+        @media (max-width: 780px) {
           .container {
             grid-template-columns: 1fr;
           }
         }
+
         .product {
           display: flex;
           flex-direction: column;
@@ -69,12 +71,12 @@ export default function Product({ products }) {
           background-color: #fff;
           position: relative;
           filter: drop-shadow(0 0 20px rgba(0, 60, 120, 0.06));
-          padding: 3rem;
+          padding: 2.5rem;
           text-align: left;
         }
         .product-image {
           align-self: center;
-          margin-top: 5rem;
+          margin-top: 2.5rem;
         }
         .product-link {
           transition: opacity 0.5s ease !important;

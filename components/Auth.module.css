@@ -14,18 +14,17 @@
 }
 
 .formInner input {
-  margin: 1rem 0;
+  margin: 0.6rem 0;
   padding: 1rem;
   width: 85%;
   border: 2px solid #eeeeff;
   outline-color: #999;
-  font-size: 1.8rem;
-  border-radius: 0.85em;
+  border-radius: 1.1rem;
+  font-size: 1rem;
 }
 
 @media (max-width: 380px) {
   .formInner input {
-    font-size: 1.7rem;
   }
 }
 

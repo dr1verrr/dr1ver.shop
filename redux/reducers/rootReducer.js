@@ -1,11 +1,11 @@
-import { GET_USERNAME } from '../types'
+import { CART_ADD } from '../types'
 
-const initialState = {}
+const initialState = []
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case '':
-      return action.payload
+    case CART_ADD:
+      return [...state, action.payload]
 
     default:
       return state

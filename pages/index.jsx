@@ -5,7 +5,7 @@ import api from '../config/api'
 function Home({ products }) {
   return (
     <React.Fragment>
-      <div style={{ textAlign: 'center', fontSize: '4rem', padding: '4rem 0' }}>All cards</div>
+      <div style={{ textAlign: 'center', fontSize: '2rem', padding: '2rem 0' }}>All cards</div>
       <Product products={products} />
     </React.Fragment>
   )

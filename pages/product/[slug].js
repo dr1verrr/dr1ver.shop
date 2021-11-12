@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import NextNProgress from 'nextjs-progressbar'
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart } from '../../redux/actions'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -11,7 +13,7 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const [totalPrice, setTotalPrice] = useState(price)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     console.log(product)
@@ -21,13 +23,20 @@ export default function Product({ product }) {
     console.log(selected)
   }, [selected])
 
-  function addToCart() {
-    setTotalPrice(price + optionPrice)
-  }
+  const cart = useSelector(state => state)
 
   useEffect(() => {
-    console.log(totalPrice)
-  }, [totalPrice])
+    console.log(cart)
+  }, [cart])
+
+  function submitHandler() {
+    const totalPrice = price + optionPrice
+
+    if (selected) {
+      const data = { id: product.id, name: product.title, price: totalPrice, options: selected, count }
+      return dispatch(addToCart(data))
+    }
+  }
 
   return (
     <>
@@ -61,7 +70,7 @@ export default function Product({ product }) {
                   return (
                     <div key={fld.id} className='product-info-sizes'>
                       <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '1.5rem' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', paddingTop: '0.75rem' }}>
                         {select.map(s => {
                           const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
                           const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
@@ -134,7 +143,7 @@ export default function Product({ product }) {
                     </button>
                   </div>
                 </div>
-                <button type='button' className='product-info-add-to-cart' onClick={addToCart}>
+                <button type='button' className='product-info-add-to-cart' onClick={submitHandler}>
                   Add to cart
                 </button>
               </div>
@@ -155,35 +164,37 @@ export default function Product({ product }) {
 
       <style jsx>{`
         .product {
-          padding: 1.5rem;
+          padding: 0.5rem;
+        }
+
+        .product-info {
+          flex: 1;
         }
 
         @media (max-width: 870px) {
-          .product-inner {
-            flex-direction: column;
-          }
         }
 
         @media (max-width: 460px) {
           .product-info-description {
-            font-size: 1.6rem !important;
+            line-height: 1.5;
           }
 
           .product {
-            padding: 1.5rem 0 !important;
+            padding: 0.75rem 0 !important;
           }
 
           .container {
-            padding: 1rem !important;
+            padding: 0.6rem !important;
           }
         }
 
         .product-info-add-to-cart {
           transition: filter 0.3s ease;
           background-color: #fff;
-          letter-spacing: 0.2em;
+          letter-spacing: 2px;
           text-transform: uppercase;
           border-radius: 3rem;
+          font-weight: 600;
         }
 
         .product-info-add-to-cart:hover {
@@ -199,15 +210,16 @@ export default function Product({ product }) {
 
         .product-info-count-title {
           color: #636573;
-          padding: 1rem 0;
+          padding: 0.5rem 0;
           font-weight: 600;
         }
 
         .product-info-count {
           display: inline-block;
         }
+
         .product-info-count-input {
-          width: 5rem;
+          width: 3.5rem;
           text-align: center;
           font-weight: 600;
           outline: none;
@@ -215,13 +227,13 @@ export default function Product({ product }) {
         }
 
         .product-info-count {
-          margin: 2rem 2rem 2rem 0;
+          margin: 1rem 1rem 1rem 0;
         }
 
         button {
           outline: none;
           background-color: transparent;
-          padding: 1.7rem;
+          padding: 1.2rem;
           border: none;
           cursor: pointer;
         }
@@ -245,37 +257,39 @@ export default function Product({ product }) {
           border-style: none;
           background: #474852;
           border-radius: 3rem;
-          padding: 1rem 2rem;
+          padding: 0.75rem 1.2rem;
           margin-right: 0.25rem;
         }
 
         .product-info-sizes-input:last-child {
           margin-right: 0;
         }
+
         .product-info-description {
-          font-size: 1.8rem;
           min-width: 225px;
-          word-break: break-all;
+          word-break: break-word;
         }
 
         .product-info-sizes {
-          padding: 1.5rem 0;
+          padding: 0.75rem 0;
         }
+
         .product-inner {
           display: flex;
           flex-wrap: wrap;
-          gap: 4rem;
+          gap: 2rem;
         }
+
         .product-info {
           flex: 1;
-          font-size: 1.7rem;
         }
+
         .product-info-price {
           background-color: #fff;
           color: #1d1f21;
-          padding: 1rem 4rem;
-          font-weight: 600;
-          font-size: 2.5rem;
+          padding: 1rem 3rem;
+          font-size: 1.2rem;
+          font-weight: 700;
           border-radius: 3rem;
           max-width: fit-content;
           border: none;
@@ -284,24 +298,29 @@ export default function Product({ product }) {
         }
 
         .product-title {
-          font-size: 4rem;
+          font-size: 2rem;
         }
+
         .product-redirect {
           cursor: pointer;
-          flex: 0.49;
-          padding: 1.5rem 2rem;
+          flex: 0.48;
+          padding: 1rem;
           position: relative;
         }
+
         .product-image {
           position: relative;
-          align-items: flex-start;
           display: flex;
+          align-items: flex-start;
           justify-content: center;
           flex: 1;
+          min-width: 225px;
         }
+
         .product-redirect:hover {
           text-decoration: underline;
         }
+
         .product-redirect::before,
         .product-redirect::after {
           content: '';
@@ -315,16 +334,18 @@ export default function Product({ product }) {
         .product-redirect::after {
           transform: rotate(45deg);
         }
+
         .product-redirect::before {
           transform: rotate(135deg);
         }
+
         .product-header {
           width: 100%;
           margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          padding: 3rem 0;
+          padding: 1rem 0;
           flex-wrap: wrap;
           white-space: nowrap;
         }
@@ -332,7 +353,7 @@ export default function Product({ product }) {
         .container {
           margin: 0 auto;
           max-width: 91vw;
-          padding: 0 1.5rem;
+          padding: 0 1rem;
         }
       `}</style>
     </>
