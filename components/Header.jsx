@@ -134,7 +134,7 @@ export default function Header() {
 
           .header-menu-link {
             display: block;
-            padding: 1rem 0;
+            padding: 1.25rem 0;
           }
 
           .header-menu-link span {

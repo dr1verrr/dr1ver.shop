@@ -64,6 +64,12 @@ export default function Product({ products }) {
           }
         }
 
+        @media (max-width: 340px) {
+          .product {
+            padding: 1.5rem !important;
+          }
+        }
+
         .product {
           display: flex;
           flex-direction: column;
@@ -74,10 +80,12 @@ export default function Product({ products }) {
           padding: 2.5rem;
           text-align: left;
         }
+
         .product-image {
           align-self: center;
           margin-top: 2.5rem;
         }
+
         .product-link {
           transition: opacity 0.5s ease !important;
           opacity: 0;
@@ -92,6 +100,7 @@ export default function Product({ products }) {
           width: 100%;
           height: 100%;
         }
+
         .product:hover .product-link {
           display: block;
           background-color: #333;
