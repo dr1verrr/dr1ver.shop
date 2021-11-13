@@ -177,10 +177,10 @@ export default function Header() {
             justify-content:center;
             align-items:center;
             text-align: center;
-            font-weight: bold;
+            font-weight: 400;
             cursor: pointer;
             position: relative;
-            font-size: 1.2rem;
+            font-size: 1.35rem;
           }
           .header-logo-first {
             color: #1d1f21;
@@ -225,8 +225,8 @@ export default function Header() {
           }
 
           .icon svg {
-            width: 32px;
-            height: 32px;
+            width: 1.85rem;
+            height: 1.85rem;
             fill: #fff;
             margin: 0 0.5rem;
           }

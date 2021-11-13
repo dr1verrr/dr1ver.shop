@@ -12,7 +12,16 @@ export default function Product({ products }) {
             <div className='product' key={product.id}>
               <div className='product-price'>{product.price + ' USD'}</div>
               <div className='product-image'>
-                <Image src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`} width={200} height={200} alt='' />
+                {product.image ? (
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                    width={200}
+                    height={200}
+                    alt=''
+                  />
+                ) : (
+                  <Image src='https://via.placeholder.com/150' alt='' />
+                )}
               </div>
               <div style={{ padding: '0.25rem' }}>
                 <div className='product-title'>{product.title}</div>
@@ -40,12 +49,13 @@ export default function Product({ products }) {
           position: absolute;
           left: 0;
           top: 0;
-          padding: 1rem 2rem;
+          padding: 0.5rem 1.5rem;
           color: #fff;
+          font-size: 1.2rem;
           font-weight: 700;
           background-color: #1d1f21;
-          border-top-left-radius: 2rem;
-          border-bottom-right-radius: 2rem;
+          border-top-left-radius: 1.5rem;
+          border-bottom-right-radius: 1.5rem;
         }
 
         .product-title {

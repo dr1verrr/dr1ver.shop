@@ -9,7 +9,7 @@ import { addToCart } from '../../redux/actions'
 export default function Product({ product }) {
   const router = useRouter()
   const [selected, setSelected] = useState('')
-  const [active, setActive] = useState(false)
+  const [active] = useState(true)
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
@@ -36,6 +36,10 @@ export default function Product({ product }) {
       const data = { id: product.id, name: product.title, price: totalPrice, options: selected, count }
       return dispatch(addToCart(data))
     }
+  }
+
+  function countHandler(e) {
+    e.target.value <= 20 && e.target.value > 0 && setCount(e.target.value.replace(/\D/g, ''))
   }
 
   return (
@@ -70,10 +74,14 @@ export default function Product({ product }) {
                   return (
                     <div key={fld.id} className='product-info-sizes'>
                       <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', paddingTop: '0.75rem' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '0.75rem' }}>
                         {select.map(s => {
                           const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
                           const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
+
+                          if ((selected.trim().length === 0 && option.startsWith('S')) || option.startsWith('s')) {
+                            setSelected(option)
+                          }
 
                           return (
                             <input
@@ -84,7 +92,6 @@ export default function Product({ product }) {
                               value={option}
                               onClick={e => {
                                 setSelected(e.target.value)
-                                setActive(true)
                                 setOptionPrice(price)
                               }}
                             />
@@ -115,14 +122,7 @@ export default function Product({ product }) {
                         <path d='M9 4v1H0V4z'></path>
                       </svg>
                     </button>
-                    <input
-                      type='text'
-                      value={count}
-                      className='product-info-count-input'
-                      onChange={e =>
-                        e.target.value <= 20 && e.target.value > 0 && setCount(e.target.value.replace(/\D/g, ''))
-                      }
-                    />
+                    <input type='text' value={count} className='product-info-count-input' onChange={countHandler} />
                     <button
                       className='product-info-count-counter-plus button-counter'
                       type='button'
@@ -171,6 +171,14 @@ export default function Product({ product }) {
           flex: 1;
         }
 
+        .button-counter svg {
+          width: 0.6rem;
+          height: 0.6rem;
+        }
+
+        .button-counter:active {
+        }
+
         @media (max-width: 870px) {
         }
 
@@ -189,12 +197,18 @@ export default function Product({ product }) {
         }
 
         .product-info-add-to-cart {
-          transition: filter 0.3s ease;
+          font-size: 0.9rem;
+          transition: all 0.2s ease;
+          transition-property: filter, transform;
           background-color: #fff;
           letter-spacing: 2px;
           text-transform: uppercase;
           border-radius: 3rem;
           font-weight: 600;
+        }
+
+        .product-info-add-to-cart:active {
+          transform: scale(1.09);
         }
 
         .product-info-add-to-cart:hover {
@@ -224,6 +238,7 @@ export default function Product({ product }) {
           font-weight: 600;
           outline: none;
           border: none;
+          font-size: 0.9rem;
         }
 
         .product-info-count {
@@ -252,13 +267,18 @@ export default function Product({ product }) {
         .product-info-sizes-input {
           color: #797b8c;
           transition: all 0.2s ease;
-          transition-property: color, background-color;
+          transition-property: color, background-color, transform;
           cursor: pointer;
           border-style: none;
           background: #474852;
           border-radius: 3rem;
           padding: 0.75rem 1.2rem;
           margin-right: 0.25rem;
+          font-size: 0.8rem;
+        }
+
+        .product-info-sizes-input:active {
+          transform: scale(1.15);
         }
 
         .product-info-sizes-input:last-child {
@@ -266,6 +286,7 @@ export default function Product({ product }) {
         }
 
         .product-info-description {
+          font-size: 1rem;
           min-width: 225px;
           word-break: break-word;
         }
@@ -287,7 +308,7 @@ export default function Product({ product }) {
         .product-info-price {
           background-color: #fff;
           color: #1d1f21;
-          padding: 1rem 3rem;
+          padding: 0.75rem 3rem;
           font-size: 1.2rem;
           font-weight: 700;
           border-radius: 3rem;
@@ -314,7 +335,7 @@ export default function Product({ product }) {
           align-items: flex-start;
           justify-content: center;
           flex: 1;
-          min-width: 225px;
+          min-width: 50%;
         }
 
         .product-redirect:hover {
