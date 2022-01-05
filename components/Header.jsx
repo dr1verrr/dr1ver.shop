@@ -2,14 +2,17 @@ import Link from 'next/link'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import categories from '../data/categories.json'
+import { getState } from 'redux-localstore'
 
 export default function Header() {
   const cartItems = useSelector(state => state)
+  const state = getState()
+  console.log(state)
 
   function getTotal(state) {
-    const itemsInCart = state.filter(item => item.price > 0)
+    const items = state.filter(item => item.price > 0)
     let value = 0
-    const total = itemsInCart.map(result => {
+    const total = items.map(result => {
       value += result.price * result.count
     })
 
@@ -109,8 +112,6 @@ export default function Header() {
             .header-menu {
               width: 100%;
               overflow-x: auto;
-              scrollbar-width: none; /* Firefox */
-              -ms-overflow-style: none; /* IE 10+ */
             }
 
             .header-second {
@@ -123,13 +124,13 @@ export default function Header() {
             height: 100%;
             gap: 0.7rem;
             letter-spacing: 1.5px;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             height: 100%;
           }
 
           .header-menu-category {
-            position: relative;
+
           }
 
           .header-menu-link {
@@ -138,7 +139,6 @@ export default function Header() {
           }
 
           .header-menu-link span {
-            display: block;
             position: relative;
           }
 

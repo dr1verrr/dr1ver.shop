@@ -1,12 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { ContainerStyled } from './Container.styled'
-import Link from 'next/link'
 
 export default function Product({ products }) {
   return (
     <ContainerStyled>
-      <div className='container'>
+      <div className='product-wrapper'>
         {products?.map(product => {
           return (
             <div className='product' key={product.id}>
@@ -36,7 +36,7 @@ export default function Product({ products }) {
       </div>
 
       <style jsx>{`
-        .container {
+        .product-wrapper {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 1.5rem;
@@ -63,13 +63,13 @@ export default function Product({ products }) {
           font-size: 1.3rem;
         }
 
-        @media (max-width: 1170px) {
-          .container {
+        @media (max-width: 1200px) {
+          .product-wrapper {
             grid-template-columns: repeat(2, 1fr);
           }
         }
-        @media (max-width: 780px) {
-          .container {
+        @media (max-width: 840px) {
+          .product-wrapper {
             grid-template-columns: 1fr;
           }
         }

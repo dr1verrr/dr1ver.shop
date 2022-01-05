@@ -1,7 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import NextNProgress from 'nextjs-progressbar'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../../redux/actions'
@@ -44,7 +43,7 @@ export default function Product({ product }) {
 
   return (
     <>
-      <NextNProgress />
+      {/*<NextNProgress />*/}
       {product && (
         <div className='container'>
           <div className='product'>
@@ -320,11 +319,12 @@ export default function Product({ product }) {
 
         .product-title {
           font-size: 2rem;
+          text-align: center;
         }
 
         .product-redirect {
+          display: inline-block;
           cursor: pointer;
-          flex: 0.48;
           padding: 1rem;
           position: relative;
         }
@@ -335,7 +335,7 @@ export default function Product({ product }) {
           align-items: flex-start;
           justify-content: center;
           flex: 1;
-          min-width: 50%;
+          min-width: 250px;
         }
 
         .product-redirect:hover {
@@ -361,13 +361,7 @@ export default function Product({ product }) {
         }
 
         .product-header {
-          width: 100%;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
           padding: 1rem 0;
-          flex-wrap: wrap;
           white-space: nowrap;
         }
 
