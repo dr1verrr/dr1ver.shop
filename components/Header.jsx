@@ -1,14 +1,9 @@
 import Link from 'next/link'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useAuth } from '../contexts/auth'
 import categories from '../data/categories.json'
-import { getState } from 'redux-localstore'
 
 export default function Header() {
-  const cartItems = useSelector(state => state)
-  const state = getState()
-  console.log(state)
-
   function getTotal(state) {
     const items = state.filter(item => item.price > 0)
     let value = 0
@@ -18,6 +13,8 @@ export default function Header() {
 
     return value.toFixed(2)
   }
+
+  const { cartData } = useAuth()
 
   return (
     <header className='header'>
@@ -80,7 +77,7 @@ export default function Header() {
                 </svg>
               </Link>
             </div>
-            <Link href='/cart' className='header-cart-total-cost'>{`${cartItems ? getTotal(cartItems) : 0} USD`}</Link>
+            <Link href='/cart' className='header-cart-total-cost'>{`${cartData ? getTotal(cartData) : 0} USD`}</Link>
           </div>
         </div>
       </div>

@@ -15,8 +15,8 @@ function MyApp({ Component, pageProps }) {
         <title>Next.js app</title>
       </Head>
       <Provider store={store}>
-        <Header />
         <AuthProvider>
+          <Header />
           <Component {...pageProps} />
         </AuthProvider>
       </Provider>

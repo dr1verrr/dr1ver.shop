@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap');
 
 html {
   font-size: 1vw;
@@ -8,6 +8,7 @@ html,
 body {
   overflow-y: scroll;
   scrollbar-width: none;
+  line-height: 1.5;
 }
 
 body::-webkit-scrollbar {
@@ -18,7 +19,7 @@ body::-webkit-scrollbar {
 body {
   padding: 0 !important;
   margin: 0 !important;
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
     Droid Sans, Helvetica Neue, sans-serif;
   font-size: 0.9rem;
   overflow-x: hidden;
@@ -56,7 +57,7 @@ body {
 }
 
 * {
-  font-family: 'Nunito';
+  font-family: 'Lato';
 }
 
 body::-webkit-scrollbar {

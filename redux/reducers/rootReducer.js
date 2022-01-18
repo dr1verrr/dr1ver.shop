@@ -1,9 +1,6 @@
 import { CART_ADD } from '../types'
-import { defineState } from 'redux-localstore'
 
-const defaultState = []
-
-const initialState = defineState(defaultState)('cart')
+const initialState = []
 
 export const rootReducer = (state = initialState, action) => {
   switch (action.type) {

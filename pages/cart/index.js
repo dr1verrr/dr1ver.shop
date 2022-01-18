@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Cart() {
-  const cartItems = useSelector(state => state)
+  const [cartData] = useLocalStorage('cart-data')
 
-  return <div>{JSON.stringify(cartItems)}</div>
+  return <div>{JSON.stringify(cartData)}</div>
 }

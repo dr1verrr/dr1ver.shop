@@ -2,8 +2,8 @@ import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCart } from '../../redux/actions'
+import { useAuth } from '../../contexts/auth'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -12,28 +12,23 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    console.log(product)
-  }, [product])
-
-  useEffect(() => {
-    console.log(selected)
-  }, [selected])
-
-  const cart = useSelector(state => state)
-
-  useEffect(() => {
-    console.log(cart)
-  }, [cart])
+  const [localStCart, setLocalStCart] = useLocalStorage('cart-data', [])
+  const { setCartData } = useAuth()
 
   function submitHandler() {
     const totalPrice = price + optionPrice
 
     if (selected) {
-      const data = { id: product.id, name: product.title, price: totalPrice, options: selected, count }
-      return dispatch(addToCart(data))
+      try {
+        const data = { id: product.id, name: product.title, price: totalPrice, options: selected, count }
+        if (data) {
+          setCartData(prev => [...prev, data])
+          return setLocalStCart(prev => [...prev, data])
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Something went wrong', err)
+      }
     }
   }
 
