@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../config/api'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 const AuthContext = createContext({})
 
@@ -17,23 +18,14 @@ export const AuthProvider = ({ children }) => {
   const privateCondition = privateRoutes.includes(router.pathname)
   const routeCondition = authCondition || privateCondition
 
-  function getCartData() {
-    if (typeof window !== 'undefined') {
-      return JSON.parse(localStorage.getItem('cart-data'))
-    }
-  }
-
   const [cartData, setCartData] = useState([])
+  const [localStCart, setLocalStCart] = useLocalStorage('cart-data', [])
 
   useEffect(() => {
-    if (localStorage.getItem('cart-data') !== null) {
-      setCartData(getCartData())
+    if (localStCart) {
+      setCartData(localStCart)
     }
   }, [])
-
-  useEffect(() => {
-    console.log(cartData)
-  }, [cartData])
 
   function checkRoute() {
     if (authCondition) {
@@ -87,7 +79,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, cartData, setCartData }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, cartData, setCartData, setLocalStCart }}>
       {routeChecked && !routeCondition && children}
       {routeChecked && routeCondition && children}
     </AuthContext.Provider>

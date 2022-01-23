@@ -1,9 +1,8 @@
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../../contexts/auth'
-import useLocalStorage from '../../hooks/useLocalStorage'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -12,22 +11,37 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const [localStCart, setLocalStCart] = useLocalStorage('cart-data', [])
-  const { setCartData } = useAuth()
+  const { cartData, setCartData, setLocalStCart } = useAuth()
+
+  function isDuplicate(arr, toCompare) {
+    const convToNum = toConv => parseInt(toConv)
+    const exists = arr.find(
+      item => convToNum(item.id) === convToNum(toCompare.id) && item.options === toCompare.options
+    )
+
+    if (exists) return true
+    return false
+  }
 
   function submitHandler() {
     const totalPrice = price + optionPrice
 
     if (selected) {
-      try {
-        const data = { id: product.id, name: product.title, price: totalPrice, options: selected, count }
-        if (data) {
-          setCartData(prev => [...prev, data])
-          return setLocalStCart(prev => [...prev, data])
-        }
-      } catch (err) {
-        console.error(err)
-        alert('Something went wrong', err)
+      const data = {
+        id: product.id,
+        name: product.title,
+        slug: product.slug,
+        price: totalPrice,
+        options: selected,
+        count,
+        image: product.image.url,
+      }
+
+      if (data && !isDuplicate(cartData, data)) {
+        setLocalStCart(prev => [...prev, data])
+        setCartData(prev => [...prev, data])
+      } else {
+        console.log('something went wrong')
       }
     }
   }
@@ -193,7 +207,6 @@ export default function Product({ product }) {
         .product-info-add-to-cart {
           font-size: 0.9rem;
           transition: all 0.2s ease;
-          transition-property: filter, transform;
           background-color: #fff;
           letter-spacing: 2px;
           text-transform: uppercase;

@@ -14,6 +14,10 @@ export default function Header() {
     return value.toFixed(2)
   }
 
+  useEffect(() => {
+    console.log(cartData)
+  }, [])
+
   const { cartData } = useAuth()
 
   return (
@@ -87,7 +91,7 @@ export default function Header() {
             background: #1d1f21;
             color: #fff;
             min-height: 75px;
-            font-size: 0.9rem;
+            font-size: 1rem;
           }
 
           .header-first {
