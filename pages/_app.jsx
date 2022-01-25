@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <React.Fragment>
       <Head>
-        <title>Next.js app</title>
+        <title>dr1ver.shop</title>
       </Head>
       <Provider store={store}>
         <AuthProvider>

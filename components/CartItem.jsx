@@ -1,45 +1,65 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable react/display-name */
+
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 
 function CartItem({ data }) {
   const [productCount, setProductCount] = useState(data.count)
   const [editMode, setEditMode] = useState(false)
   const [menuVisible, setMenuVisible] = useState(false)
+  const inputCountRef = useRef()
+  const numArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10+']
+  const [modCartData, setModCartData] = useState([])
 
-  const { cartData, setCartData, setLocalStCart } = useAuth()
+  const { cartData, setCartData } = useAuth()
 
-  function dropMenuHandler(e) {
-    if (e.target.value === '11+') {
+  function dropMenuHandler(e, v) {
+    if (v === '10+') {
       setEditMode(true)
+      return inputCountRef.current.focus()
     }
-
-    if (editMode) {
-      setProductCount(e.target.value)
-      setEditMode(false)
-    }
+    updateFieldChanged(e, v)
   }
 
-  function updateFieldChanged(e) {
-    if (e.target.value <= 20 && e.target.value >= 1) {
-      let newArr = [...cartData]
-      cartData.findIndex((element, index) => {
-        if (element.id + element.options === data.id + data.options) {
-          newArr[index] = { ...data, [e.target.name]: parseInt(e.target.value) }
-        }
-      })
+  function submitHandler(e) {
+    e.preventDefault()
+    setCartData(modCartData)
+  }
 
-      setProductCount(e.target.value)
-      setCartData(newArr)
-      setLocalStCart(newArr)
+  function updateFieldChanged(e, option) {
+    const value = e.target.value ? parseInt(e.target.value && e.target.value?.replace(/\D/g, '')) : ''
+
+    function ifEditMode() {
+      if (editMode && value >= 1 && value <= 20) {
+        return parseInt(value)
+      }
+      if (editMode) {
+        if (value > 20) return 20
+        if (value < 1 || value === '') return 1
+      }
+
+      if (!editMode) return parseInt(option)
+    }
+    const name = inputCountRef.current.name
+
+    let newArr = [...cartData]
+    cartData.findIndex((element, index) => {
+      if (element.id + element.options === data.id + data.options) {
+        newArr[index] = { ...data, [name]: parseInt(ifEditMode()) }
+      }
+    })
+
+    setProductCount(ifEditMode())
+    if (editMode) {
+      setModCartData(newArr)
     } else {
-      console.log('cannot set count more than 20')
+      setCartData(newArr)
     }
   }
 
   return (
-    <form className='cart-item-counter'>
+    <form className='cart-item-counter' onSubmit={submitHandler}>
       <div
         className='input-group'
         style={{
@@ -55,8 +75,9 @@ function CartItem({ data }) {
           className='cart-item-count'
           value={productCount}
           name='count'
-          readOnly={editMode}
-          onChange={updateFieldChanged}
+          ref={inputCountRef}
+          readOnly={!editMode}
+          onChange={e => updateFieldChanged(e)}
           style={{
             border: 'none',
             background: 'transparent',
@@ -80,17 +101,13 @@ function CartItem({ data }) {
             }}
           >
             <div className='drop-list'>
-              <input type='text' className='drop-item' value={'1'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'2'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'3'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'4'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'5'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'6'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'7'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'8'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'9'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'10'} onChange={dropMenuHandler} />
-              <input type='text' className='drop-item' value={'11+'} onChange={dropMenuHandler} />
+              {numArr.map(n => {
+                return (
+                  <div key={n} type='text' className='drop-list-item' value={n} onClick={e => dropMenuHandler(e, n)}>
+                    {n}
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}
@@ -103,18 +120,18 @@ function CartItem({ data }) {
       </div>
 
       <style jsx>{`
-        .drop-item {
+        .drop-list-item {
           position: relative;
           padding: 0.75rem;
           background: none;
           border: none;
-          pointer-events: none;
+          pointer-events: 'none';
           font-size: 0.9rem;
           border-bottom: 1px solid #a3a3a3;
           width: 100%;
         }
 
-        .drop-item:last-child {
+        .drop-list-item:last-child {
           border-radius: 10px;
         }
       `}</style>

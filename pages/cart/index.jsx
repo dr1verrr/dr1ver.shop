@@ -4,12 +4,6 @@ import CartItem from '../../components/CartItem'
 import { useAuth } from '../../contexts/auth'
 import Link from 'next/link'
 
-//TODO: filter, transform, validate data that coming from db(localStorage or Database)
-
-// Conditions: no more than 20 count of one product with the same options(You can add the same product BUT with options difference)
-
-// One object(product) have 5 keys: 1)id, 2)name, 3)price, 4)options: type String, 5)count, 6)image: url, 7)slug
-
 export default function Cart() {
   const { cartData } = useAuth()
 
@@ -52,7 +46,6 @@ export default function Cart() {
                     <CartItem data={item} />
                     <div className='cart-item-remove'></div>
                   </div>
-                  {/*{item.id}*/}
                 </div>
               )
             })
@@ -61,8 +54,8 @@ export default function Cart() {
       </div>
       <style jsx>{`
         .cart {
+          min-height: 100vh;
         }
-
         .cart-item {
           padding: 2rem 0;
         }

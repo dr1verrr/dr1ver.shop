@@ -26,6 +26,7 @@ body {
   background-color: #fafafc;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
+  position: relative;
 }
 
 @media (max-width: 1600px) {

@@ -31,7 +31,9 @@ export default function Header() {
                 scrollTo({ left: 0, top: 0, behavior: 'smooth' })
               }}
             >
-              <div className='header-logo-first logo'>DR1VER</div>
+              <div className='header-logo-first logo'>
+                DR1VER<span style={{ fontWeight: 'bold' }}>.</span>
+              </div>
               <div className='header-logo-second logo'>SHOP</div>
             </div>
           </Link>

@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import Modal from '../../components/Modal'
 import { useAuth } from '../../contexts/auth'
 
 export default function Product({ product }) {
@@ -11,7 +12,8 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const { cartData, setCartData, setLocalStCart } = useAuth()
+  const { cartData, setCartData } = useAuth()
+  const [showModal, setShowModal] = useState(false)
 
   function isDuplicate(arr, toCompare) {
     const convToNum = toConv => parseInt(toConv)
@@ -38,10 +40,9 @@ export default function Product({ product }) {
       }
 
       if (data && !isDuplicate(cartData, data)) {
-        setLocalStCart(prev => [...prev, data])
         setCartData(prev => [...prev, data])
       } else {
-        console.log('something went wrong')
+        setShowModal(true)
       }
     }
   }
@@ -52,6 +53,9 @@ export default function Product({ product }) {
 
   return (
     <>
+      <Modal title={'Warning!'} show={showModal} onClose={() => setShowModal(false)}>
+        Duplicate found
+      </Modal>
       {/*<NextNProgress />*/}
       {product && (
         <div className='container'>

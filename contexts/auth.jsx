@@ -18,14 +18,7 @@ export const AuthProvider = ({ children }) => {
   const privateCondition = privateRoutes.includes(router.pathname)
   const routeCondition = authCondition || privateCondition
 
-  const [cartData, setCartData] = useState([])
-  const [localStCart, setLocalStCart] = useLocalStorage('cart-data', [])
-
-  useEffect(() => {
-    if (localStCart) {
-      setCartData(localStCart)
-    }
-  }, [])
+  const [cartData, setCartData] = useLocalStorage('cart-data', [])
 
   function checkRoute() {
     if (authCondition) {
@@ -79,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, cartData, setCartData, setLocalStCart }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, cartData, setCartData }}>
       {routeChecked && !routeCondition && children}
       {routeChecked && routeCondition && children}
     </AuthContext.Provider>
