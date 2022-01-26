@@ -14,10 +14,6 @@ export default function Header() {
     return value.toFixed(2)
   }
 
-  useEffect(() => {
-    console.log(cartData)
-  }, [])
-
   const { cartData } = useAuth()
 
   return (
@@ -25,12 +21,7 @@ export default function Header() {
       <div className='container'>
         <div className='header-first'>
           <Link href='/' passHref>
-            <div
-              className='header-logo'
-              onClick={() => {
-                scrollTo({ left: 0, top: 0, behavior: 'smooth' })
-              }}
-            >
+            <div className='header-logo'>
               <div className='header-logo-first logo'>
                 DR1VER<span style={{ fontWeight: 'bold' }}>.</span>
               </div>
@@ -90,7 +81,7 @@ export default function Header() {
       <style jsx>{`
           .header {
             z-index: 1000;
-            background: #1d1f21;
+            background: #111113;
             color: #fff;
             min-height: 75px;
             font-size: 1rem;

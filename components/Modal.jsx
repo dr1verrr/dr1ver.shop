@@ -18,7 +18,7 @@ const Modal = props => {
           justify-content: center;
           align-items: center;
           position: fixed;
-          background: rgba(29, 31, 33, 0.95);
+          background: rgba(29, 31, 33, 0.75);
           width: 100%;
           height: 100%;
           top: 0;
