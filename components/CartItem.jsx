@@ -24,7 +24,10 @@ function CartItem({ data }) {
 
   function submitHandler(e) {
     e.preventDefault()
-    setCartData(modCartData)
+    if (Array.isArray(modCartData) && modCartData.length) {
+      setCartData(modCartData)
+    }
+    setEditMode(false)
   }
 
   function updateFieldChanged(e, option) {
@@ -34,9 +37,10 @@ function CartItem({ data }) {
       if (editMode && value >= 1 && value <= 20) {
         return parseInt(value)
       }
+
       if (editMode) {
         if (value > 20) return 20
-        if (value < 1 || value === '') return 1
+        if (value < 1 || value === '' || typeof value === 'undefined') return 1
       }
 
       if (!editMode) return parseInt(option)
@@ -71,7 +75,7 @@ function CartItem({ data }) {
         onClick={() => setMenuVisible(prev => !prev)}
       >
         <input
-          type='text'
+          type='number'
           className='cart-item-count'
           value={productCount}
           name='count'
@@ -81,7 +85,7 @@ function CartItem({ data }) {
           style={{
             border: 'none',
             background: 'transparent',
-            padding: '0.7rem',
+            padding: '0.7rem 0.7rem 0.7rem 1.5rem',
             outline: 'none',
             pointerEvents: editMode ? 'all' : 'none',
             fontSize: '0.9rem',
@@ -122,7 +126,7 @@ function CartItem({ data }) {
       <style jsx>{`
         .drop-list-item {
           position: relative;
-          padding: 0.75rem;
+          padding: 0.5rem 0.5rem 0.5rem 1.5rem;
           background: none;
           border: none;
           pointer-events: 'none';
@@ -133,6 +137,25 @@ function CartItem({ data }) {
 
         .drop-list-item:last-child {
           border-radius: 10px;
+        }
+
+        .cart-item-count {
+          border: none;
+          background-image: none;
+          background-color: transparent;
+          -webkit-box-shadow: none;
+          -moz-box-shadow: none;
+          box-shadow: none;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type='number'] {
+          -moz-appearance: textfield;
         }
       `}</style>
     </form>

@@ -163,16 +163,45 @@ export default function Product({ product }) {
           </div>
         </div>
       )}
-      <style jsx global>{`
-        body {
-          background-color: #1d1f21;
-          color: #1d1f21;
-          transition: all 0.5s ease;
-        }
-        body {
-          color: #fff;
-        }
-      `}</style>
+      <style jsx global>
+        {`
+          body {
+            color: #fff;
+            transition: all 0.3s ease;
+            background: rgba(17, 17, 19, 1);
+          }
+
+          body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url(${process.env.NEXT_PUBLIC_API_URL}${product.image.url});
+            background-repeat: repeat-x;
+            background-size: 50%;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.15;
+            filter: blur(0.75rem);
+          }
+
+          @media (max-width: 480px) {
+            body::after {
+              background-repeat: repeat-y;
+              background-size: 75%;
+            }
+          }
+
+          header {
+            background: rgba(17, 17, 19, 0.75) !important;
+          }
+
+          body {
+          }
+        `}
+      </style>
 
       <style jsx>{`
         .product {
