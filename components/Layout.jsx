@@ -22,7 +22,6 @@ export default function Layout({ children }) {
           min-height: 100vh;
         }
         .main {
-          min-height: 100vh;
           flex: 1;
         }
       `}</style>
