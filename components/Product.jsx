@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { ContainerStyled } from './Container.styled'
 
 export default function Product({ products }) {
   return (
-    <ContainerStyled>
+    <div className='container'>
       <div className='product-wrapper'>
         {products?.map(product => {
           return (
@@ -41,6 +40,12 @@ export default function Product({ products }) {
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 1.5rem;
           padding-bottom: 2rem;
+        }
+
+        .container {
+          position: relative !important;
+          margin: 0 auto;
+          max-width: 80vw;
         }
 
         .product-price {
@@ -120,6 +125,6 @@ export default function Product({ products }) {
           opacity: 0.45;
         }
       `}</style>
-    </ContainerStyled>
+    </div>
   )
 }
