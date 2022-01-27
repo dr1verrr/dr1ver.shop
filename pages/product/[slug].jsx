@@ -4,6 +4,9 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Modal from '../../components/Modal'
 import { useAuth } from '../../contexts/auth'
+import _ from 'lodash'
+import { useCallback } from 'react'
+import { useEffect } from 'react'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -12,8 +15,8 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const { cartData, setCartData } = useAuth()
   const [showModal, setShowModal] = useState(false)
+  const { cartData, setCartData } = useAuth()
 
   function isDuplicate(arr, toCompare) {
     const convToNum = toConv => parseInt(toConv)
@@ -25,7 +28,16 @@ export default function Product({ product }) {
     return false
   }
 
-  function submitHandler() {
+  const debounce = useCallback(
+    _.debounce(_val => {
+      setShowModal(_val)
+      // send the server request here
+    }, 5000),
+    []
+  )
+
+  function submitHandler(e) {
+    e.preventDefault()
     const totalPrice = price + optionPrice
 
     if (selected) {
@@ -43,12 +55,18 @@ export default function Product({ product }) {
         setCartData(prev => [...prev, data])
       } else {
         setShowModal(true)
+        debounce(false)
       }
     }
   }
 
   function countHandler(e) {
-    e.target.value <= 20 && e.target.value > 0 && setCount(e.target.value.replace(/\D/g, ''))
+    const value = e.target.value.replace(/\D/g, '')
+    if (value) {
+      if (value >= 1 && value <= 20) setCount(value)
+      if (value <= 0 || value === '') setCount(1)
+      if (value > 20) setCount(20)
+    }
   }
 
   return (
@@ -58,108 +76,107 @@ export default function Product({ product }) {
       </Modal>
       {/*<NextNProgress />*/}
       {product && (
-        <div className='container'>
-          <div className='product'>
-            <div className='product-header'>
-              <div onClick={router.back} className='product-redirect'>
-                <span>Go back</span>
-              </div>
-              <div className='product-title'>{product.title}</div>
-            </div>
-            <div className='product-inner'>
-              <div className='product-image'>
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                  alt=''
-                  width={product.image.width}
-                  height={product.image.height}
-                />
-              </div>
-              <div className='product-info'>
-                <button type='button' className='product-info-price'>
-                  {parseFloat(product.price + optionPrice)}
-                </button>
-                <p className='product-info-description'>{product.description}</p>
-                {product.Custom_field.map(fld => {
-                  const select = fld.options.split('|')
-
-                  return (
-                    <div key={fld.id} className='product-info-sizes'>
-                      <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '0.75rem' }}>
-                        {select.map(s => {
-                          const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
-                          const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
-
-                          if ((selected.trim().length === 0 && option.startsWith('S')) || option.startsWith('s')) {
-                            setSelected(option)
-                          }
-
-                          return (
-                            <input
-                              type='button'
-                              key={s}
-                              className='product-info-sizes-input'
-                              active={active && selected === option ? 'true' : 'false'}
-                              value={option}
-                              onClick={e => {
-                                setSelected(e.target.value)
-                                setOptionPrice(price)
-                              }}
-                            />
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )
-                })}
-                <div className='product-info-count'>
-                  <div className='product-info-count-title'>Count:</div>
-                  <div className='product-info-count-counter'>
-                    <button
-                      className='product-info-count-counter-minus button-counter'
-                      type='button'
-                      onClick={() =>
-                        setCount(prev => {
-                          const value = prev - 1
-                          if (value > 0) {
-                            return value
-                          } else {
-                            return prev
-                          }
-                        })
-                      }
-                    >
-                      <svg xmlns='http://www.w3.org/2000/svg'>
-                        <path d='M9 4v1H0V4z'></path>
-                      </svg>
-                    </button>
-                    <input type='text' value={count} className='product-info-count-input' onChange={countHandler} />
-                    <button
-                      className='product-info-count-counter-plus button-counter'
-                      type='button'
-                      onClick={() =>
-                        setCount(prev => {
-                          const value = prev + 1
-                          if (value <= 20) {
-                            return value
-                          } else {
-                            return prev
-                          }
-                        })
-                      }
-                    >
-                      <svg xmlns='http://www.w3.org/2000/svg'>
-                        <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
-                      </svg>
-                    </button>
-                  </div>
+        <div className='product'>
+          <div className='container'>
+            <form action='' onSubmit={submitHandler}>
+              <div className='product-header'>
+                <div onClick={router.back} className='product-redirect'>
+                  <span>Go back</span>
                 </div>
-                <button type='button' className='product-info-add-to-cart' onClick={submitHandler}>
-                  Add to cart
-                </button>
+                <div className='product-title'>{product.title}</div>
               </div>
-            </div>
+              <div className='product-inner'>
+                <div className='product-image'>
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                    alt=''
+                    width={product.image.width}
+                    height={product.image.height}
+                  />
+                </div>
+                <div className='product-info'>
+                  <button type='button' className='product-info-price'>
+                    {parseFloat(product.price + optionPrice)}
+                  </button>
+                  <p className='product-info-description'>{product.description}</p>
+                  {product.Custom_field.map(fld => {
+                    const select = fld.options.split('|')
+                    return (
+                      <div key={fld.id} className='product-info-sizes'>
+                        <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '0.75rem' }}>
+                          {select.map(s => {
+                            const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
+                            const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
+                            if ((selected.trim().length === 0 && option.startsWith('S')) || option.startsWith('s')) {
+                              setSelected(option)
+                            }
+                            return (
+                              <input
+                                type='button'
+                                key={s}
+                                className='product-info-sizes-input'
+                                active={active && selected === option ? 'true' : 'false'}
+                                value={option}
+                                onClick={e => {
+                                  setSelected(e.target.value)
+                                  setOptionPrice(price)
+                                }}
+                              />
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
+                  <div className='product-info-count'>
+                    <div className='product-info-count-title'>Count:</div>
+                    <div className='product-info-count-counter'>
+                      <button
+                        className='product-info-count-counter-minus button-counter'
+                        type='button'
+                        onClick={() =>
+                          setCount(prev => {
+                            const value = prev - 1
+                            if (value > 0) {
+                              return value
+                            } else {
+                              return prev
+                            }
+                          })
+                        }
+                      >
+                        <svg xmlns='http://www.w3.org/2000/svg'>
+                          <path d='M9 4v1H0V4z'></path>
+                        </svg>
+                      </button>
+                      <input type='number' value={count} className='product-info-count-input' onChange={countHandler} />
+                      <button
+                        className='product-info-count-counter-plus button-counter'
+                        type='button'
+                        onClick={() =>
+                          setCount(prev => {
+                            const value = prev + 1
+                            if (value <= 20) {
+                              return value
+                            } else {
+                              return prev
+                            }
+                          })
+                        }
+                      >
+                        <svg xmlns='http://www.w3.org/2000/svg'>
+                          <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <button type='submit' className='product-info-add-to-cart'>
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -169,29 +186,6 @@ export default function Product({ product }) {
             color: #fff;
             transition: all 0.3s ease;
             background: rgba(17, 17, 19, 1);
-          }
-
-          body::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url(${process.env.NEXT_PUBLIC_API_URL}${product.image.url});
-            background-repeat: repeat-x;
-            background-size: 50%;
-            background-position: center;
-            z-index: -1;
-            opacity: 0.15;
-            filter: blur(0.75rem);
-          }
-
-          @media (max-width: 480px) {
-            body::after {
-              background-repeat: repeat-y;
-              background-size: 75%;
-            }
           }
 
           header {
@@ -206,6 +200,35 @@ export default function Product({ product }) {
       <style jsx>{`
         .product {
           padding: 0.5rem;
+          position: relative;
+          min-height: 100vh;
+        }
+
+        * {
+          overflow: visible !important;
+        }
+
+        .product::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: url(${process.env.NEXT_PUBLIC_API_URL}${product.image.url});
+          background-repeat: repeat-x;
+          background-size: 50%;
+          background-position: top;
+          z-index: -1;
+          opacity: 0.15;
+          filter: blur(0.5rem);
+        }
+
+        @media (max-width: 480px) {
+          .product::after {
+            background-repeat: repeat-y;
+            background-size: 75%;
+          }
         }
 
         .product-info {
@@ -279,6 +302,17 @@ export default function Product({ product }) {
           outline: none;
           border: none;
           font-size: 0.9rem;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Firefox */
+        input[type='number'] {
+          -moz-appearance: textfield;
         }
 
         .product-info-count {

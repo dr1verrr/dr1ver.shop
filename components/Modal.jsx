@@ -1,51 +1,55 @@
+import { useCallback, useEffect, useRef } from 'react'
+import useOnClickOutside from '../hooks/useOnClickOutside'
+
 const Modal = props => {
-  return props.show ? (
-    <div className='modal'>
-      <div className='modal-content'>
-        <div className='modal-header'>{props.title}</div>
-        <div className='modal-body'>
-          <p>{props.children}</p>
-        </div>
-        <div className='modal-footer'>
-          <button className='modal-button' onClick={props.onClose} style={{ width: '100%', display: 'block' }}>
-            Close
-          </button>
-        </div>
+  const modalRef = useRef()
+  const handler = useCallback(() => props.onClose(), [])
+
+  useOnClickOutside(modalRef, handler)
+  return (
+    <div className='modal' onKeyDown={e => console.log(e)} ref={modalRef}>
+      <div className='modal-header'>{props.title}</div>
+      <div className='modal-body'>
+        <p>{props.children}</p>
+      </div>
+      <div className='modal-footer'>
+        <button className='modal-button' onClick={props.onClose} style={{ width: '100%', display: 'block' }}>
+          Close
+        </button>
       </div>
       <style jsx>{`
-        .modal {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: fixed;
-          background: rgba(29, 31, 33, 0.75);
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 100;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-          padding: 15px;
-        }
-
         * {
-          font-size: 1.5rem;
+          font-size: 1.1rem;
         }
 
-        .modal-content {
+        .modal {
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
           margin: 0 auto;
           display: flex;
-          background: rgba(255, 255, 255, 0.75);
+          background: rgba(255, 255, 255, 0.9);
           color: #000;
           flex-direction: column;
           justify-content: center;
           min-width: fit-content;
-          width: 50vw;
-          padding: 3rem 10vw;
+          width: 15rem;
+          padding: 2rem;
           border-radius: 15px;
           text-align: center;
+          z-index: 1000;
+          position: fixed;
+          top: 30px;
+          right: 10vw;
+          opacity: ${props.show ? 1 : 0};
+          visibility: ${props.show ? 'visible' : 'hidden'};
+          transition: visibility 0s, opacity 0.4s linear;
+        }
+
+        @media (max-width: 480px) {
+          .modal {
+            top: 10px;
+            right: 0;
+            left: 0;
+          }
         }
 
         .modal-button {
@@ -53,7 +57,7 @@ const Modal = props => {
         }
       `}</style>
     </div>
-  ) : null
+  )
 }
 
 export default Modal
