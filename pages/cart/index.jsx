@@ -60,6 +60,11 @@ export default function Cart() {
           padding: 2rem 0;
         }
 
+        .cart-item-right {
+          display: flex;
+          flex-direction: column;
+        }
+
         .cart-item-left-inner {
           display: flex;
           align-items: center;
@@ -73,13 +78,13 @@ export default function Cart() {
 
         .cart-item-info-title {
           display: flex;
-          flex: 1;
           font-size: 1.5rem;
           letter-spacing: 1.5px;
         }
 
         .cart-item-image {
           cursor: pointer;
+          min-width: 150px;
         }
         .cart-item-info-title:hover {
           text-decoration: underline;
@@ -94,8 +99,8 @@ export default function Cart() {
 
         .cart-item {
           display: flex;
-          align-items: center;
           position: relative;
+          flex-wrap: wrap;
         }
 
         .cart-item::after {
@@ -122,8 +127,9 @@ export default function Cart() {
 
         .cart-item-left {
           display: flex;
-          align-items: center;
           flex: 1;
+          flex-wrap: wrap;
+          margin: 1rem;
         }
 
         .cart-item-image {
