@@ -2,23 +2,30 @@
 /* eslint-disable react/display-name */
 
 import React, { useEffect, useRef, useState } from 'react'
+import { useCallback } from 'react'
 import { useAuth } from '../contexts/auth'
+import useOnClickOutside from '../hooks/useOnClickOutside'
 
 function CartItem({ data }) {
   const [productCount, setProductCount] = useState(data.count)
   const [editMode, setEditMode] = useState(false)
   const [menuVisible, setMenuVisible] = useState(false)
   const inputCountRef = useRef()
+  const menuRef = useRef()
   const numArr = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10+']
   const [modCartData, setModCartData] = useState([])
 
   const { cartData, setCartData } = useAuth()
+
+  const handler = useCallback(() => setMenuVisible(false), [])
+  useOnClickOutside(menuRef, handler)
 
   function dropMenuHandler(e, v) {
     if (v === '10+') {
       setEditMode(true)
       return inputCountRef.current.focus()
     }
+
     updateFieldChanged(e, v)
   }
 
@@ -60,19 +67,22 @@ function CartItem({ data }) {
     } else {
       setCartData(newArr)
     }
+
+    if (menuVisible) setMenuVisible(false)
   }
 
   return (
     <form className='cart-item-counter' onSubmit={submitHandler}>
       <div
         className='input-group'
+        ref={menuRef}
         style={{
-          border: menuVisible ? '2px solid #333' : '1px solid #cccccc',
+          border: menuVisible || editMode ? '2px solid #333' : '1px solid #cccccc',
           cursor: 'pointer',
           borderRadius: '10px',
           position: 'relative',
         }}
-        onClick={() => setMenuVisible(prev => !prev)}
+        onClick={() => !editMode && setMenuVisible(prev => !prev)}
       >
         <input
           type='number'
@@ -87,8 +97,9 @@ function CartItem({ data }) {
             background: 'transparent',
             padding: '0.7rem 0.7rem 0.7rem 1.5rem',
             outline: 'none',
-            pointerEvents: editMode ? 'all' : 'none',
             fontSize: '0.9rem',
+            pointerEvents: editMode ? 'all' : 'none',
+            width: '100%',
           }}
         />
         {menuVisible && (
@@ -115,12 +126,6 @@ function CartItem({ data }) {
             </div>
           </div>
         )}
-
-        <span style={{ padding: '0 10px 0 0' }}>
-          <svg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg' className='ui-u7'>
-            <path d='M11.8 6.6l-3 4a1 1 0 01-1.6 0l-3-4A1 1 0 015 5h6a1 1 0 01.8 1.6z' fill='currentColor'></path>
-          </svg>
-        </span>
       </div>
 
       <style jsx>{`
@@ -135,8 +140,23 @@ function CartItem({ data }) {
           width: 100%;
         }
 
+        .drop-list-item:first-child {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
+
+        .drop-list-item:active {
+          transition: background 0.25s ease;
+          background: rgba(49, 190, 252, 0.4) !important;
+        }
+
+        .drop-list-item:hover {
+          background: rgba(49, 190, 252, 0.2);
+        }
+
         .drop-list-item:last-child {
-          border-radius: 10px;
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
         }
 
         .cart-item-count {
@@ -146,6 +166,9 @@ function CartItem({ data }) {
           -webkit-box-shadow: none;
           -moz-box-shadow: none;
           box-shadow: none;
+          width: 30%;
+          min-width: 50px;
+          max-width: 200px;
         }
 
         input::-webkit-outer-spin-button,
