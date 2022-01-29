@@ -74,7 +74,7 @@ export default function Product({ product }) {
       {!loading ? (
         <div className='product'>
           <div className='container'>
-            <form action='' onSubmit={submitHandler} onChange={() => console.log('awfawf')}>
+            <form action='' onSubmit={submitHandler}>
               <div className='product-header'>
                 <div onClick={router.back} className='product-redirect'>
                   <span>Go back</span>

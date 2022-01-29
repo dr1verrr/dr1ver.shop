@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 import categories from '../data/categories.json'
@@ -14,7 +15,26 @@ export default function Header() {
     return value.toFixed(2)
   }
 
-  const { cartData } = useAuth()
+  const [totalPrice, setTotalPrice] = useState(0)
+  const { cartData, popup, setPopup, isAuthenticated } = useAuth()
+
+  function profileHandler() {
+    if (isAuthenticated) {
+      router.push('/profile')
+    } else {
+      setPopup(prev => ({ ...prev, login: !prev.login }))
+    }
+  }
+
+  useEffect(() => {
+    console.log(popup)
+  }, [popup])
+
+  useEffect(() => {
+    if (cartData.length) {
+      setTotalPrice(getTotal(cartData))
+    }
+  }, [cartData])
 
   return (
     <header className='header'>
@@ -42,20 +62,18 @@ export default function Header() {
             ))}
           </div>
           <div className='header-second-other'>
-            <div className='header-account-icon icon'>
-              <Link href='/profile' onClick={e => e.preventDefault()} passHref>
-                <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
-                  <title />
-                  <g data-name='Layer 2' id='Layer_2'>
-                    <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
-                    <path d='M16,15a6,6,0,1,1,6-6A6,6,0,0,1,16,15ZM16,5a4,4,0,1,0,4,4A4,4,0,0,0,16,5Z' />
-                    <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
-                  </g>
-                  <g id='frame'>
-                    <rect height='32' width='32' className='cls-1' />
-                  </g>
-                </svg>
-              </Link>
+            <div className='header-account-icon icon' onClick={profileHandler}>
+              <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
+                <title />
+                <g data-name='Layer 2' id='Layer_2'>
+                  <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
+                  <path d='M16,15a6,6,0,1,1,6-6A6,6,0,0,1,16,15ZM16,5a4,4,0,1,0,4,4A4,4,0,0,0,16,5Z' />
+                  <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
+                </g>
+                <g id='frame'>
+                  <rect height='32' width='32' className='cls-1' />
+                </g>
+              </svg>
             </div>
             <div className='header-cart icon'>
               <Link href='/cart' onClick={e => e.preventDefault()} passHref>
@@ -74,7 +92,7 @@ export default function Header() {
                 </svg>
               </Link>
             </div>
-            <Link href='/cart' className='header-cart-total-cost'>{`${cartData ? getTotal(cartData) : 0} USD`}</Link>
+            <Link href='/cart' className='header-cart-total-cost'>{`${totalPrice} USD`}</Link>
           </div>
         </div>
       </div>
@@ -85,6 +103,10 @@ export default function Header() {
             color: #fff;
             min-height: 75px;
             font-size: 1rem;
+          }
+
+          .header-account-icon {
+            position: relative;
           }
 
           .header-first {
