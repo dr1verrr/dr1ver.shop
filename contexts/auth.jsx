@@ -9,45 +9,24 @@ const AuthContext = createContext({})
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [routeChecked, setRouteChecked] = useState(false)
   const router = useRouter()
 
   const privateRoutes = ['/profile']
-  const authRoutes = ['/login', '/register']
-  const authCondition = authRoutes.includes(router.pathname)
+  //const authRoutes = ['/login', '/register']
+  //const authCondition = authRoutes.includes(router.pathname)
   const privateCondition = privateRoutes.includes(router.pathname)
-  const routeCondition = authCondition || privateCondition
 
   const [cartData, setCartData] = useLocalStorage('cart-data', [])
+  const [loginModal, setLoginModal] = useState(false)
+  const [registerModal, setRegisterModal] = useState(false)
 
   function checkRoute() {
-    if (authCondition) {
-      if (!!user) {
-        router.replace('/').then(() => setRouteChecked(true))
-      } else {
-        setRouteChecked(true)
-      }
-    }
-
-    if (privateCondition) {
-      if (!!user) {
-        setRouteChecked(true)
-      } else {
-        router.replace('/login').then(() => setRouteChecked(true))
-      }
+    if (privateCondition && !user) {
+      router.replace('/')
     }
   }
 
-  useEffect(() => {
-    if (routeCondition && !loading) {
-      setRouteChecked(false)
-      checkRoute()
-    }
-
-    if (!routeChecked && !routeCondition) {
-      setRouteChecked(true)
-    }
-  }, [router.pathname, loading])
+  useEffect(checkRoute, [router.pathname, user])
 
   useEffect(() => {
     async function loadUserFromCookies() {
@@ -72,9 +51,19 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, loading, cartData, setCartData }}>
-      {routeChecked && !routeCondition && children}
-      {routeChecked && routeCondition && children}
+    <AuthContext.Provider
+      value={{
+        isAuthenticated: !!user,
+        user,
+        loading,
+        cartData,
+        setCartData,
+        loginModal,
+        setLoginModal,
+        registerModal,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   )
 }

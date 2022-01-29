@@ -1,8 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable react/display-name */
 
-import React, { useEffect, useRef, useState } from 'react'
-import { useCallback } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 

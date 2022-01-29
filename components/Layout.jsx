@@ -23,6 +23,7 @@ export default function Layout({ children }) {
         }
         .main {
           flex: 1;
+          min-height: 100vh;
         }
       `}</style>
     </React.Fragment>

@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useAuth } from '../contexts/auth'
 import React from 'react'
 
+//TODO: Rewrite Profile component. It shouldn't be a page
+
 const Profile = props => {
   const router = useRouter()
   const { user } = useAuth()

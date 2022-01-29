@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Modal from '../../components/Modal'
 import { useAuth } from '../../contexts/auth'
-import _ from 'lodash'
-import { useCallback } from 'react'
-import { useEffect } from 'react'
+import useDebouncedFunction from '../../hooks/useDebouncedFunction'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -17,6 +16,12 @@ export default function Product({ product }) {
   const [optionPrice, setOptionPrice] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const { cartData, setCartData } = useAuth()
+  const debounceModal = useDebouncedFunction(() => setShowModal(false), 3500)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (product) setLoading(false)
+  }, [product])
 
   function isDuplicate(arr, toCompare) {
     const convToNum = toConv => parseInt(toConv)
@@ -27,14 +32,6 @@ export default function Product({ product }) {
     if (exists) return true
     return false
   }
-
-  const debounce = useCallback(
-    _.debounce(_val => {
-      setShowModal(_val)
-      // send the server request here
-    }, 5000),
-    []
-  )
 
   function submitHandler(e) {
     e.preventDefault()
@@ -52,11 +49,11 @@ export default function Product({ product }) {
       }
 
       if (data && !isDuplicate(cartData, data)) {
-        setCartData(prev => [...prev, data])
-      } else {
-        setShowModal(true)
-        debounce(false)
+        return setCartData(prev => [...prev, data])
       }
+
+      setShowModal(true)
+      debounceModal()
     }
   }
 
@@ -74,11 +71,10 @@ export default function Product({ product }) {
       <Modal title={'Warning!'} show={showModal} onClose={() => setShowModal(false)}>
         Duplicate found
       </Modal>
-      {/*<NextNProgress />*/}
-      {product && (
+      {!loading ? (
         <div className='product'>
           <div className='container'>
-            <form action='' onSubmit={submitHandler}>
+            <form action='' onSubmit={submitHandler} onChange={() => console.log('awfawf')}>
               <div className='product-header'>
                 <div onClick={router.back} className='product-redirect'>
                   <span>Go back</span>
@@ -179,7 +175,10 @@ export default function Product({ product }) {
             </form>
           </div>
         </div>
+      ) : (
+        <div>Loading...</div>
       )}
+
       <style jsx global>
         {`
           body {
@@ -191,9 +190,6 @@ export default function Product({ product }) {
           header {
             background: rgba(17, 17, 19, 0.75) !important;
           }
-
-          body {
-          }
         `}
       </style>
 
@@ -202,6 +198,9 @@ export default function Product({ product }) {
           padding: 0.5rem;
           position: relative;
           min-height: 100vh;
+        }
+
+        .progress-circle {
         }
 
         * {
