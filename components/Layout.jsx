@@ -132,6 +132,7 @@ export default function Layout({ children }) {
           visibility: ${ifPopup ? 'visible' : 'hidden'};
           z-index: 1001;
           color: #000;
+          min-width: fit-content;
         }
       `}</style>
 

@@ -27,10 +27,6 @@ export default function Header() {
   }
 
   useEffect(() => {
-    console.log(popup)
-  }, [popup])
-
-  useEffect(() => {
     if (cartData.length) {
       setTotalPrice(getTotal(cartData))
     }
@@ -76,7 +72,7 @@ export default function Header() {
               </svg>
             </div>
             <div className='header-cart icon'>
-              <Link href='/cart' onClick={e => e.preventDefault()} passHref>
+              <Link href='/' onClick={e => e.preventDefault()} passHref>
                 <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
                   <title />
                   <g data-name='Layer 2' id='Layer_2'>
