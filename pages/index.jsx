@@ -1,12 +1,13 @@
 import React from 'react'
-import Product from '../components/Product'
+import Products from '../components/Products'
 import api from '../config/api'
 
 function Home({ products }) {
   return (
     <React.Fragment>
-      <div style={{ textAlign: 'center', fontSize: '2rem', padding: '2rem 0' }}>All cards</div>
-      <Product products={products} />
+      <h2 style={{ textAlign: 'center', fontSize: '3.5rem', padding: '1rem 0 3rem 0', fontWeight: 400 }}>All cards</h2>
+
+      <Products products={products} />
     </React.Fragment>
   )
 }

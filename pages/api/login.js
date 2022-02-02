@@ -17,6 +17,8 @@ export default async function handler(req, res) {
       path: '/',
     })
 
+    res.setHeader('Content-Type', 'text/plain')
+
     res.status(200).end()
   } catch (e) {
     res.status(400).send(e.response.data?.message[0]?.messages[0])

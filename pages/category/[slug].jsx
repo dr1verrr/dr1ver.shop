@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import fetch from 'isomorphic-fetch'
 import React from 'react'
-import Product from '../../components/Product'
+import Products from '../../components/Products'
 
 function Category({ products }) {
   return (
     <React.Fragment>
-      <div style={{ textAlign: 'center', fontSize: '2rem', padding: '2rem 0' }}>{products?.name}</div>
-      {products && <Product products={products.products} />}
+      <h2 style={{ textAlign: 'center', fontSize: '3.5rem', padding: '1rem 0 3rem 0', fontWeight: 400 }}>
+        {products?.name}
+      </h2>
+      {products && <Products products={products.products} />}
     </React.Fragment>
   )
 }

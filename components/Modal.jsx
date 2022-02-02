@@ -1,13 +1,26 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 
 const Modal = props => {
   const modalRef = useRef()
-  const handler = useCallback(() => props.onClose(), [props])
+  const handler = useCallback(() => props.onClose(), [])
+  const [pause, setPause] = useState(false)
 
-  useOnClickOutside(modalRef, handler)
+  useOnClickOutside(modalRef, props.show ? handler : () => {})
+
+  useEffect(() => {
+    props.debounce()
+  }, [pause])
+
   return (
-    <div className='modal' ref={modalRef}>
+    <div
+      className='modal'
+      ref={modalRef}
+      onMouseEnter={() => setPause(true)}
+      onMouseLeave={() => {
+        if (pause) setPause(false)
+      }}
+    >
       <div className='modal-button' onClick={props.onClose}>
         <svg className='cross' xmlns='http://www.w3.org/2000/svg'>
           <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
@@ -26,13 +39,11 @@ const Modal = props => {
         </div>
       </div>
 
-      <div className='modal-progressbar'>
-        <div className='modal-progressbar-line'></div>
-      </div>
+      <div className='notification-timer' paused={`${pause}`}></div>
       <style jsx>{`
-        * {
-          font-size: 1.1rem;
-        }
+        /** {
+          font-size: 1.6rem;
+        }*/
 
         .modal {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -42,17 +53,28 @@ const Modal = props => {
           color: #000;
           flex-direction: column;
           min-width: fit-content;
-          width: 15rem;
+          width: 300px;
           border-radius: 15px;
           text-align: center;
-          z-index: 1000;
           position: fixed;
-          top: 30px;
-          right: 10vw;
+          bottom: 15px;
+          right: 30px;
           overflow: hidden;
           opacity: ${props.show ? 1 : 0};
           visibility: ${props.show ? 'visible' : 'hidden'};
           transition: visibility 0s, opacity 0.4s linear;
+          z-index: 1200;
+          font-size: 2rem;
+        }
+
+        @media (max-width: 340px) {
+          .modal {
+            margin: 0 15px;
+          }
+        }
+
+        .modal-body {
+          /*text-align: left;*/
         }
 
         .modal-footer {
@@ -63,21 +85,21 @@ const Modal = props => {
           position: absolute;
           top: 15px;
           right: 15px;
-          max-width: 1rem;
-          max-height: 1rem;
+          max-width: 15px;
+          max-height: 15px;
         }
 
         svg {
-          width: 1rem;
-          height: 1rem;
+          width: 15px;
+          height: 15px;
         }
 
         .modal-content {
           flex: 1;
-          padding: 3rem;
+          padding: 4rem 3rem;
         }
 
-        .modal::after {
+        .notification-timer {
           content: '';
           display: block;
           position: absolute;
@@ -87,7 +109,13 @@ const Modal = props => {
           width: 100%;
           height: 5px;
           background: #a9a9a9;
+          animation-fill-mode: forwards;
+          animation-iteration-count: 1;
           animation: progressbar 3.5s;
+        }
+
+        .notification-timer[paused='true'] {
+          animation: none;
         }
 
         @keyframes progressbar {

@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Modal from '../../components/Modal'
 import { useAuth } from '../../contexts/auth'
 import useDebouncedFunction from '../../hooks/useDebouncedFunction'
@@ -14,23 +14,69 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const [showModal, setShowModal] = useState(false)
-  const { cartData, setCartData } = useAuth()
-  const debounceModal = useDebouncedFunction(() => setShowModal(false), 3500)
+  const { setCartData, setCartVisible, showModal, setShowModal } = useAuth()
   const [loading, setLoading] = useState(true)
+  const inputCountRef = useRef(null)
+  const debounceModal = useDebouncedFunction(() => {
+    setShowModal(prev => ({ ...prev, visible: false }))
+  }, 3500)
+
+  //const timeout = setTimeout(() => {
+  //  setShowModal(prev => ({ ...prev, visible: false }))
+  //}, timeClose - timeNow)
 
   useEffect(() => {
     if (product) setLoading(false)
   }, [product])
 
-  function isDuplicate(arr, toCompare) {
-    const convToNum = toConv => parseInt(toConv)
-    const exists = arr.find(
-      item => convToNum(item.id) === convToNum(toCompare.id) && item.options === toCompare.options
-    )
+  useEffect(() => {
+    const listener = document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        setShowModal(prev => ({ ...prev, visible: false }))
+      }
 
-    if (exists) return true
+      if (e.key === 'Enter' && document.activeElement === inputCountRef.current) {
+        setShowModal(prev => ({ ...prev, visible: false }))
+      }
+    })
+
+    return listener
+  }, [])
+
+  const convToNum = toConv => parseInt(toConv)
+
+  function ifExists(arr, obj) {
+    if (arr.find(item => convToNum(item.id) === convToNum(obj.id) && item.options === obj.options)) {
+      return true
+    }
     return false
+  }
+
+  function isDuplicate(arr, obj) {
+    //Later need to be rewrited! Temporary decision
+
+    if (ifExists(arr, obj)) {
+      let newArr = [...arr]
+
+      for (let index = 0; index < arr.length; index++) {
+        const element = arr[index]
+        if (element.options === obj.options && convToNum(element.id) === convToNum(obj.id)) {
+          newArr[index] = { ...obj, count: parseInt(element.count + obj.count > 20 ? 20 : element.count + obj.count) }
+          if (obj.count + element.count > 20) {
+            setShowModal({ title: 'Warning', message: 'Cannot set count more than 20', visible: true })
+            debounceModal()
+
+            //setShowModal(prev => ({ ...prev, visible: false }))
+            //setShowModal({ title: 'Warning', message: 'Cannot set count more than 20', visible: true })
+            //debounceModal()
+          }
+        }
+      }
+
+      return newArr
+    }
+
+    return [...arr, obj]
   }
 
   function submitHandler(e) {
@@ -46,30 +92,42 @@ export default function Product({ product }) {
         options: selected,
         count,
         image: product.image.url,
+        Custom_Field: product.Custom_field,
       }
 
-      if (data && !isDuplicate(cartData, data)) {
-        return setCartData(prev => [...prev, data])
+      if (data) {
+        setShowModal(prev => ({ ...prev, visible: false }))
+        setCartData(prev => isDuplicate(prev, data))
+        setCartVisible(true)
       }
-
-      setShowModal(true)
-      debounceModal()
     }
   }
 
   function countHandler(e) {
-    const value = e.target.value.replace(/\D/g, '')
-    if (value) {
-      if (value >= 1 && value <= 20) setCount(value)
-      if (value <= 0 || value === '') setCount(1)
-      if (value > 20) setCount(20)
+    const value = parseInt(e.target.value)
+    if (value > 20) {
+      return setCount(20)
+    }
+
+    if (!value) {
+      console.log('1')
+      setCount(1)
+    } else {
+      setCount(value)
     }
   }
 
   return (
     <>
-      <Modal title={'Warning!'} show={showModal} onClose={() => setShowModal(false)}>
-        Duplicate found
+      <Modal
+        title={showModal.title}
+        show={showModal.visible}
+        onClose={() => {
+          setShowModal(prev => ({ ...prev, visible: false }))
+        }}
+        debounce={debounceModal}
+      >
+        {showModal.message}
       </Modal>
       {!loading ? (
         <div className='product'>
@@ -92,15 +150,22 @@ export default function Product({ product }) {
                 </div>
                 <div className='product-info'>
                   <button type='button' className='product-info-price'>
-                    {parseFloat(product.price + optionPrice)}
+                    <span>{parseFloat(product.price + optionPrice)} USD</span>
                   </button>
                   <p className='product-info-description'>{product.description}</p>
                   {product.Custom_field.map(fld => {
                     const select = fld.options.split('|')
                     return (
                       <div key={fld.id} className='product-info-sizes'>
-                        <div style={{ color: '#636573', fontWeight: '600' }}>{fld.title}:</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', paddingTop: '0.75rem' }}>
+                        <div style={{ color: '#636573', fontWeight: '600', fontSize: '1.8rem' }}>{fld.title}:</div>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '0.5rem',
+                            paddingTop: '0.75rem',
+                          }}
+                        >
                           {select.map(s => {
                             const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
                             const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
@@ -146,18 +211,27 @@ export default function Product({ product }) {
                           <path d='M9 4v1H0V4z'></path>
                         </svg>
                       </button>
-                      <input type='number' value={count} className='product-info-count-input' onChange={countHandler} />
+                      <input
+                        type='number'
+                        value={count}
+                        className='product-info-count-input'
+                        onChange={countHandler}
+                        ref={inputCountRef}
+                      />
                       <button
                         className='product-info-count-counter-plus button-counter'
                         type='button'
                         onClick={() =>
                           setCount(prev => {
-                            const value = prev + 1
-                            if (value <= 20) {
-                              return value
-                            } else {
-                              return prev
+                            let value = prev + 1
+                            if (value > 20) {
+                              return 20
                             }
+
+                            if (value <= 0 || value === '') {
+                              return 1
+                            }
+                            return value
                           })
                         }
                       >
@@ -182,20 +256,22 @@ export default function Product({ product }) {
       <style jsx global>
         {`
           body {
+            transition: background 0.25s ease;
             color: #fff;
-            transition: all 0.3s ease;
             background: rgba(17, 17, 19, 1);
           }
 
           header {
-            background: rgba(17, 17, 19, 0.75) !important;
+            background: rgba(17, 17, 19, 0.75);
           }
         `}
       </style>
 
       <style jsx>{`
         .product {
-          padding: 0.5rem;
+          transition: all 0.5s ease;
+          background: transparent;
+          padding: 0 0.5rem 3rem 0.5rem;
           position: relative;
           min-height: 100vh;
         }
@@ -239,7 +315,17 @@ export default function Product({ product }) {
           height: 0.6rem;
         }
 
-        .button-counter:active {
+        .button-counter {
+          border-radius: 3rem 0 0 3rem;
+          transition: 0.1s background ease;
+        }
+
+        .button-counter:last-child {
+          border-radius: 0 3rem 3rem 0;
+        }
+
+        .button-counter:hover {
+          background: rgba(255, 255, 255, 0.1);
         }
 
         @media (max-width: 870px) {
@@ -260,7 +346,7 @@ export default function Product({ product }) {
         }
 
         .product-info-add-to-cart {
-          font-size: 0.9rem;
+          font-size: 1.6rem;
           transition: all 0.2s ease;
           background-color: #fff;
           letter-spacing: 2px;
@@ -288,6 +374,7 @@ export default function Product({ product }) {
           color: #636573;
           padding: 0.5rem 0;
           font-weight: 600;
+          font-size: 1.8rem;
         }
 
         .product-info-count {
@@ -295,12 +382,12 @@ export default function Product({ product }) {
         }
 
         .product-info-count-input {
-          width: 3.5rem;
+          width: 5rem;
           text-align: center;
           font-weight: 600;
           outline: none;
           border: none;
-          font-size: 0.9rem;
+          font-size: 1.6rem;
         }
 
         input::-webkit-outer-spin-button,
@@ -321,7 +408,7 @@ export default function Product({ product }) {
         button {
           outline: none;
           background-color: transparent;
-          padding: 1.2rem;
+          padding: 2rem;
           border: none;
           cursor: pointer;
         }
@@ -338,20 +425,28 @@ export default function Product({ product }) {
         }
 
         .product-info-sizes-input {
+          display: block;
           color: #797b8c;
+          position: relative;
           transition: all 0.2s ease;
-          transition-property: color, background-color, transform;
+          transition-property: color, background-color, transform, border;
           cursor: pointer;
           border-style: none;
           background: #474852;
           border-radius: 3rem;
-          padding: 0.75rem 1.2rem;
-          margin-right: 0.25rem;
-          font-size: 0.8rem;
+          padding: 1rem 1.5rem;
+          margin-bottom: 1rem;
+          margin-right: 0.5rem;
+          font-size: 1.6rem;
+          border: 1px solid transparent;
+        }
+
+        .product-info-sizes-input[active='false']:hover {
+          border: 1px solid #fff;
         }
 
         .product-info-sizes-input:active {
-          transform: scale(1.15);
+          transform: scale(1.1);
         }
 
         .product-info-sizes-input:last-child {
@@ -359,7 +454,7 @@ export default function Product({ product }) {
         }
 
         .product-info-description {
-          font-size: 1rem;
+          font-size: 2rem;
           min-width: 225px;
           word-break: break-word;
         }
@@ -381,8 +476,8 @@ export default function Product({ product }) {
         .product-info-price {
           background-color: #fff;
           color: #1d1f21;
-          padding: 0.75rem 3rem;
-          font-size: 1.2rem;
+          padding: 1rem 3rem;
+          font-size: 2.2rem;
           font-weight: 700;
           border-radius: 3rem;
           max-width: fit-content;
@@ -391,9 +486,22 @@ export default function Product({ product }) {
           cursor: default;
         }
 
+        .product-info-price span {
+          cursor: text;
+          pointer-events: all;
+          user-select: all;
+        }
+
         .product-title {
-          font-size: 2rem;
+          font-size: 4rem;
           text-align: center;
+          padding-bottom: 3rem;
+        }
+
+        @media (max-width: 570px) {
+          .product-title {
+            padding: 0;
+          }
         }
 
         .product-redirect {
@@ -420,8 +528,8 @@ export default function Product({ product }) {
         .product-redirect::after {
           content: '';
           position: absolute;
-          left: 0;
-          width: 0.6rem;
+          left: -0.75rem;
+          width: 1.2rem;
           height: 1px;
           top: 50%;
           background-color: #fff;

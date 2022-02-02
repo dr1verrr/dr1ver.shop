@@ -6,5 +6,7 @@ export default async (req, res) => {
     path: '/',
   })
 
+  res.setHeader('Content-Type', 'text/plain')
+
   res.status(200).end()
 }

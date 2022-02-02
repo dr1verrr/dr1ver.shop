@@ -16,7 +16,7 @@ export default function Header() {
   }
 
   const [totalPrice, setTotalPrice] = useState(0)
-  const { cartData, popup, setPopup, isAuthenticated } = useAuth()
+  const { cartData, setPopup, isAuthenticated, setCartVisible } = useAuth()
 
   function profileHandler() {
     if (isAuthenticated) {
@@ -71,24 +71,22 @@ export default function Header() {
                 </g>
               </svg>
             </div>
-            <div className='header-cart icon'>
-              <Link href='/' onClick={e => e.preventDefault()} passHref>
-                <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
-                  <title />
-                  <g data-name='Layer 2' id='Layer_2'>
-                    <path d='M24.33,23H13.53a3,3,0,0,1-2.9-2.21L8,11.26a1,1,0,0,1,.17-.87A1,1,0,0,1,9,10H28a1,1,0,0,1,.77.36,1,1,0,0,1,.21.82l-1.7,9.36A3,3,0,0,1,24.33,23Zm-14-11,2.25,8.26a1,1,0,0,0,1,.74h10.8a1,1,0,0,0,1-.82L26.8,12Z' />
-                    <path d='M9,12a1,1,0,0,1-1-.73L6.45,5.73a1,1,0,0,0-1-.73H4A1,1,0,0,1,4,3H5.49A3,3,0,0,1,8.38,5.18L10,10.73A1,1,0,0,1,9.27,12,.84.84,0,0,1,9,12Z' />
-                    <path d='M16,29a2,2,0,1,1,2-2A2,2,0,0,1,16,29Zm0-2h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Z' />
-                    <path d='M22,29a2,2,0,1,1,2-2A2,2,0,0,1,22,29Zm0-2Z' />
-                    <path d='M22,17H16a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z' />
-                  </g>
-                  <g id='frame'>
-                    <rect height='32' width='32' className='cls-1' />
-                  </g>
-                </svg>
-              </Link>
+            <div className='header-cart icon' onClick={() => setCartVisible(true)}>
+              <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
+                <title />
+                <g data-name='Layer 2' id='Layer_2'>
+                  <path d='M24.33,23H13.53a3,3,0,0,1-2.9-2.21L8,11.26a1,1,0,0,1,.17-.87A1,1,0,0,1,9,10H28a1,1,0,0,1,.77.36,1,1,0,0,1,.21.82l-1.7,9.36A3,3,0,0,1,24.33,23Zm-14-11,2.25,8.26a1,1,0,0,0,1,.74h10.8a1,1,0,0,0,1-.82L26.8,12Z' />
+                  <path d='M9,12a1,1,0,0,1-1-.73L6.45,5.73a1,1,0,0,0-1-.73H4A1,1,0,0,1,4,3H5.49A3,3,0,0,1,8.38,5.18L10,10.73A1,1,0,0,1,9.27,12,.84.84,0,0,1,9,12Z' />
+                  <path d='M16,29a2,2,0,1,1,2-2A2,2,0,0,1,16,29Zm0-2h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Z' />
+                  <path d='M22,29a2,2,0,1,1,2-2A2,2,0,0,1,22,29Zm0-2Z' />
+                  <path d='M22,17H16a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z' />
+                </g>
+                <g id='frame'>
+                  <rect height='32' width='32' className='cls-1' />
+                </g>
+              </svg>
             </div>
-            <Link href='/cart' className='header-cart-total-cost'>{`${totalPrice} USD`}</Link>
+            <div className='header-cart-total-cost'>{`${totalPrice || ''} USD` || 'USD'}</div>
           </div>
         </div>
       </div>
@@ -98,7 +96,7 @@ export default function Header() {
             background: #111113;
             color: #fff;
             min-height: 75px;
-            font-size: 1rem;
+            font-size: 2rem;
           }
 
           .header-account-icon {
@@ -106,7 +104,7 @@ export default function Header() {
           }
 
           .header-first {
-            padding-top: 1.5rem;
+            padding-top: 4rem;
           }
 
           .header-second {
@@ -116,7 +114,7 @@ export default function Header() {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
           }
 
@@ -134,8 +132,8 @@ export default function Header() {
           .header-menu {
             display: flex;
             height: 100%;
-            gap: 0.7rem;
-            letter-spacing: 1.5px;
+            gap: 0.75rem;
+            letter-spacing: 0.1rem;
             justify-content: space-between;
             align-items: center;
             height: 100%;
@@ -147,7 +145,8 @@ export default function Header() {
 
           .header-menu-link {
             display: block;
-            padding: 1.25rem 0;
+            padding: 2.25rem 0;
+            //later need to be rewrite padding to 2rem 2rem
           }
 
           .header-menu-link span {
@@ -188,11 +187,9 @@ export default function Header() {
             display: flex;
             justify-content:center;
             align-items:center;
-            text-align: center;
-            font-weight: 400;
             cursor: pointer;
             position: relative;
-            font-size: 1.35rem;
+            font-size: 3rem;
           }
           .header-logo-first {
             color: #1d1f21;
@@ -224,7 +221,7 @@ export default function Header() {
           .header-second-other {
             display: flex;
             align-items: center;
-            padding: 0.5rem 0;
+            padding: 1.5rem 0;
           }
 
           .icon {
@@ -237,8 +234,8 @@ export default function Header() {
           }
 
           .icon svg {
-            width: 1.85rem;
-            height: 1.85rem;
+            width: 3rem;
+            height: 3rem;
             fill: #fff;
             margin: 0 0.5rem;
           }
