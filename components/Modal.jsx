@@ -1,27 +1,66 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import useOnClickOutside from '../hooks/useOnClickOutside'
 
 const Modal = props => {
   const modalRef = useRef()
   const handler = useCallback(() => props.onClose(), [])
   const [pause, setPause] = useState(false)
-
-  useOnClickOutside(modalRef, props.show ? handler : () => {})
+  const [mounted, setMounted] = useState(false)
+  const timeoutRef = useRef()
 
   useEffect(() => {
-    props.debounce()
-  }, [pause])
+    if (!mounted && props.show) setMounted(true)
+  }, [props.show])
+
+  function runTimeout() {
+    clearTimeout(timeoutRef.current)
+    if (mounted) timeoutRef.current = setTimeout(() => props.onClose(), 3500)
+  }
+
+  useEffect(() => {
+    console.log('rerender')
+  }, [])
+
+  useEffect(() => {
+    console.log(props.show)
+  }, [props.show])
+
+  useEffect(() => {
+    //console.log(mounted)
+  }, [mounted])
+
+  useEffect(() => {
+    return () => {
+      props.onClose()
+      stopTimeout()
+    }
+  }, [])
+
+  function stopTimeout() {
+    clearTimeout(timeoutRef.current)
+  }
+
+  useEffect(() => {
+    if (props.show) {
+      if (pause) stopTimeout()
+      if (!pause) runTimeout()
+    }
+  }, [pause, props.show, mounted])
 
   return (
     <div
       className='modal'
       ref={modalRef}
-      onMouseEnter={() => setPause(true)}
-      onMouseLeave={() => {
-        if (pause) setPause(false)
+      onMouseEnter={() => {
+        setPause(true)
       }}
+      onMouseLeave={() => {
+        setPause(false)
+      }}
+      onClick={handler}
+      paused={`${pause}`}
+      show={`${props.show}`}
     >
-      <div className='modal-button' onClick={props.onClose}>
+      <div className='modal-button' onClick={handler}>
         <svg className='cross' xmlns='http://www.w3.org/2000/svg'>
           <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
         </svg>
@@ -45,12 +84,27 @@ const Modal = props => {
           font-size: 1.6rem;
         }*/
 
+        @keyframes fade-modal {
+          25% {
+            opacity: 1;
+          }
+
+          85% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+          }
+        }
+
         .modal {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
           margin: 0 auto;
           display: flex;
           background: rgba(255, 255, 255, 0.97);
           color: #000;
+          opacity: ${props.show ? 0.1 : 0};
           flex-direction: column;
           min-width: fit-content;
           width: 300px;
@@ -58,14 +112,31 @@ const Modal = props => {
           text-align: center;
           position: fixed;
           bottom: 15px;
-          right: 30px;
+          right: 65px;
           overflow: hidden;
-          opacity: ${props.show ? 1 : 0};
           visibility: ${props.show ? 'visible' : 'hidden'};
-          transition: visibility 0s, opacity 0.4s linear;
           z-index: 1200;
-          font-size: 2rem;
+          font-size: 1.8rem;
+          pointer-events: stroke;
+          animation: fade-modal 3.5s ease;
+          animation-fill-mode: forwards;
+          animation-iteration-count: 1;
         }
+
+        .modal[paused='false'][show='true'] {
+          opacity: 1;
+        }
+        .modal[paused='true'] {
+          animation: none;
+          opacity: 1;
+        }
+
+        /*.modal[show='true'] {
+          opacity: 1;
+        }
+        .modal[show='false'] {
+          opacity: 0;
+        }*/
 
         @media (max-width: 340px) {
           .modal {
@@ -106,32 +177,34 @@ const Modal = props => {
           bottom: 0;
           left: 0;
           right: 0;
-          width: 100%;
+          width: ${props.show ? '100%' : '0%'};
           height: 5px;
           background: #a9a9a9;
-          animation-fill-mode: forwards;
-          animation-iteration-count: 1;
-          animation: progressbar 3.5s;
+        }
+
+        @keyframes timer {
+          0% {
+            width: 100%;
+          }
+
+          100% {
+            width: 0%;
+          }
         }
 
         .notification-timer[paused='true'] {
           animation: none;
         }
 
-        @keyframes progressbar {
-          0% {
-            width: 100%;
-          }
-          100% {
-            width: 0%;
-          }
+        .notification-timer[paused='false'] {
+          animation: timer 3.5s ease;
+          animation-fill-mode: forwards;
         }
 
         @media (max-width: 480px) {
           .modal {
-            top: 10px;
-            right: 0;
             left: 0;
+            right: 0;
           }
         }
       `}</style>

@@ -2,10 +2,10 @@
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Modal from '../../components/Modal'
-import { useAuth } from '../../contexts/auth'
-import useDebouncedFunction from '../../hooks/useDebouncedFunction'
+import { useCart } from '../../contexts/cart'
+import { useLayout } from '../../contexts/layout'
 
 export default function Product({ product }) {
   const router = useRouter()
@@ -14,16 +14,11 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const { setCartData, setCartVisible, showModal, setShowModal } = useAuth()
+  const { cartVisible, setCartVisible, showModal, setShowModal } = useLayout()
+  const { setCartData } = useCart()
+
   const [loading, setLoading] = useState(true)
   const inputCountRef = useRef(null)
-  const debounceModal = useDebouncedFunction(() => {
-    setShowModal(prev => ({ ...prev, visible: false }))
-  }, 3500)
-
-  //const timeout = setTimeout(() => {
-  //  setShowModal(prev => ({ ...prev, visible: false }))
-  //}, timeClose - timeNow)
 
   useEffect(() => {
     if (product) setLoading(false)
@@ -53,22 +48,17 @@ export default function Product({ product }) {
   }
 
   function isDuplicate(arr, obj) {
-    //Later need to be rewrited! Temporary decision
-
     if (ifExists(arr, obj)) {
       let newArr = [...arr]
 
       for (let index = 0; index < arr.length; index++) {
         const element = arr[index]
-        if (element.options === obj.options && convToNum(element.id) === convToNum(obj.id)) {
+        if (convToNum(element.id) === convToNum(obj.id) && element.options === obj.options) {
           newArr[index] = { ...obj, count: parseInt(element.count + obj.count > 20 ? 20 : element.count + obj.count) }
           if (obj.count + element.count > 20) {
-            setShowModal({ title: 'Warning', message: 'Cannot set count more than 20', visible: true })
-            debounceModal()
-
-            //setShowModal(prev => ({ ...prev, visible: false }))
-            //setShowModal({ title: 'Warning', message: 'Cannot set count more than 20', visible: true })
-            //debounceModal()
+            setShowModal({ title: 'Warning', message: 'Cannot set count more than 20. Was set 20', visible: true })
+          } else {
+            setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful!', visible: true })
           }
         }
       }
@@ -76,11 +66,15 @@ export default function Product({ product }) {
       return newArr
     }
 
+    setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful!', visible: true })
+
     return [...arr, obj]
   }
 
   function submitHandler(e) {
     e.preventDefault()
+
+    if (cartVisible) return
     const totalPrice = price + optionPrice
 
     if (selected) {
@@ -96,7 +90,6 @@ export default function Product({ product }) {
       }
 
       if (data) {
-        setShowModal(prev => ({ ...prev, visible: false }))
         setCartData(prev => isDuplicate(prev, data))
         setCartVisible(true)
       }
@@ -110,7 +103,6 @@ export default function Product({ product }) {
     }
 
     if (!value) {
-      console.log('1')
       setCount(1)
     } else {
       setCount(value)
@@ -122,10 +114,10 @@ export default function Product({ product }) {
       <Modal
         title={showModal.title}
         show={showModal.visible}
+        message={showModal.message}
         onClose={() => {
           setShowModal(prev => ({ ...prev, visible: false }))
         }}
-        debounce={debounceModal}
       >
         {showModal.message}
       </Modal>
@@ -252,7 +244,6 @@ export default function Product({ product }) {
       ) : (
         <div>Loading...</div>
       )}
-
       <style jsx global>
         {`
           body {
@@ -266,7 +257,6 @@ export default function Product({ product }) {
           }
         `}
       </style>
-
       <style jsx>{`
         .product {
           transition: all 0.5s ease;

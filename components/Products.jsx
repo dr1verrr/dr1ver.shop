@@ -41,6 +41,7 @@ export default function Products({ products }) {
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 3rem;
           padding-bottom: 2rem;
+          min-height: 100vh;
         }
 
         .product-description {

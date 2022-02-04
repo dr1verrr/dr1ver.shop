@@ -1,35 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useAuth } from '../contexts/auth'
+import React, { useEffect, useRef, useState } from 'react'
 
-export default function CartItem({ product, cartVisible }) {
+function CartItem({ product, cartVisible }) {
   const [selected, setSelected] = useState('')
   const [active, setActive] = useState(true)
-  const productRef = useRef(null)
-  const { cartData } = useAuth()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    //console.log(mounted)
-  }, [mounted])
-
-  useEffect(() => {
-    if (!mounted) setMounted(true)
-  }, [cartVisible, mounted, !product])
-
-  useEffect(() => {
-    //console.log(selected)
-  }, [selected])
+  const productRef = useRef()
 
   useEffect(() => {
     setSelected(product.options)
-  }, [product])
-
-  //temporary decision. Works not correct
-
-  useEffect(() => {
-    if (mounted) scrollToChanged(productRef)
   }, [product])
 
   function scrollToChanged(ref) {
@@ -37,6 +16,10 @@ export default function CartItem({ product, cartVisible }) {
       behavior: 'smooth',
     })
   }
+
+  useEffect(() => {
+    scrollToChanged(productRef)
+  }, [product])
 
   function countHandler(e) {}
 
@@ -194,3 +177,5 @@ export default function CartItem({ product, cartVisible }) {
     </div>
   )
 }
+
+export default CartItem

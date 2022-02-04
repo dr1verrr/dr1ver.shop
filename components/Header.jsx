@@ -2,9 +2,11 @@ import Link from 'next/link'
 import router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/auth'
+import { useCart } from '../contexts/cart'
+import { useLayout } from '../contexts/layout'
 import categories from '../data/categories.json'
 
-export default function Header() {
+function Header() {
   function getTotal(state) {
     const items = state.filter(item => item.price > 0)
     let value = 0
@@ -16,7 +18,9 @@ export default function Header() {
   }
 
   const [totalPrice, setTotalPrice] = useState(0)
-  const { cartData, setPopup, isAuthenticated, setCartVisible } = useAuth()
+  const { isAuthenticated } = useAuth()
+  const { setPopup, setCartVisible } = useLayout()
+  const { cartData } = useCart()
 
   function profileHandler() {
     if (isAuthenticated) {
@@ -92,6 +96,7 @@ export default function Header() {
       </div>
       <style jsx>{`
           .header {
+            position: relative;
             z-index: 1000;
             background: #111113;
             color: #fff;
@@ -248,3 +253,5 @@ export default function Header() {
     </header>
   )
 }
+
+export default Header

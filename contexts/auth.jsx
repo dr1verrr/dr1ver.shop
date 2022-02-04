@@ -12,11 +12,6 @@ export const AuthProvider = ({ children }) => {
   const router = useRouter()
   const privateRoutes = ['/profile']
   const privateCondition = privateRoutes.includes(router.pathname)
-  const [cartData, setCartData] = useLocalStorage('cart-data', [])
-  const [popup, setPopup] = useState({ login: false, register: false })
-  const [cartVisible, setCartVisible] = useState(false)
-  const [showModal, setShowModal] = useState({ visible: false, title: 'title', message: 'message' })
-  const [isDuplicate, setDuplicate] = useState(false)
 
   function checkRoute() {
     if (privateCondition && !loading && !user) {
@@ -54,17 +49,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         loading,
         setLoading,
-        cartData,
-        setCartData,
-        popup,
-        setPopup,
         loadUserFromCookies,
-        cartVisible,
-        setCartVisible,
-        showModal,
-        setShowModal,
-        isDuplicate,
-        setDuplicate,
       }}
     >
       {children}

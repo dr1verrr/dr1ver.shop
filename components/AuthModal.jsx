@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 
-export default function AuthModal() {
-  const { popup, setPopup, loadUserFromCookies } = useAuth()
+export default function AuthModal({ popup, setPopup }) {
+  const { loadUserFromCookies } = useAuth()
   const ifPopup = popup.login || popup.register
   const popupRef = useRef()
   const router = useRouter()
@@ -17,7 +17,7 @@ export default function AuthModal() {
   })
 
   useEffect(() => {
-    console.log(userData)
+    //console.log(userData)
   }, [userData])
 
   useOnClickOutside(popupRef, () => setPopup({ login: false, register: false }))
