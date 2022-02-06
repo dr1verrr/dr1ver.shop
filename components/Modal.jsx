@@ -17,18 +17,6 @@ const Modal = props => {
   }
 
   useEffect(() => {
-    console.log('rerender')
-  }, [])
-
-  useEffect(() => {
-    console.log(props.show)
-  }, [props.show])
-
-  useEffect(() => {
-    //console.log(mounted)
-  }, [mounted])
-
-  useEffect(() => {
     return () => {
       props.onClose()
       stopTimeout()
@@ -61,7 +49,7 @@ const Modal = props => {
       show={`${props.show}`}
     >
       <div className='modal-button' onClick={handler}>
-        <svg className='cross' xmlns='http://www.w3.org/2000/svg'>
+        <svg className='cross' xmlns='http://www.w3.org/2000/svg' style={{ fill: '#c6c9ce' }}>
           <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
         </svg>
       </div>
@@ -71,19 +59,11 @@ const Modal = props => {
           <p>{props.children}</p>
         </div>
 
-        <div className='modal-footer'>
-          {/*<button className='modal-button' onClick={props.onClose} style={{ width: '100%', display: 'block' }}>
-            Close
-          </button>*/}
-        </div>
+        <div className='modal-footer'></div>
       </div>
 
       <div className='notification-timer' paused={`${pause}`}></div>
       <style jsx>{`
-        /** {
-          font-size: 1.6rem;
-        }*/
-
         @keyframes fade-modal {
           25% {
             opacity: 1;
@@ -98,29 +78,37 @@ const Modal = props => {
           }
         }
 
+        .cross {
+          transition: opacity 0.2s ease;
+          opacity: 0;
+        }
+
+        .modal:hover .cross {
+          opacity: 1;
+        }
+
         .modal {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-          margin: 0 auto;
           display: flex;
-          background: rgba(255, 255, 255, 0.97);
-          color: #000;
+          background: rgba(158, 161, 169, 1);
           opacity: ${props.show ? 0.1 : 0};
+          color: rgba(255, 255, 255, 0.85);
           flex-direction: column;
           min-width: fit-content;
           width: 300px;
-          border-radius: 15px;
+          border-radius: 20px;
           text-align: center;
           position: fixed;
           bottom: 15px;
-          right: 65px;
+          right: 35px;
           overflow: hidden;
           visibility: ${props.show ? 'visible' : 'hidden'};
           z-index: 1200;
-          font-size: 1.8rem;
+          font-size: 1.7rem;
           pointer-events: stroke;
-          animation: fade-modal 3.5s ease;
+          animation: fade-modal 3.5s linear;
           animation-fill-mode: forwards;
-          animation-iteration-count: 1;
+          cursor: default;
         }
 
         .modal[paused='false'][show='true'] {
@@ -131,24 +119,10 @@ const Modal = props => {
           opacity: 1;
         }
 
-        /*.modal[show='true'] {
-          opacity: 1;
-        }
-        .modal[show='false'] {
-          opacity: 0;
-        }*/
-
         @media (max-width: 340px) {
           .modal {
             margin: 0 15px;
           }
-        }
-
-        .modal-body {
-          /*text-align: left;*/
-        }
-
-        .modal-footer {
         }
 
         .modal-button {
@@ -167,7 +141,7 @@ const Modal = props => {
 
         .modal-content {
           flex: 1;
-          padding: 4rem 3rem;
+          padding: 2.5rem 7rem 1rem 7rem;
         }
 
         .notification-timer {
@@ -179,7 +153,7 @@ const Modal = props => {
           right: 0;
           width: ${props.show ? '100%' : '0%'};
           height: 5px;
-          background: #a9a9a9;
+          background: #c6c9ce;
         }
 
         @keyframes timer {

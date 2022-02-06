@@ -1,10 +1,11 @@
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { Router } from 'next/router'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import AuthModal from '../components/AuthModal'
 import Cart from '../components/Cart'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import Modal from '../components/Modal'
 import CartProvider from './cart'
 
 const LayoutContext = createContext({})
@@ -17,17 +18,16 @@ function LayoutProvider({ children }) {
   const [cartVisible, setCartVisible] = useState(false)
 
   const providedValues = { showModal, setShowModal, popup, setPopup, cartVisible, setCartVisible }
-  const router = useRouter()
-  const transitionRef = useRef(false)
-
-  const handleRouteChange = () => {
-    transitionRef.current = !transitionRef.current
-  }
 
   useEffect(() => {
-    router.events.on('routeChangeStart', handleRouteChange)
-    //router.events.on('routeChangeComplete', () => handleRouteChange(false))
-  }, [router.events])
+    scroll()
+    Router.events.on('routeChangeComplete', () => {
+      window.scroll({
+        top: 0,
+        behavior: 'smooth',
+      })
+    })
+  }, [])
 
   return (
     <React.Fragment>
@@ -43,9 +43,19 @@ function LayoutProvider({ children }) {
 
       <div className='wrapper'>
         <LayoutContext.Provider value={providedValues}>
+          <Modal
+            title={showModal.title}
+            show={showModal.visible}
+            message={showModal.message}
+            onClose={() => {
+              setShowModal(prev => ({ ...prev, visible: false }))
+            }}
+          >
+            {showModal.message}
+          </Modal>
           <div className='cart-mask' onClick={() => setCartVisible(false)}></div>
           <CartProvider>
-            <div className='cart-provider-inner'>
+            <div className='cart-provider-wrapper'>
               <Cart cartVisible={cartVisible} setCartVisible={setCartVisible} />
               <Header />
               <main className='main'>{children}</main>
@@ -66,6 +76,7 @@ function LayoutProvider({ children }) {
         .main {
           flex: 1;
           min-height: 100vh;
+          height: 100%;
         }
 
         .cart-mask {
@@ -76,9 +87,9 @@ function LayoutProvider({ children }) {
           left: 0;
           bottom: 0;
           background: #000;
-          opacity: ${cartVisible ? 0.5 : 0};
-          z-index: ${cartVisible ? 1100 : -100};
-          pointer-events: all;
+          opacity: ${cartVisible ? 0.4 : 0};
+          z-index: 1050;
+          pointer-events: ${cartVisible ? 'all' : 'none'};
         }
       `}</style>
     </React.Fragment>

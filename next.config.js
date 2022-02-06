@@ -6,4 +6,8 @@ module.exports = {
   images: {
     domains: ['localhost', process.env.NEXT_PUBLIC_API_URL],
   },
+  i18n: {
+    locales: ['en', 'ru', 'uk'],
+    defaultLocale: 'en',
+  },
 }

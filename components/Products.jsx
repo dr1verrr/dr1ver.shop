@@ -2,51 +2,59 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-export default function Products({ products }) {
+function Products({ products }) {
   return (
     <div className='container'>
       <div className='product-wrapper'>
         {products?.map(product => {
           return (
-            <div className='product' key={product.id}>
-              <div className='product-price'>{product.price + ' USD'}</div>
-              <div className='product-image'>
-                {product.image ? (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                    width={200}
-                    height={200}
-                    alt=''
-                  />
-                ) : (
-                  <Image src='https://via.placeholder.com/150' alt='' />
-                )}
+            <Link key={product.id} href={`/product/${product.slug}`} passHref scroll>
+              <div className='product-inner'>
+                <div className='product'>
+                  <div className='product-price'>{product.price + ' USD'}</div>
+                  <div className='product-image'>
+                    {product.image ? (
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                        width={200}
+                        height={200}
+                        alt=''
+                      />
+                    ) : (
+                      <Image src='https://via.placeholder.com/150' alt='' />
+                    )}
+                  </div>
+                  <a className='product-link'></a>
+                </div>
+                <span className='product-button'>{product.title}</span>
               </div>
-              <div style={{ padding: '1.5rem' }}>
-                <div className='product-title'>{product.title}</div>
-                <p className='product-description'>{product.description}</p>
-              </div>
-              <Link href={`/product/${product.slug}`}>
-                <a className='product-link'></a>
-              </Link>
-            </div>
+            </Link>
           )
         })}
       </div>
 
       <style jsx>{`
         .product-wrapper {
-          grid-auto-rows: minmax(min-content, max-content);
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 3rem;
-          padding-bottom: 2rem;
-          min-height: 100vh;
+          padding-bottom: 10rem;
         }
 
-        .product-description {
+        .product-button {
+          display: block;
+          margin-top: 2rem;
+          width: 100%;
+          text-align: center;
+          border: 2px solid #f1f3f5;
+          padding: 1.5rem;
+          border-radius: 30px;
+          transition: background-color 0.4s ease, color 0.4s ease;
+          letter-spacing: 2px;
           font-size: 1.9rem;
+          cursor: pointer;
         }
+
         .container {
           position: relative !important;
           margin: 0 auto;
@@ -60,13 +68,13 @@ export default function Products({ products }) {
           position: absolute;
           left: 0;
           top: 0;
-          padding: 0.5rem 2rem;
+          padding: 0.75rem 2.5rem 0.75rem 2rem;
           color: #fff;
           font-size: 2.2rem;
           font-weight: 600;
           background-color: #1d1f21;
-          border-top-left-radius: 20px;
-          border-bottom-right-radius: 20px;
+          border-top-left-radius: 25px;
+          border-bottom-right-radius: 25px;
         }
 
         .product-title {
@@ -80,9 +88,6 @@ export default function Products({ products }) {
           }
         }
         @media (max-width: 840px) {
-          .product-wrapper {
-          }
-
           .product-image {
             max-width: 150px;
           }
@@ -97,26 +102,15 @@ export default function Products({ products }) {
           }
         }
 
-        @media (max-width: 340px) {
-          .product {
-            padding: 1.5rem !important;
-          }
-        }
-
-        @media (max-width: 400px) {
-          .product-description {
-            font-size: 1.6rem;
-          }
-        }
-
         .product {
+          position: relative;
           display: flex;
           flex-direction: column;
           border-radius: 3rem;
           background-color: #fff;
           position: relative;
           filter: drop-shadow(0 0 20px rgba(0, 60, 120, 0.06));
-          padding: 2.5rem;
+          padding: 2.5rem 2.5rem 9rem;
           text-align: left;
         }
 
@@ -126,10 +120,9 @@ export default function Products({ products }) {
         }
 
         .product-link {
-          transition: opacity 0.5s ease !important;
+          transition: background 0.4s ease, opacity 0.4s ease;
+          background: transparent;
           opacity: 0;
-          display: none;
-          cursor: default;
           position: absolute;
           top: 0;
           left: 0;
@@ -140,15 +133,18 @@ export default function Products({ products }) {
           height: 100%;
         }
 
-        .product:hover .product-link {
-          display: block;
-          background-color: #333;
+        .product-inner:hover .product-link {
+          opacity: 0.5;
+          background-color: #000;
         }
 
-        .product-link:hover {
-          opacity: 0.45;
+        .product-inner:hover .product-button {
+          background-color: #000;
+          color: #fff;
         }
       `}</style>
     </div>
   )
 }
+
+export default Products

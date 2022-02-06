@@ -8,16 +8,19 @@ import categories from '../data/categories.json'
 
 function Header() {
   function getTotal(state) {
-    const items = state.filter(item => item.price > 0)
     let value = 0
-    const total = items.map(result => {
-      value += result.price * result.count
-    })
+    if (state == undefined) return
+
+    if (state) {
+      for (let index = 0; index < state.length; index++) {
+        value += state[index].price * state[index].count
+      }
+    }
 
     return value.toFixed(2)
   }
 
-  const [totalPrice, setTotalPrice] = useState(0)
+  const [total, setTotal] = useState(0)
   const { isAuthenticated } = useAuth()
   const { setPopup, setCartVisible } = useLayout()
   const { cartData } = useCart()
@@ -31,9 +34,8 @@ function Header() {
   }
 
   useEffect(() => {
-    if (cartData.length) {
-      setTotalPrice(getTotal(cartData))
-    }
+    setTotal(getTotal(cartData))
+    if (cartData && !cartData.length) setTotal('')
   }, [cartData])
 
   return (
@@ -43,7 +45,7 @@ function Header() {
           <Link href='/' passHref>
             <div className='header-logo'>
               <div className='header-logo-first logo'>
-                DR1VER<span style={{ fontWeight: 'bold' }}>.</span>
+                DR1VER<span style={{ fontWeight: 'bold' }}></span>
               </div>
               <div className='header-logo-second logo'>SHOP</div>
             </div>
@@ -53,7 +55,7 @@ function Header() {
           <div className='header-menu'>
             {categories?.map(category => (
               <div key={category.id} className='header-menu-category'>
-                <Link href='/category/[slug]' as={`/category/${category.slug}`}>
+                <Link href={`/category/${category.slug}`}>
                   <a className='header-menu-link'>
                     <span>{category.name?.toUpperCase()}</span>
                   </a>
@@ -75,6 +77,7 @@ function Header() {
                 </g>
               </svg>
             </div>
+
             <div className='header-cart icon' onClick={() => setCartVisible(true)}>
               <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
                 <title />
@@ -90,7 +93,7 @@ function Header() {
                 </g>
               </svg>
             </div>
-            <div className='header-cart-total-cost'>{`${totalPrice || ''} USD` || 'USD'}</div>
+            <div className='header-cart-total-cost'>{`${total || ''} USD` || 'USD'}</div>
           </div>
         </div>
       </div>
@@ -101,7 +104,7 @@ function Header() {
             background: #111113;
             color: #fff;
             min-height: 75px;
-            font-size: 2rem;
+            font-size: 1.9rem;
           }
 
           .header-account-icon {
@@ -113,25 +116,95 @@ function Header() {
           }
 
           .header-second {
-            margin: 0 auto;
             max-width: 93vw;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
+            margin: 0 auto;
+            padding-right: 15px;
           }
 
-          @media(max-width: 970px) {
-            .header-menu {
-              width: 100%;
-              overflow-x: auto;
+
+
+          @media(max-width: 1170px) {
+            .header-second {
+              padding-bottom: 5rem;
             }
 
-            .header-second {
-              justify-content: flex-end;
+            .header-second-other {
+              bottom: 0;
+              right: 0!important;
+              margin-right: 1rem;
             }
+
+          }
+
+          @media(max-width: 1170px) {
+
+
+
+            .header-menu {
+              width: 100%;
+            }
+
+
+          }
+
+          @media(max-width: 567px) {
+          .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .header-first {
+            padding: 1.5rem;
+          }
+
+          .header {
+            border-bottom: 1px solid #616161;
+            min-height: 0;
+          }
+
+          .icon svg {
+            width: 2.7rem !important;
+            height: 2.7rem !important;
+          }
+
+          .header-cart-total-cost {
+            display: none;
+          }
+
+          .logo {
+            padding: 0.5rem !important;
+            font-size: 2rem;
+            border: none !important;
+          }
+
+          .header-second {
+            padding: 0;
+            margin: 0;
+          }
+
+
+          .logo::before {
+            height: 1px !important;
+
+          }
+
+
+
+
+          .header-menu {
+            display: none !important;
+          }
+
+          .header-second-other {
+            position: static!important;
+          }
+
+
           }
 
           .header-menu {
@@ -194,7 +267,7 @@ function Header() {
             align-items:center;
             cursor: pointer;
             position: relative;
-            font-size: 3rem;
+            font-size: 2.5rem;
           }
           .header-logo-first {
             color: #1d1f21;
@@ -211,7 +284,7 @@ function Header() {
           }
 
           .logo {
-            padding: 1rem;
+            padding: 1.25rem;
             border: 2px solid #fff;
           }
           .logo::before {
@@ -227,6 +300,8 @@ function Header() {
             display: flex;
             align-items: center;
             padding: 1.5rem 0;
+            position: absolute;
+            right: 50px;
           }
 
           .icon {

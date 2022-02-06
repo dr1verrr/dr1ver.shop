@@ -1,17 +1,9 @@
-import React, { useEffect } from 'react'
-import Layout from '../contexts/layout'
+import React from 'react'
 import { AuthProvider } from '../contexts/auth'
+import Layout from '../contexts/layout'
 import '../styles/globals.css'
-import { useRouter } from 'next/router'
 
-function MyApp({ Component, pageProps }) {
-  useEffect(() => (document.documentElement.lang = 'en-us'), [])
-  const router = useRouter()
-
-  //useEffect(() => {
-  //  console.log(router.pathname)
-  //}, [router.pathname])
-
+function MyApp({ Component, pageProps, router }) {
   return (
     <AuthProvider>
       <Layout>

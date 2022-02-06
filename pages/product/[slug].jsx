@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import Modal from '../../components/Modal'
 import { useCart } from '../../contexts/cart'
 import { useLayout } from '../../contexts/layout'
 
@@ -15,7 +14,7 @@ export default function Product({ product }) {
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
   const { cartVisible, setCartVisible, showModal, setShowModal } = useLayout()
-  const { setCartData } = useCart()
+  const { setCartData, setLastModified } = useCart()
 
   const [loading, setLoading] = useState(true)
   const inputCountRef = useRef(null)
@@ -38,41 +37,62 @@ export default function Product({ product }) {
     return listener
   }, [])
 
-  const convToNum = toConv => parseInt(toConv)
-
   function ifExists(arr, obj) {
-    if (arr.find(item => convToNum(item.id) === convToNum(obj.id) && item.options === obj.options)) {
-      return true
+    for (let index = 0; index < arr.length; index++) {
+      if (arr[index].id == obj.id && arr[index].options === obj.options) {
+        return [arr[index], index]
+      }
     }
+
     return false
   }
 
   function isDuplicate(arr, obj) {
-    if (ifExists(arr, obj)) {
-      let newArr = [...arr]
+    let productFound = ifExists(arr, obj)
+    let newArr
+    let flag = true
 
-      for (let index = 0; index < arr.length; index++) {
-        const element = arr[index]
-        if (convToNum(element.id) === convToNum(obj.id) && element.options === obj.options) {
-          newArr[index] = { ...obj, count: parseInt(element.count + obj.count > 20 ? 20 : element.count + obj.count) }
-          if (obj.count + element.count > 20) {
-            setShowModal({ title: 'Warning', message: 'Cannot set count more than 20. Was set 20', visible: true })
-          } else {
-            setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful!', visible: true })
-          }
+    if (productFound) {
+      if (productFound[0].count == 20) {
+        flag = false
+      } else {
+        if (newArr == undefined) newArr = [...arr]
+      }
+
+      if (flag) {
+        newArr[productFound[1]] = {
+          ...obj,
+          count: parseInt(productFound[0].count + obj.count > 20 ? 20 : productFound[0].count + obj.count),
         }
       }
 
+      setShowModal(
+        obj.count + productFound[0].count > 20 || productFound[0].count == 20
+          ? { title: 'Warning', message: 'Cannot set count more than 20.', visible: true }
+          : { title: `${obj.name} x${obj.count}`, message: 'Product added successful.', visible: true }
+      )
+      setCartVisible(true)
+      setLastModified({ id: obj.id, options: obj.options })
+
+      if (!flag) return arr
+
       return newArr
     }
+    setLastModified({ id: obj.id, options: obj.options })
 
-    setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful!', visible: true })
+    setCartVisible(true)
+    setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful.', visible: true })
 
     return [...arr, obj]
   }
 
   function submitHandler(e) {
     e.preventDefault()
+
+    if (count === '' || count == undefined) {
+      setCount(1)
+      return
+    }
 
     if (cartVisible) return
     const totalPrice = price + optionPrice
@@ -91,36 +111,27 @@ export default function Product({ product }) {
 
       if (data) {
         setCartData(prev => isDuplicate(prev, data))
-        setCartVisible(true)
       }
     }
   }
 
   function countHandler(e) {
-    const value = parseInt(e.target.value)
+    const value = parseInt(e.target.value) || ''
     if (value > 20) {
-      return setCount(20)
+      setCount(20)
+      return
     }
 
-    if (!value) {
-      setCount(1)
-    } else {
-      setCount(value)
+    if (value == NaN || value == undefined) {
+      setCount(parseInt(''))
+      return
     }
+
+    setCount(value)
   }
 
   return (
     <>
-      <Modal
-        title={showModal.title}
-        show={showModal.visible}
-        message={showModal.message}
-        onClose={() => {
-          setShowModal(prev => ({ ...prev, visible: false }))
-        }}
-      >
-        {showModal.message}
-      </Modal>
       {!loading ? (
         <div className='product'>
           <div className='container'>
@@ -149,7 +160,7 @@ export default function Product({ product }) {
                     const select = fld.options.split('|')
                     return (
                       <div key={fld.id} className='product-info-sizes'>
-                        <div style={{ color: '#636573', fontWeight: '600', fontSize: '1.8rem' }}>{fld.title}:</div>
+                        <div style={{ color: '#636573', fontWeight: '600', fontSize: '1.7rem' }}>{fld.title}:</div>
                         <div
                           style={{
                             display: 'flex',
@@ -247,30 +258,27 @@ export default function Product({ product }) {
       <style jsx global>
         {`
           body {
-            transition: background 0.25s ease;
             color: #fff;
+            transition: background 0.2s ease;
             background: rgba(17, 17, 19, 1);
           }
 
-          header {
-            background: rgba(17, 17, 19, 0.75);
+          .header {
+            background: transparent !important;
           }
         `}
       </style>
       <style jsx>{`
         .product {
-          transition: all 0.5s ease;
           background: transparent;
-          padding: 0 0.5rem 3rem 0.5rem;
+          padding: 0 0.5rem 1.5rem 0.5rem;
           position: relative;
           min-height: 100vh;
-        }
-
-        .progress-circle {
+          margin-bottom: 10rem;
         }
 
         * {
-          overflow: visible !important;
+          overflow: visible;
         }
 
         .product::after {
@@ -286,7 +294,7 @@ export default function Product({ product }) {
           background-position: top;
           z-index: -1;
           opacity: 0.15;
-          filter: blur(0.5rem);
+          filter: blur(2rem);
         }
 
         @media (max-width: 480px) {
@@ -298,6 +306,9 @@ export default function Product({ product }) {
 
         .product-info {
           flex: 1;
+        }
+
+        button {
         }
 
         .button-counter svg {
@@ -337,7 +348,7 @@ export default function Product({ product }) {
 
         .product-info-add-to-cart {
           font-size: 1.6rem;
-          transition: all 0.2s ease;
+          transition: filter 0.2s ease, transform 0.2s ease;
           background-color: #fff;
           letter-spacing: 2px;
           text-transform: uppercase;
@@ -358,13 +369,14 @@ export default function Product({ product }) {
           max-width: fit-content;
           border-radius: 3rem;
           border: 2px solid #fff;
+          margin-bottom: 1.5rem;
         }
 
         .product-info-count-title {
           color: #636573;
           padding: 0.5rem 0;
           font-weight: 600;
-          font-size: 1.8rem;
+          font-size: 1.7rem;
         }
 
         .product-info-count {
@@ -377,6 +389,10 @@ export default function Product({ product }) {
           font-weight: 600;
           outline: none;
           border: none;
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+          border-left: 2px solid #fff;
+          border-right: 2px solid #fff;
           font-size: 1.6rem;
         }
 

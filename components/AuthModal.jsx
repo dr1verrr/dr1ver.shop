@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 
@@ -61,15 +61,20 @@ export default function AuthModal({ popup, setPopup }) {
       </svg>
       <form className='login-modal-window' onSubmit={handleSubmit}>
         {popup.register && (
-          <input
-            type='text'
-            name='username'
-            placeholder='Type your username'
-            value={userData.username}
-            onChange={handleChange}
-            required
-          />
+          <React.Fragment>
+            <label htmlFor='username'>Name: </label>
+            <input
+              type='text'
+              name='username'
+              id='username'
+              value={userData.username}
+              onChange={handleChange}
+              required
+            />
+          </React.Fragment>
         )}
+
+        <label htmlFor='email'>Email: </label>
         {popup.login && (
           <input
             className='login-modal-email'
@@ -77,7 +82,6 @@ export default function AuthModal({ popup, setPopup }) {
             name='identifier'
             id='email'
             value={userData.identifier}
-            placeholder='Type your email address'
             onChange={handleChange}
             required
           />
@@ -89,23 +93,25 @@ export default function AuthModal({ popup, setPopup }) {
             name='email'
             id='email'
             value={userData.email}
-            placeholder='Type your email address'
             onChange={handleChange}
             required
           />
         )}
+        <label htmlFor='password'>Password: </label>
         <input
           className='login-modal-password'
           type='password'
           name='password'
           id='password'
-          placeholder='Type your password'
           value={userData.password}
           onChange={handleChange}
           required
         />
         <input className='login-modal-submit' type='submit' value={popup.login ? 'Sign in' : 'Sign up'} />
-        <div style={{ fontSize: '2rem' }} onClick={() => setPopup({ login: !popup.login, register: !popup.register })}>
+        <div
+          style={{ fontSize: '1.8rem' }}
+          onClick={() => setPopup({ login: !popup.login, register: !popup.register })}
+        >
           {popup.login ? 'Want to create an account ? ' : 'Already registered ? '}
           <span style={{ cursor: 'pointer' }}>{popup.login ? 'Register' : 'Login'}</span>
         </div>
@@ -150,7 +156,6 @@ export default function AuthModal({ popup, setPopup }) {
           left: 50%;
           transform: translate(-50%, -50%);
           background: #fff;
-          z-index: 1000;
           padding: 4rem;
           border-radius: 15px;
           z-index: ${ifPopup ? 1001 : -100};
@@ -176,6 +181,7 @@ export default function AuthModal({ popup, setPopup }) {
           }
 
           body::after {
+            display: ${ifPopup ? 'block' : 'none'};
             position: absolute;
             content: '';
             top: 0;
