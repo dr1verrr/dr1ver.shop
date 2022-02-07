@@ -54,14 +54,6 @@ function Cart({ cartVisible }) {
           .cart-items {
           }
         `}</style>
-
-        <style jsx global>
-          {`
-            body {
-              overflow: ${cartVisible ? 'hidden' : 'auto'};
-            }
-          `}
-        </style>
       </div>
     )
   }

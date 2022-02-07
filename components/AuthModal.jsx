@@ -158,7 +158,7 @@ export default function AuthModal({ popup, setPopup }) {
           background: #fff;
           padding: 4rem;
           border-radius: 15px;
-          z-index: ${ifPopup ? 1001 : -100};
+          z-index: 1200;
           opacity: ${ifPopup ? 1 : 0};
           visibility: ${ifPopup ? 'visible' : 'hidden'};
           color: #000;
@@ -173,27 +173,6 @@ export default function AuthModal({ popup, setPopup }) {
           justify-content: center;
         }
       `}</style>
-
-      <style jsx global>
-        {`
-          body {
-            overflow: ${ifPopup ? 'hidden' : 'auto'};
-          }
-
-          body::after {
-            display: ${ifPopup ? 'block' : 'none'};
-            position: absolute;
-            content: '';
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            background: #000;
-            opacity: ${ifPopup ? 0.5 : 0};
-            z-index: ${ifPopup ? 1000 : -100};
-          }
-        `}
-      </style>
     </div>
   )
 }

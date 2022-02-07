@@ -16,18 +16,19 @@ function LayoutProvider({ children }) {
   const [showModal, setShowModal] = useState({ visible: false, title: 'title', message: 'message' })
   const [popup, setPopup] = useState({ login: false, register: false })
   const [cartVisible, setCartVisible] = useState(false)
+  const [menuVisible, setMenuVisible] = useState(false)
+  const ifPopup = popup.login || popup.register
 
-  const providedValues = { showModal, setShowModal, popup, setPopup, cartVisible, setCartVisible }
-
-  useEffect(() => {
-    scroll()
-    Router.events.on('routeChangeComplete', () => {
-      window.scroll({
-        top: 0,
-        behavior: 'smooth',
-      })
-    })
-  }, [])
+  const providedValues = {
+    showModal,
+    setShowModal,
+    popup,
+    setPopup,
+    cartVisible,
+    setCartVisible,
+    menuVisible,
+    setMenuVisible,
+  }
 
   return (
     <React.Fragment>
@@ -53,7 +54,13 @@ function LayoutProvider({ children }) {
           >
             {showModal.message}
           </Modal>
-          <div className='cart-mask' onClick={() => setCartVisible(false)}></div>
+          <div
+            className='mask'
+            onClick={() => {
+              if (cartVisible) setCartVisible(false)
+              if (menuVisible) setMenuVisible(false)
+            }}
+          ></div>
           <CartProvider>
             <div className='cart-provider-wrapper'>
               <Cart cartVisible={cartVisible} setCartVisible={setCartVisible} />
@@ -64,6 +71,12 @@ function LayoutProvider({ children }) {
           <Footer />
         </LayoutContext.Provider>
       </div>
+
+      <style jsx global>{`
+        body {
+          overflow: ${cartVisible || menuVisible || ifPopup ? 'hidden' : 'auto'} !important;
+        }
+      `}</style>
 
       <style jsx>{`
         .wrapper {
@@ -79,7 +92,7 @@ function LayoutProvider({ children }) {
           height: 100%;
         }
 
-        .cart-mask {
+        .mask {
           position: absolute;
           content: '';
           top: 0;
@@ -87,9 +100,9 @@ function LayoutProvider({ children }) {
           left: 0;
           bottom: 0;
           background: #000;
-          opacity: ${cartVisible ? 0.4 : 0};
+          opacity: ${cartVisible || menuVisible || ifPopup ? 0.4 : 0};
           z-index: 1050;
-          pointer-events: ${cartVisible ? 'all' : 'none'};
+          pointer-events: ${cartVisible || menuVisible || ifPopup ? 'all' : 'none'};
         }
       `}</style>
     </React.Fragment>

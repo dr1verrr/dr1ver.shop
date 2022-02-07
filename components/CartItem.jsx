@@ -250,6 +250,7 @@ function CartItem({ product, cartVisible }) {
         }
 
         .product-remove {
+          transition: 0.25s filter ease;
           position: absolute;
           display: flex;
           justify-content: center;
@@ -264,6 +265,10 @@ function CartItem({ product, cartVisible }) {
           cursor: pointer;
           transition: all 0.5s;
           z-index: 6;
+        }
+
+        .product-remove:hover {
+          filter: brightness(0.9);
         }
 
         .product-wrapper {

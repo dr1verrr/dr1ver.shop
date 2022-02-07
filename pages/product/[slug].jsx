@@ -297,7 +297,7 @@ export default function Product({ product }) {
           filter: blur(2rem);
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 567px) {
           .product::after {
             background-repeat: repeat-y;
             background-size: 75%;
@@ -353,7 +353,7 @@ export default function Product({ product }) {
           letter-spacing: 2px;
           text-transform: uppercase;
           border-radius: 3rem;
-          font-weight: 600;
+          padding: 1.5rem 5rem;
         }
 
         .product-info-add-to-cart:active {
@@ -473,6 +473,24 @@ export default function Product({ product }) {
           display: flex;
           flex-wrap: wrap;
           gap: 2rem;
+        }
+
+        @media (max-width: 567px) {
+          .product-inner {
+            flex-direction: column;
+          }
+
+          .product-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+
+          .product-info-description {
+            font-size: 1.8rem;
+            margin-top: 7rem;
+          }
         }
 
         .product-info {

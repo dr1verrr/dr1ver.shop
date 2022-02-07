@@ -22,7 +22,7 @@ function Header() {
 
   const [total, setTotal] = useState(0)
   const { isAuthenticated } = useAuth()
-  const { setPopup, setCartVisible } = useLayout()
+  const { setPopup, setCartVisible, menuVisible, setMenuVisible } = useLayout()
   const { cartData } = useCart()
 
   function profileHandler() {
@@ -45,27 +45,36 @@ function Header() {
           <Link href='/' passHref>
             <div className='header-logo'>
               <div className='header-logo-first logo'>
-                DR1VER<span style={{ fontWeight: 'bold' }}></span>
+                <span className='original-logo'>DR1VER</span>
+                <span className='logo-mobile'>D</span>
               </div>
-              <div className='header-logo-second logo'>SHOP</div>
+              <div className='header-logo-second logo'>
+                <span className='original-logo'>SHOP</span>
+                <span className='logo-mobile'>S</span>
+              </div>
             </div>
           </Link>
         </div>
         <div className='header-second'>
-          <div className='header-menu'>
-            {categories?.map(category => (
-              <div key={category.id} className='header-menu-category'>
-                <Link href={`/category/${category.slug}`}>
-                  <a className='header-menu-link'>
-                    <span>{category.name?.toUpperCase()}</span>
-                  </a>
-                </Link>
-              </div>
-            ))}
+          <div className='header-menu-wrapper'>
+            <div className='header-mobile-menu-close' onClick={() => setMenuVisible(false)}>
+              Hide menu
+            </div>
+            <div className='header-menu'>
+              {categories?.map(category => (
+                <div key={category.id} className='header-menu-category' onClick={() => setMenuVisible(false)}>
+                  <Link href={`/category/${category.slug}`}>
+                    <a className='header-menu-link'>
+                      <span>{category.name?.toUpperCase()}</span>
+                    </a>
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
           <div className='header-second-other'>
             <div className='header-account-icon icon' onClick={profileHandler}>
-              <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
+              <svg xmlns='http://www.w3.org/2000/svg'>
                 <title />
                 <g data-name='Layer 2' id='Layer_2'>
                   <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
@@ -79,7 +88,7 @@ function Header() {
             </div>
 
             <div className='header-cart icon' onClick={() => setCartVisible(true)}>
-              <svg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'>
+              <svg xmlns='http://www.w3.org/2000/svg'>
                 <title />
                 <g data-name='Layer 2' id='Layer_2'>
                   <path d='M24.33,23H13.53a3,3,0,0,1-2.9-2.21L8,11.26a1,1,0,0,1,.17-.87A1,1,0,0,1,9,10H28a1,1,0,0,1,.77.36,1,1,0,0,1,.21.82l-1.7,9.36A3,3,0,0,1,24.33,23Zm-14-11,2.25,8.26a1,1,0,0,0,1,.74h10.8a1,1,0,0,0,1-.82L26.8,12Z' />
@@ -94,6 +103,13 @@ function Header() {
               </svg>
             </div>
             <div className='header-cart-total-cost'>{`${total || ''} USD` || 'USD'}</div>
+          </div>
+          <div className='icon header-mobile-menu-icon icon__animated' onClick={() => setMenuVisible(true)}>
+            <div className='menu-wrapper'>
+              <svg className='menu' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+                <path d='M36,2H0V0h36V2z M36,18H0v2h36V18z M36,9H0v2h36V9z'></path>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -111,6 +127,10 @@ function Header() {
             position: relative;
           }
 
+          .header-mobile-menu-close {
+            display: none;
+          }
+
           .header-first {
             padding-top: 4rem;
           }
@@ -123,6 +143,10 @@ function Header() {
             justify-content: center;
             margin: 0 auto;
             padding-right: 15px;
+          }
+
+          .header-mobile-menu-icon {
+            display: none;
           }
 
 
@@ -141,14 +165,13 @@ function Header() {
           }
 
           @media(max-width: 1170px) {
-
-
-
             .header-menu {
               width: 100%;
             }
 
-
+            .header-menu-wrapper {
+              width: 100%;
+            }
           }
 
           @media(max-width: 567px) {
@@ -162,14 +185,61 @@ function Header() {
             padding: 1.5rem;
           }
 
+          .header-mobile-menu-close {
+            display: block;
+            text-align: center;
+            background: #000;
+            cursor: pointer;
+            color: #fff;
+            padding: 1.5rem;
+          }
+
+          .header-menu-wrapper {
+            display: ${menuVisible ? 'block' : 'none'};
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1500;
+            width: fit-content;
+            background: #fff;
+            color: #000;
+            width: 280px;
+            font-size: 1.5rem;
+          }
+
+          .header-menu {
+            display: block !important;
+            overflow-y: auto;
+          }
+
+          .header-menu-link {
+            padding: 1.5rem !important;
+          }
+
+          .header-menu-category {
+            border-bottom: 1px solid #dfdfdf;
+            overflow-x: auto;
+          }
+
+          .header-second {
+            position: static !important;
+          }
+
+          .header {
+            position: static !important;
+          }
+
+
           .header {
             border-bottom: 1px solid #616161;
             min-height: 0;
           }
 
+          .icon {
+          }
+
           .icon svg {
-            width: 2.7rem !important;
-            height: 2.7rem !important;
           }
 
           .header-cart-total-cost {
@@ -177,27 +247,38 @@ function Header() {
           }
 
           .logo {
-            padding: 0.5rem !important;
+            padding: 0.75rem !important;
             font-size: 2rem;
-            border: none !important;
+            border: 1px solid #fff !important;
           }
 
           .header-second {
             padding: 0;
             margin: 0;
+            align-items: center !important ;
+            justify-content: center;
           }
 
+          .header-mobile-menu-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            width: 60px;
+            padding: 0 !important;
+          }
+
+          .menu-wrapper {
+            height: 20px ;
+          }
 
           .logo::before {
             height: 1px !important;
-
           }
 
-
-
-
           .header-menu {
-            display: none !important;
+            flex-direction: column;
           }
 
           .header-second-other {
@@ -214,7 +295,6 @@ function Header() {
             letter-spacing: 0.1rem;
             justify-content: space-between;
             align-items: center;
-            height: 100%;
           }
 
           .header-menu-category {
@@ -273,6 +353,7 @@ function Header() {
             color: #1d1f21;
             background-color: #fff;
           }
+
           .header-logo-first::before {
             content: '',
             position: absolute,
@@ -296,10 +377,14 @@ function Header() {
             bottom: 0;
             right: 0;
           }
+
+          .icon {
+            padding: 1.5rem 0;
+          }
+
           .header-second-other {
             display: flex;
             align-items: center;
-            padding: 1.5rem 0;
             position: absolute;
             right: 50px;
           }
@@ -322,6 +407,20 @@ function Header() {
 
           .cls-1 {
             fill: none;
+          }
+
+          .logo-mobile {
+            display: none;
+          }
+
+          @media (max-width:567px) {
+            .logo-mobile {
+              display: block;
+            }
+
+            .original-logo {
+              display: none;
+            }
           }
 
         `}</style>

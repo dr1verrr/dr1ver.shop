@@ -8,7 +8,7 @@ function Products({ products }) {
       <div className='product-wrapper'>
         {products?.map(product => {
           return (
-            <Link key={product.id} href={`/product/${product.slug}`} passHref scroll>
+            <Link key={product.id} href={`/product/${product.slug}`} passHref>
               <div className='product-inner'>
                 <div className='product'>
                   <div className='product-price'>{product.price + ' USD'}</div>
