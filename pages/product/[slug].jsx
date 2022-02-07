@@ -14,7 +14,7 @@ export default function Product({ product }) {
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
   const { cartVisible, setCartVisible, showModal, setShowModal } = useLayout()
-  const { setCartData, setLastModified } = useCart()
+  const { cartData, setCartData, setLastModified } = useCart()
 
   const [loading, setLoading] = useState(true)
   const inputCountRef = useRef(null)
@@ -37,51 +37,33 @@ export default function Product({ product }) {
     return listener
   }, [])
 
-  function ifExists(arr, obj) {
-    for (let index = 0; index < arr.length; index++) {
-      if (arr[index].id == obj.id && arr[index].options === obj.options) {
-        return [arr[index], index]
-      }
-    }
+  function addToCart(arr, obj) {
+    let newArr = []
+    let flag = false
+    const isExist = index => arr[index].id == obj.id && arr[index].options === obj.options
 
-    return false
-  }
+    if (arr.length) {
+      newArr = [...arr]
 
-  function isDuplicate(arr, obj) {
-    let productFound = ifExists(arr, obj)
-    let newArr
-    let flag = true
-
-    if (productFound) {
-      if (productFound[0].count == 20) {
-        flag = false
-      } else {
-        if (newArr == undefined) newArr = [...arr]
-      }
-
-      if (flag) {
-        newArr[productFound[1]] = {
-          ...obj,
-          count: parseInt(productFound[0].count + obj.count > 20 ? 20 : productFound[0].count + obj.count),
+      for (let index = 0; index < arr.length; index++) {
+        if (isExist(index)) {
+          newArr[index] = {
+            ...obj,
+            count: parseInt(arr[index].count + obj.count > 99 ? 99 : arr[index].count + obj.count),
+          }
+          flag = true
+          break
+        } else if (index > arr.length) {
+          flag = false
         }
       }
-
-      setShowModal(
-        obj.count + productFound[0].count > 20 || productFound[0].count == 20
-          ? { title: 'Warning', message: 'Cannot set count more than 20.', visible: true }
-          : { title: `${obj.name} x${obj.count}`, message: 'Product added successful.', visible: true }
-      )
-      setCartVisible(true)
-      setLastModified({ id: obj.id, options: obj.options })
-
-      if (!flag) return arr
-
-      return newArr
     }
+
+    if (!arr.length) newArr = null
+
     setLastModified({ id: obj.id, options: obj.options })
 
-    setCartVisible(true)
-    setShowModal({ title: `${obj.name} x${obj.count}`, message: 'Product added successful.', visible: true })
+    if (flag) return newArr
 
     return [...arr, obj]
   }
@@ -110,7 +92,12 @@ export default function Product({ product }) {
       }
 
       if (data) {
-        setCartData(prev => isDuplicate(prev, data))
+        try {
+          setCartData(prev => addToCart(prev, data))
+        } finally {
+          setShowModal({ title: '', message: 'Product added successful.', visible: true })
+          setCartVisible(true)
+        }
       }
     }
   }

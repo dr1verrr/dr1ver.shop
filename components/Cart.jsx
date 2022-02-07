@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCart } from '../contexts/cart'
 import { useLayout } from '../contexts/layout'
 import CartItem from './CartItem'
-import Modal from './Modal'
 
-function Cart({ cartVisible }) {
+function Cart({ cartVisible, setCartVisible }) {
   const { cartData, lastModified } = useCart()
   const [mounted, setMounted] = useState(false)
   const { showModal, setShowModal } = useLayout()
@@ -14,17 +13,19 @@ function Cart({ cartVisible }) {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    console.log('rendered')
-  }, [])
-
-  useEffect(() => {
-    console.log(lastModified)
-  }, [lastModified])
+  useEffect(() => {}, [lastModified])
 
   if (mounted) {
     return (
       <div className='cart'>
+        <div className='cart-vision-switcher' onClick={() => setCartVisible(false)}>
+          <div className='icon modal__cart-continue-shopping-arrow icon__animated'>
+            <svg className='arrow4' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+              <path d='M2.2 16L16.7 1.5c.4-.4.4-.9 0-1.3s-.9-.4-1.3 0L.3 15.4c-.4.4-.4.9 0 1.3l15.2 15.1c.2.2.4.3.6.3.2 0 .5-.1.6-.3.4-.4.4-.9 0-1.3L2.2 16z'></path>
+            </svg>
+          </div>
+          <span>Continue shopping</span>
+        </div>
         <div className='cart-inner'>
           <div className='cart-items'>
             {cartData?.map(item => {
@@ -34,24 +35,69 @@ function Cart({ cartVisible }) {
         </div>
         <style jsx>{`
           .cart {
-            transition: all 0.3s ease;
+            transition: transform 0.4s ease;
             content: '';
-            background: #fafafa;
             position: fixed;
             right: 0;
             top: 0;
             bottom: 0;
             min-width: fit-content;
-            width: 100%;
-            max-width: 400px;
-            height: 100%;
+            width: 400px;
             transform: ${cartVisible ? 'translateX(0)' : 'translateX(100%)'};
             z-index: 1100;
             color: #000;
             overflow-x: hidden;
             scrollbar-width: none;
+            user-select: none;
           }
+
           .cart-items {
+            padding: 0 3rem;
+          }
+
+          .cart-inner {
+            min-height: 100vh;
+            height: auto;
+            background: #fff;
+            padding-bottom: 150px;
+          }
+
+          .modal__cart-continue-shopping-arrow,
+          .modal__cart-continue-shopping-arrow svg {
+            width: 17px;
+            height: 32px;
+          }
+
+          .modal__cart-continue-shopping-arrow {
+            padding-right: 4rem;
+          }
+
+          @media (max-width: 440px) {
+            .cart {
+              width: 100%;
+            }
+          }
+
+          .cart-vision-switcher {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid #e0e3e6;
+            background: #fff;
+            padding: 2rem 0;
+            height: 100%;
+            text-transform: uppercase;
+            max-height: 106.5px;
+            letter-spacing: 1.5px;
+            font-size: 1.4rem;
+            cursor: pointer;
+          }
+
+          @media (max-width: 567px) {
+            .cart-vision-switcher {
+              max-height: 78px;
+            }
           }
         `}</style>
       </div>

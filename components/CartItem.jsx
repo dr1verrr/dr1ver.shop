@@ -11,6 +11,8 @@ function CartItem({ product, cartVisible }) {
   const { setCartData, cartData } = useCart()
   const { setShowModal } = useLayout()
 
+  useEffect(() => {}, [product])
+
   useEffect(() => {
     setSelected(product.options)
   }, [product])
@@ -87,14 +89,14 @@ function CartItem({ product, cartVisible }) {
             <div className='counter-control'>
               <button type='button' className='modal__cart-product-count-plus'>
                 <div className='icon icon__animated'>
-                  <svg className='plus' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+                  <svg className='plus' xmlns='http://www.w3.org/2000/svg'>
                     <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
                   </svg>
                 </div>
               </button>
               <button type='button' className='modal__cart-product-count-minus'>
                 <div className='icon icon__animated'>
-                  <svg className='minus' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+                  <svg className='minus' xmlns='http://www.w3.org/2000/svg'>
                     <path d='M9 4v1H0V4z'></path>
                   </svg>
                 </div>
@@ -105,16 +107,14 @@ function CartItem({ product, cartVisible }) {
       </div>
       <style jsx>{`
         .cart-item {
-          padding: 3rem 1.5rem 5rem;
-          border-bottom: 1px solid #dcdee0;
+          padding: 3rem 0 5rem;
+          border-bottom: 1px solid #e0e3e6;
           display: flex;
           margin: 0 auto;
-          padding-left: 0.5rem;
         }
 
         .cart-left {
           padding-right: 2rem;
-          padding-left: 2rem;
         }
 
         button[type='button'] {

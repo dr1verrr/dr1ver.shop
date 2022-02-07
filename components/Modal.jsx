@@ -109,7 +109,7 @@ const Modal = props => {
           animation: fade-modal 3.5s linear;
           animation-fill-mode: forwards;
           cursor: default;
-          padding: 2.5rem 7rem 1rem 7rem;
+          padding: 1.5rem 7rem 1.5rem;
         }
 
         .modal[paused='false'][show='true'] {
@@ -121,9 +121,6 @@ const Modal = props => {
         }
 
         @media (max-width: 340px) {
-          .modal {
-            margin: 0 15px;
-          }
         }
 
         .modal-button {
@@ -142,6 +139,7 @@ const Modal = props => {
 
         .modal-content {
           flex: 1;
+          width: 100%;
         }
 
         .notification-timer {
@@ -175,10 +173,16 @@ const Modal = props => {
           animation-fill-mode: forwards;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 440px) {
           .modal {
-            left: 0;
             right: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 15px;
+          }
+
+          .modal {
+            padding: 1rem;
           }
         }
       `}</style>

@@ -102,11 +102,13 @@ function Header() {
                 </g>
               </svg>
             </div>
-            <div className='header-cart-total-cost'>{`${total || ''} USD` || 'USD'}</div>
+            <div className='header-cart-total-cost' onClick={() => setCartVisible(true)}>
+              {`${total || ''} USD` || 'USD'}
+            </div>
           </div>
           <div className='icon header-mobile-menu-icon icon__animated' onClick={() => setMenuVisible(true)}>
             <div className='menu-wrapper'>
-              <svg className='menu' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+              <svg className='menu' xmlns='http://www.w3.org/2000/svg'>
                 <path d='M36,2H0V0h36V2z M36,18H0v2h36V18z M36,9H0v2h36V9z'></path>
               </svg>
             </div>
@@ -129,6 +131,7 @@ function Header() {
 
           .header-mobile-menu-close {
             display: none;
+
           }
 
           .header-first {
@@ -174,6 +177,11 @@ function Header() {
             }
           }
 
+          .header-cart-total-cost {
+            cursor: pointer;
+            user-select: none;
+          }
+
           @media(max-width: 567px) {
           .container {
             display: flex;
@@ -186,12 +194,18 @@ function Header() {
           }
 
           .header-mobile-menu-close {
-            display: block;
-            text-align: center;
-            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid #ebeef1;
+            border-top: 0;
+            text-transform: uppercase;
             cursor: pointer;
-            color: #fff;
             padding: 1.5rem;
+            letter-spacing: 1.5px;
+            font-size: 1.4rem;
+            height: 100%;
+            max-height: 78px;
           }
 
           .header-menu-wrapper {
@@ -211,6 +225,7 @@ function Header() {
           .header-menu {
             display: block !important;
             overflow-y: auto;
+            background: #fafafa;
           }
 
           .header-menu-link {
@@ -218,7 +233,7 @@ function Header() {
           }
 
           .header-menu-category {
-            border-bottom: 1px solid #dfdfdf;
+            border-bottom: 1px solid #e0e3e6;
             overflow-x: auto;
           }
 
@@ -413,7 +428,7 @@ function Header() {
             display: none;
           }
 
-          @media (max-width:567px) {
+          @media (max-width: 567px) {
             .logo-mobile {
               display: block;
             }
