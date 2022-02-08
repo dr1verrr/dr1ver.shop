@@ -24,10 +24,12 @@ function Header() {
   const { isAuthenticated } = useAuth()
   const { setPopup, setCartVisible, menuVisible, setMenuVisible } = useLayout()
   const { cartData } = useCart()
-  const [mobile, setMobile] = useState({ width: 0, isTrue: false })
+  const [mobile, setMobile] = useState({ width: 0, isTrue: false, secondWidth: 0 })
   const menuRef = useRef(null)
+  const secondHeaderRef = useRef(null)
+  const [widthChecked, setWidthChecked] = useState(false)
 
-  function calculateMenuWidth(ref) {
+  async function getMenuWidth(ref) {
     let calculatedWidth = 0
     const childRefsArr = Object.values(ref.children)
     console.log(childRefsArr)
@@ -36,22 +38,61 @@ function Header() {
       calculatedWidth += childRefsArr[index].offsetWidth
     }
 
-    if (calculatedWidth + 70 >= ref.offsetWidth) {
-      console.log(calculatedWidth, ref.offsetWidth)
-      setMobile({ width: window.innerWidth + 15, isTrue: true })
+    console.log('calc', calculatedWidth, ref.offsetWidth)
+
+    if (calculatedWidth >= ref.offsetWidth) {
+      setMobile(prev => ({ ...prev, width: Math.round(window.innerWidth + 15), isTrue: true }))
     }
-    console.log('calculated', calculatedWidth + 70, 'wrapper', ref.offsetWidth)
+    console.log(calculatedWidth, ref.offsetWidth)
   }
 
-  //TODO: remove jcc from header-menu and add to header-menu-link width: 100%
+  async function getSecHeaderWidth(ref) {
+    let calculatedWidth = 0
+    let flag = false
+    const headerWidth = ref.offsetWidth
+    const childRefsArr = Object.values(ref.children)
+    const menuWidth = childRefsArr[0].clientWidth
+    const otherWidth = childRefsArr[1].clientWidth
+
+    if (otherWidth + menuWidth <= headerWidth * 0.7) {
+      calculatedWidth = headerWidth * 0.7 - (otherWidth + menuWidth)
+      setWidthChecked(false)
+    }
+
+    if (otherWidth + menuWidth > headerWidth * 0.7) {
+      flag = true
+      calculatedWidth = otherWidth + menuWidth - headerWidth * 0.7
+      setWidthChecked(true)
+    }
+
+    setMobile(prev => ({
+      ...prev,
+      secondWidth: Math.round(!flag ? window.innerWidth - calculatedWidth : window.innerWidth + calculatedWidth),
+    }))
+  }
 
   useEffect(() => {
     console.log(mobile)
   }, [mobile])
 
   useEffect(() => {
-    calculateMenuWidth(menuRef.current)
+    const time = Date.now()
+    getSecHeaderWidth(secondHeaderRef.current).then(() => {
+      console.log(Date.now() - time)
+    })
   }, [])
+
+  useEffect(() => {
+    const time = Date.now()
+    if (widthChecked)
+      getMenuWidth(menuRef.current).then(() => {
+        console.log(Date.now() - time)
+      })
+  }, [widthChecked])
+
+  useEffect(() => {
+    console.log(secondHeaderRef.current, menuRef.current)
+  }, [secondHeaderRef.current, menuRef.current])
 
   function profileHandler() {
     if (isAuthenticated) {
@@ -83,7 +124,7 @@ function Header() {
             </div>
           </Link>
         </div>
-        <div className='header-second'>
+        <div className='header-second' ref={secondHeaderRef}>
           <div className='header-menu-wrapper'>
             <div className='header-mobile-menu-close' onClick={() => setMenuVisible(false)}>
               Hide menu
@@ -181,7 +222,7 @@ function Header() {
 
 
 
-          @media(max-width: 1170px) {
+          @media(max-width: ${`${mobile.secondWidth}px`}) {
             .header-second {
               padding-bottom: 5rem;
             }
@@ -193,7 +234,7 @@ function Header() {
 
           }
 
-          @media(max-width: 1170px) {
+          @media(max-width: ${`${mobile.secondWidth}px`}) {
             .header-menu {
               width: 100%;
             }
@@ -215,6 +256,8 @@ function Header() {
           .logo-mobile {
             display: none;
           }
+
+
 
         @media(max-width: ${`${mobile.width}px`}) {
           .container {
@@ -263,7 +306,8 @@ function Header() {
           }
 
           .header-menu-link {
-            padding: 1.5rem !important;
+            padding-left: 1.5rem !important;
+            font-size: 1.3rem;
           }
 
           .header-menu-category {
@@ -347,13 +391,9 @@ function Header() {
           .header-menu {
             display: flex;
             height: 100%;
-            gap: 0.75rem;
             letter-spacing: 0.1rem;
-            justify-content: space-between;
             align-items: center;
-          }
-
-          .header-menu-category {
+            justify-content: space-between;
 
           }
 
@@ -362,6 +402,7 @@ function Header() {
             padding: 2.25rem 0;
             //later need to be rewrite padding to 2rem 2rem
           }
+
 
           .header-menu-link span {
             position: relative;
@@ -465,9 +506,10 @@ function Header() {
             fill: none;
           }
 
-
-
-
+          .header-menu-link {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+          }
         `}</style>
     </header>
   )
