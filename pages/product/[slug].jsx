@@ -65,10 +65,11 @@ export default function Product({ product }) {
 
     if (flag) {
       setCartData(newArr)
-      return
+      return newArr
     }
 
     setCartData(prev => [...prev, obj])
+    return [...arr, obj]
   }
 
   function submitHandler(e) {
