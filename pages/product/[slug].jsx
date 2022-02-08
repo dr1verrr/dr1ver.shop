@@ -14,9 +14,8 @@ export default function Product({ product }) {
   const [count, setCount] = useState(1)
   const [price] = useState(product.price)
   const [optionPrice, setOptionPrice] = useState(0)
-  const { cartVisible, setCartVisible, showModal, setShowModal } = useLayout()
+  const { cartVisible, setCartVisible, setShowModal } = useLayout()
   const { cartData, setCartData, setLastModified } = useCart()
-
   const [loading, setLoading] = useState(true)
   const inputCountRef = useRef(null)
 
@@ -38,7 +37,7 @@ export default function Product({ product }) {
     return listener
   }, [])
 
-  function addToCart(arr, obj) {
+  async function addToCart(arr, obj) {
     let newArr = []
     let flag = false
     const isExist = index => arr[index].id == obj.id && arr[index].options === obj.options
@@ -64,9 +63,12 @@ export default function Product({ product }) {
 
     setLastModified({ id: obj.id, options: obj.options })
 
-    if (flag) return newArr
+    if (flag) {
+      setCartData(newArr)
+      return
+    }
 
-    return [...arr, obj]
+    setCartData(prev => [...prev, obj])
   }
 
   function submitHandler(e) {
@@ -93,13 +95,15 @@ export default function Product({ product }) {
       }
 
       if (data) {
+        const time = Date.now()
         try {
-          setCartData(prev => addToCart(prev, data))
+          addToCart(cartData, data).then(() => {
+            console.log(Date.now() - time)
+            setShowModal({ title: '', message: 'The product was added to the shopping cart.', visible: true })
+            setCartVisible(true)
+          })
         } catch (err) {
           console.error(err)
-        } finally {
-          setShowModal({ title: '', message: 'The product was added to the shopping cart.', visible: true })
-          setCartVisible(true)
         }
       }
     }
