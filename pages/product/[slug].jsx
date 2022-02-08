@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { useCart } from '../../contexts/cart'
 import { useLayout } from '../../contexts/layout'
