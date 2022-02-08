@@ -18,12 +18,17 @@ function CartItem({ product, cartVisible }) {
   }, [product])
 
   function removeProduct() {
-    setCartData(arr => arr.filter(item => (product.id == item.id && product.options === item.options ? false : true)))
-    setShowModal(() => ({
-      title: `${product.name} — ${product.options}`,
-      message: 'Product was removed',
-      visible: true,
-    }))
+    try {
+      setCartData(arr => arr.filter(item => (product.id == item.id && product.options === item.options ? false : true)))
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setShowModal({
+        title: '',
+        message: 'The product is removed from the basket.',
+        visible: true,
+      })
+    }
   }
 
   function countHandler(e) {}

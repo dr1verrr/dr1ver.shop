@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
@@ -94,8 +95,10 @@ export default function Product({ product }) {
       if (data) {
         try {
           setCartData(prev => addToCart(prev, data))
+        } catch (err) {
+          console.error(err)
         } finally {
-          setShowModal({ title: '', message: 'Product added successful.', visible: true })
+          setShowModal({ title: '', message: 'The product was added to the shopping cart.', visible: true })
           setCartVisible(true)
         }
       }
@@ -258,10 +261,9 @@ export default function Product({ product }) {
       <style jsx>{`
         .product {
           background: transparent;
-          padding: 0 0.5rem 1.5rem 0.5rem;
+          padding: 0 0.5rem 10rem;
           position: relative;
           min-height: 100vh;
-          margin-bottom: 10rem;
         }
 
         * {
@@ -322,10 +324,6 @@ export default function Product({ product }) {
         @media (max-width: 460px) {
           .product-info-description {
             line-height: 1.5;
-          }
-
-          .product {
-            padding: 0.75rem 0 !important;
           }
 
           .container {

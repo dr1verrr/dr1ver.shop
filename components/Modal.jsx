@@ -13,7 +13,7 @@ const Modal = props => {
 
   function runTimeout() {
     clearTimeout(timeoutRef.current)
-    if (mounted) timeoutRef.current = setTimeout(() => props.onClose(), 3500)
+    if (mounted) timeoutRef.current = setTimeout(() => props.onClose(), 4000)
   }
 
   useEffect(() => {
@@ -95,21 +95,22 @@ const Modal = props => {
           color: rgba(255, 255, 255, 0.85);
           flex-direction: column;
           min-width: fit-content;
+          text-align: center;
           width: 300px;
           border-radius: 20px;
-          text-align: center;
           position: fixed;
           bottom: 15px;
           right: 35px;
           overflow: hidden;
           visibility: ${props.show ? 'visible' : 'hidden'};
           z-index: 1200;
-          font-size: 1.7rem;
+          font-size: 1.5rem;
+          letter-spacing: 0.75px;
           pointer-events: stroke;
-          animation: fade-modal 3.5s linear;
+          animation: fade-modal 4s ease;
           animation-fill-mode: forwards;
           cursor: default;
-          padding: 1.5rem 7rem 1.5rem;
+          padding: 2rem 7rem 2rem;
         }
 
         .modal[paused='false'][show='true'] {
@@ -118,9 +119,6 @@ const Modal = props => {
         .modal[paused='true'] {
           animation: none;
           opacity: 1;
-        }
-
-        @media (max-width: 340px) {
         }
 
         .modal-button {
@@ -135,10 +133,10 @@ const Modal = props => {
         svg {
           width: 15px;
           height: 15px;
+          transform: scale(0.75);
         }
 
         .modal-content {
-          flex: 1;
           width: 100%;
         }
 
@@ -169,20 +167,22 @@ const Modal = props => {
         }
 
         .notification-timer[paused='false'] {
-          animation: timer 3.5s ease;
+          animation: timer 4s ease;
           animation-fill-mode: forwards;
+        }
+
+        @media (max-width: 500px) {
+          .modal {
+            padding: 2rem;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+          }
         }
 
         @media (max-width: 440px) {
           .modal {
-            right: 0;
-            left: 50%;
-            transform: translateX(-50%);
             bottom: 15px;
-          }
-
-          .modal {
-            padding: 1rem;
           }
         }
       `}</style>
