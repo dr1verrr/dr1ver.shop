@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import router from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
 import { useCart } from '../contexts/cart'
 import { useLayout } from '../contexts/layout'
@@ -24,6 +24,34 @@ function Header() {
   const { isAuthenticated } = useAuth()
   const { setPopup, setCartVisible, menuVisible, setMenuVisible } = useLayout()
   const { cartData } = useCart()
+  const [mobile, setMobile] = useState({ width: 0, isTrue: false })
+  const menuRef = useRef(null)
+
+  function calculateMenuWidth(ref) {
+    let calculatedWidth = 0
+    const childRefsArr = Object.values(ref.children)
+    console.log(childRefsArr)
+
+    for (let index = 0; index < childRefsArr.length; index++) {
+      calculatedWidth += childRefsArr[index].offsetWidth
+    }
+
+    if (calculatedWidth + 70 >= ref.offsetWidth) {
+      console.log(calculatedWidth, ref.offsetWidth)
+      setMobile({ width: window.innerWidth + 15, isTrue: true })
+    }
+    console.log('calculated', calculatedWidth + 70, 'wrapper', ref.offsetWidth)
+  }
+
+  //TODO: remove jcc from header-menu and add to header-menu-link width: 100%
+
+  useEffect(() => {
+    console.log(mobile)
+  }, [mobile])
+
+  useEffect(() => {
+    calculateMenuWidth(menuRef.current)
+  }, [])
 
   function profileHandler() {
     if (isAuthenticated) {
@@ -60,7 +88,7 @@ function Header() {
             <div className='header-mobile-menu-close' onClick={() => setMenuVisible(false)}>
               Hide menu
             </div>
-            <div className='header-menu'>
+            <div className='header-menu' ref={menuRef}>
               {categories?.map(category => (
                 <div key={category.id} className='header-menu-category' onClick={() => setMenuVisible(false)}>
                   <Link href={`/category/${category.slug}`}>
@@ -145,7 +173,6 @@ function Header() {
             align-items: center;
             justify-content: center;
             margin: 0 auto;
-            padding-right: 15px;
           }
 
           .header-mobile-menu-icon {
@@ -162,7 +189,6 @@ function Header() {
             .header-second-other {
               bottom: 0;
               right: 0!important;
-              margin-right: 1rem;
             }
 
           }
@@ -182,7 +208,7 @@ function Header() {
             user-select: none;
           }
 
-          @media(max-width: 567px) {
+        @media(max-width: ${`${mobile.width}px`}) {
           .container {
             display: flex;
             align-items: center;
@@ -299,7 +325,6 @@ function Header() {
           .header-second-other {
             position: static!important;
           }
-
 
           }
 
@@ -425,17 +450,12 @@ function Header() {
           }
 
           .logo-mobile {
-            display: none;
+            display: ${mobile.isTrue ? 'block' : 'none'};
           }
 
-          @media (max-width: 567px) {
-            .logo-mobile {
-              display: block;
-            }
 
-            .original-logo {
-              display: none;
-            }
+          .original-logo {
+            display: ${!mobile.isTrue ? 'block' : 'none'};
           }
 
         `}</style>

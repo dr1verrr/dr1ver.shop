@@ -103,7 +103,7 @@ const Modal = props => {
           right: 35px;
           overflow: hidden;
           visibility: ${props.show ? 'visible' : 'hidden'};
-          z-index: 1200;
+          z-index: 1500;
           font-size: 1.5rem;
           letter-spacing: 0.75px;
           pointer-events: stroke;

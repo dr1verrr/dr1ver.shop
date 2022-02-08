@@ -38,16 +38,16 @@ export default function Product({ product }) {
   }, [])
 
   async function addToCart(arr, obj) {
-    let newArr = []
+    let modExist = []
     let flag = false
     const isExist = index => arr[index].id == obj.id && arr[index].options === obj.options
 
     if (arr.length) {
-      newArr = [...arr]
+      modExist = [...arr]
 
       for (let index = 0; index < arr.length; index++) {
         if (isExist(index)) {
-          newArr[index] = {
+          modExist[index] = {
             ...obj,
             count: parseInt(arr[index].count + obj.count > 99 ? 99 : arr[index].count + obj.count),
           }
@@ -59,13 +59,13 @@ export default function Product({ product }) {
       }
     }
 
-    if (!arr.length) newArr = null
+    if (!arr.length) modExist = null
 
     setLastModified({ id: obj.id, options: obj.options })
 
     if (flag) {
-      setCartData(newArr)
-      return newArr
+      setCartData(modExist)
+      return modExist
     }
 
     setCartData(prev => [...prev, obj])

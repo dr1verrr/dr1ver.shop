@@ -16,10 +16,6 @@ export default function AuthModal({ popup, setPopup }) {
     email: '',
   })
 
-  useEffect(() => {
-    //console.log(userData)
-  }, [userData])
-
   useOnClickOutside(popupRef, () => setPopup({ login: false, register: false }))
 
   async function handleSubmit(e) {
