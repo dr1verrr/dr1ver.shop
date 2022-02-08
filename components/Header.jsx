@@ -208,6 +208,14 @@ function Header() {
             user-select: none;
           }
 
+          .original-logo {
+            display: block;
+          }
+
+          .logo-mobile {
+            display: none;
+          }
+
         @media(max-width: ${`${mobile.width}px`}) {
           .container {
             display: flex;
@@ -261,6 +269,14 @@ function Header() {
           .header-menu-category {
             border-bottom: 1px solid #e0e3e6;
             overflow-x: auto;
+          }
+
+          .logo-mobile {
+            display: block;
+          }
+
+          .original-logo {
+            display: none;
           }
 
           .header-second {
@@ -449,14 +465,8 @@ function Header() {
             fill: none;
           }
 
-          .logo-mobile {
-            display: ${mobile.isTrue ? 'block' : 'none'};
-          }
 
 
-          .original-logo {
-            display: ${!mobile.isTrue ? 'block' : 'none'};
-          }
 
         `}</style>
     </header>
