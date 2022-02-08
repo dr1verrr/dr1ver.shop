@@ -11,8 +11,6 @@ function CartItem({ product, cartVisible }) {
   const { setCartData, cartData } = useCart()
   const { setShowModal } = useLayout()
 
-  useEffect(() => {}, [product])
-
   useEffect(() => {
     setSelected(product.options)
   }, [product])

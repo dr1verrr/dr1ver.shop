@@ -308,6 +308,7 @@ function Header() {
           .header-menu-link {
             padding-left: 1.5rem !important;
             font-size: 1.3rem;
+            font-weight: 600;
           }
 
           .header-menu-category {
