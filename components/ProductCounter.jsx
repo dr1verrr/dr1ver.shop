@@ -1,9 +1,8 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PRODUCT_UPDATE } from '../redux/types'
 
 function ProductCounter() {
-  const inputCountRef = useRef(null)
   const dispatch = useDispatch()
   const count = useSelector(state => state.product?.count)
 
@@ -37,13 +36,7 @@ function ProductCounter() {
             <path d='M9 4v1H0V4z'></path>
           </svg>
         </button>
-        <input
-          type='number'
-          value={count}
-          className='product-info-count-input'
-          onChange={countHandler}
-          ref={inputCountRef}
-        />
+        <input type='number' value={count} className='product-info-count-input' onChange={countHandler} />
         <button
           className='product-info-count-counter-plus button-counter'
           type='button'

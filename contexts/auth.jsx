@@ -1,32 +1,35 @@
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../config/api'
-import useLocalStorage from '../hooks/useLocalStorage'
+import useRequest from '../hooks/useRequest'
 
 const AuthContext = createContext({})
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const privateRoutes = ['/profile']
-  const privateCondition = privateRoutes.includes(router.pathname)
+  const isPrivate = privateRoutes.includes(router.pathname)
+  const getToken = useRequest()
 
   function checkRoute() {
-    if (privateCondition && !loading && !user) {
+    if (isPrivate && !loading && !user) {
       router.replace('/')
     }
   }
+
+  useEffect(() => {
+    console.log(children)
+  }, [])
 
   useEffect(checkRoute, [router.pathname, user, loading])
 
   async function loadUserFromCookies() {
     try {
-      const token = await axios.get('/api/token').then(res => res.data)
+      const token = await getToken('/api/token', { method: 'GET' }).then(res => res.data)
 
       if (token) {
-        //console.log("Got a token in the cookies, let's see if it is valid")
         api.defaults.headers.Authorization = `Bearer ${token}`
         const { data: user } = await api.get('/users/me')
         if (user) setUser(user)
@@ -34,11 +37,10 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error(err)
     }
-    setLoading(false)
   }
 
   useEffect(() => {
-    loadUserFromCookies()
+    loadUserFromCookies().then(() => setLoading(false))
   }, [])
 
   return (
@@ -56,5 +58,7 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
+
+export default AuthProvider
 
 export const useAuth = () => useContext(AuthContext)

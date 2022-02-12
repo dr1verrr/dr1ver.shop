@@ -1,5 +1,4 @@
-import React, { memo, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
 import ProductCounter from './ProductCounter'
 import ProductOption from './ProductOption'
 import ProductPrice from './ProductPrice'

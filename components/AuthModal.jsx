@@ -1,14 +1,18 @@
-import axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import { useAuth } from '../contexts/auth'
+import { useLayout } from '../contexts/layout'
 import useOnClickOutside from '../hooks/useOnClickOutside'
+import useRequest from '../hooks/useRequest'
 
-export default function AuthModal({ popup, setPopup }) {
+function AuthModal() {
   const { loadUserFromCookies } = useAuth()
-  const ifPopup = popup.login || popup.register
   const popupRef = useRef()
   const router = useRouter()
+  const sendAuthData = useRequest()
+  const { popup, setPopup } = useLayout()
+  const isPopupActive = popup.login || popup.register
+
   const [userData, setUserData] = useState({
     identifier: '',
     username: '',
@@ -16,18 +20,19 @@ export default function AuthModal({ popup, setPopup }) {
     email: '',
   })
 
-  useOnClickOutside(popupRef, () => setPopup({ login: false, register: false }))
+  useOnClickOutside(popupRef, () => {
+    if (isPopupActive) setPopup({ login: false, register: false })
+  })
 
   async function handleSubmit(e) {
     e.preventDefault()
-    try {
-      await axios
-        .post(`${popup.login ? '/api/login' : '/api/register'}`, userData)
-        .then(() => loadUserFromCookies().then(() => router.push('/profile')))
-      setPopup({ login: false, register: false })
-    } catch (err) {
-      console.log(err)
-    }
+
+    sendAuthData({ method: 'post', url: `${popup.login ? '/api/login' : '/api/register'}`, data: userData })
+      .then(() => loadUserFromCookies())
+      .then(() => {
+        setPopup({ login: false, register: false })
+        router.push('/profile')
+      })
   }
 
   function handleChange(e) {
@@ -155,8 +160,8 @@ export default function AuthModal({ popup, setPopup }) {
           padding: 4rem;
           border-radius: 15px;
           z-index: 1200;
-          opacity: ${ifPopup ? 1 : 0};
-          visibility: ${ifPopup ? 'visible' : 'hidden'};
+          opacity: ${isPopupActive ? 1 : 0};
+          visibility: ${isPopupActive ? 'visible' : 'hidden'};
           color: #000;
           max-width: 500px;
           width: 100%;
@@ -172,3 +177,5 @@ export default function AuthModal({ popup, setPopup }) {
     </div>
   )
 }
+
+export default memo(AuthModal)

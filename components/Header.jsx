@@ -1,117 +1,45 @@
 import Link from 'next/link'
 import router from 'next/router'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
-import { useCart } from '../contexts/cart'
-import { useLayout } from '../contexts/layout'
 import categories from '../data/categories.json'
 
-function Header() {
-  function getTotal(state) {
+const Header = () => {
+  function getTotal(arr) {
     let value = 0
-    if (state == undefined) return
 
-    if (state) {
-      for (let index = 0; index < state.length; index++) {
-        value += state[index].price * state[index].count
-      }
+    for (let index = 0; index < arr.length; index++) {
+      value += arr[index].price * arr[index].count
     }
 
     return value.toFixed(2)
   }
 
-  const [total, setTotal] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
   const { isAuthenticated } = useAuth()
-  const { setPopup, setCartVisible, menuVisible, setMenuVisible } = useLayout()
-  const { cartData } = useCart()
-  const [mobile, setMobile] = useState({ width: 0, isTrue: false, secondWidth: 0 })
-  const menuRef = useRef(null)
-  const secondHeaderRef = useRef(null)
-  const [widthChecked, setWidthChecked] = useState(false)
-
-  async function getMenuWidth(ref) {
-    let calculatedWidth = 0
-    const childRefsArr = Object.values(ref.children)
-    console.log(childRefsArr)
-
-    for (let index = 0; index < childRefsArr.length; index++) {
-      calculatedWidth += childRefsArr[index].offsetWidth
-    }
-
-    console.log('calc', calculatedWidth, ref.offsetWidth)
-
-    if (calculatedWidth >= ref.offsetWidth) {
-      setMobile(prev => ({ ...prev, width: Math.round(window.innerWidth + 15), isTrue: true }))
-    }
-    console.log(calculatedWidth, ref.offsetWidth)
-  }
-
-  async function getSecHeaderWidth(ref) {
-    let calculatedWidth = 0
-    let flag = false
-    const headerWidth = ref.offsetWidth
-    const childRefsArr = Object.values(ref.children)
-    const menuWidth = childRefsArr[0].clientWidth
-    const otherWidth = childRefsArr[1].clientWidth
-
-    if (otherWidth + menuWidth <= headerWidth * 0.7) {
-      calculatedWidth = headerWidth * 0.7 - (otherWidth + menuWidth)
-      setWidthChecked(false)
-    }
-
-    if (otherWidth + menuWidth > headerWidth * 0.7) {
-      flag = true
-      calculatedWidth = otherWidth + menuWidth - headerWidth * 0.7
-      setWidthChecked(true)
-    }
-
-    setMobile(prev => ({
-      ...prev,
-      secondWidth: Math.round(!flag ? window.innerWidth - calculatedWidth : window.innerWidth + calculatedWidth),
-    }))
-  }
-
-  useEffect(() => {
-    console.log(mobile)
-  }, [mobile])
-
-  useEffect(() => {
-    const time = Date.now()
-    getSecHeaderWidth(secondHeaderRef.current).then(() => {
-      console.log(Date.now() - time)
-    })
-  }, [])
-
-  useEffect(() => {
-    const time = Date.now()
-    if (widthChecked)
-      getMenuWidth(menuRef.current).then(() => {
-        console.log(Date.now() - time)
-      })
-  }, [widthChecked])
-
-  useEffect(() => {
-    console.log(secondHeaderRef.current, menuRef.current)
-  }, [secondHeaderRef.current, menuRef.current])
+  //const { setPopup, setCartVisibility, isMenuVisible, setMenuVisibility } = useLayout()
+  //const { cartData } = useCart()
+  const cartData = useSelector(state => state.cart.cartData)
 
   function profileHandler() {
     if (isAuthenticated) {
       router.push('/profile')
     } else {
-      setPopup(prev => ({ ...prev, login: !prev.login }))
+      //setPopup(prev => ({ ...prev, login: !prev.login }))
     }
   }
 
   useEffect(() => {
-    setTotal(getTotal(cartData))
-    if (cartData && !cartData.length) setTotal('')
+    console.log(cartData)
+    setTotalPrice(getTotal(cartData))
   }, [cartData])
 
   return (
     <header className='header'>
       <div className='container'>
         <div className='header-first'>
-          <Link href='/' passHref>
+          <Link href='/' as='/' passHref>
             <div className='header-logo'>
               <div className='header-logo-first logo'>
                 <span className='original-logo'>DR1VER</span>
@@ -124,15 +52,15 @@ function Header() {
             </div>
           </Link>
         </div>
-        <div className='header-second' ref={secondHeaderRef}>
+        <div className='header-second'>
           <div className='header-menu-wrapper'>
-            <div className='header-mobile-menu-close' onClick={() => setMenuVisible(false)}>
+            <div className='header-mobile-menu-close' onClick={() => {}}>
               Hide menu
             </div>
-            <div className='header-menu' ref={menuRef}>
+            <div className='header-menu'>
               {categories?.map(category => (
-                <div key={category.id} className='header-menu-category' onClick={() => setMenuVisible(false)}>
-                  <Link href={`/category/${category.slug}`}>
+                <div key={category.id} className='header-menu-category' onClick={() => {}}>
+                  <Link href='/category/[slug]' as={`/category/${category.slug}`}>
                     <a className='header-menu-link'>
                       <span>{category.name?.toUpperCase()}</span>
                     </a>
@@ -156,7 +84,7 @@ function Header() {
               </svg>
             </div>
 
-            <div className='header-cart icon' onClick={() => setCartVisible(true)}>
+            <div className='header-cart icon' onClick={() => {}}>
               <svg xmlns='http://www.w3.org/2000/svg'>
                 <title />
                 <g data-name='Layer 2' id='Layer_2'>
@@ -171,11 +99,11 @@ function Header() {
                 </g>
               </svg>
             </div>
-            <div className='header-cart-total-cost' onClick={() => setCartVisible(true)}>
-              {`${total || ''} USD` || 'USD'}
+            <div className='header-cart-total-cost' onClick={() => {}}>
+              {`${totalPrice || ''} USD` || 'USD'}
             </div>
           </div>
-          <div className='icon header-mobile-menu-icon icon__animated' onClick={() => setMenuVisible(true)}>
+          <div className='icon header-mobile-menu-icon icon__animated' onClick={() => {}}>
             <div className='menu-wrapper'>
               <svg className='menu' xmlns='http://www.w3.org/2000/svg'>
                 <path d='M36,2H0V0h36V2z M36,18H0v2h36V18z M36,9H0v2h36V9z'></path>
@@ -222,7 +150,7 @@ function Header() {
 
 
 
-          @media(max-width: ${`${mobile.secondWidth}px`}) {
+          @media(max-width: 1170px) {
             .header-second {
               padding-bottom: 5rem;
             }
@@ -234,7 +162,7 @@ function Header() {
 
           }
 
-          @media(max-width: ${`${mobile.secondWidth}px`}) {
+          @media(max-width: 1170px) {
             .header-menu {
               width: 100%;
             }
@@ -259,7 +187,7 @@ function Header() {
 
 
 
-        @media(max-width: ${`${mobile.width}px`}) {
+        @media(max-width: 567px) {
           .container {
             display: flex;
             align-items: center;
@@ -286,7 +214,7 @@ function Header() {
           }
 
           .header-menu-wrapper {
-            display: ${menuVisible ? 'block' : 'none'};
+            display: none;
             position: fixed;
             top: 0;
             right: 0;
@@ -307,8 +235,9 @@ function Header() {
 
           .header-menu-link {
             padding-left: 1.5rem !important;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 600;
+            color: rgba(0,0,0, 0.75);
           }
 
           .header-menu-category {
@@ -516,4 +445,9 @@ function Header() {
   )
 }
 
-export default Header
+export default memo(Header, (prevProps, nextProps) => {
+  if (categories === categories) {
+    return true
+  }
+  return false
+})

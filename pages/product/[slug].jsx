@@ -3,11 +3,11 @@
 import fetch from 'isomorphic-fetch'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { memo } from 'react'
-import { useSelector } from 'react-redux'
-import ProductCounter from '../../components/ProductCounter'
+import { memo, useCallback, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import ProductInfo from '../../components/ProductInfo'
-import ProductOption from '../../components/ProductOption'
+import store from '../../redux/store'
+import { CART_ADD, PRODUCT_UPDATE } from '../../redux/types'
 
 function Product({ product }) {
   const router = useRouter()
@@ -35,40 +35,47 @@ function Product({ product }) {
   //  return listener
   //}, [])
 
-  //const submitHandler = useCallback(e => {
-  //  e.preventDefault()
+  const dispatch = useDispatch()
 
-  //  if (count === '' || count == undefined) {
-  //    setCount(1)
-  //    return
-  //  }
+  useEffect(() => dispatch({ type: PRODUCT_UPDATE, payload: { price: product.price, count: 1 } }), [])
 
-  //  //if (isCartVisible) return
-  //  const totalPrice = price + optionPrice
+  const submitHandler = useCallback(e => {
+    e.preventDefault()
 
-  //  if (selected) {
-  //    const data = {
-  //      id: product.id,
-  //      name: product.title,
-  //      slug: product.slug,
-  //      price: totalPrice,
-  //      options: selected,
-  //      count,
-  //      image: product.image.url,
-  //      Custom_Field: product.Custom_field,
-  //    }
+    const {
+      product: { count, price, optionPrice, selected },
+    } = store.getState()
 
-  //    if (data) {
-  //      //addToCart(data)
-  //    }
-  //  }
-  //}, [])
+    if (count === '' || count == undefined) {
+      dispatch({ type: PRODUCT_UPDATE, payload: { count: 1 } })
+    }
+
+    //if (isCartVisible) return
+    const totalPrice = price + optionPrice
+
+    if (selected) {
+      const data = {
+        id: product.id,
+        name: product.title,
+        slug: product.slug,
+        price: totalPrice,
+        options: selected,
+        count: count ? parseInt(count) : 1,
+        image: product.image.url,
+        Custom_Field: product.Custom_field,
+      }
+
+      if (data) {
+        dispatch({ type: CART_ADD, payload: data })
+      }
+    }
+  }, [])
 
   return (
     <>
       <div className='product'>
         <div className='container'>
-          <form action='' onSubmit={() => {}}>
+          <form action='' onSubmit={submitHandler}>
             <div className='product-header'>
               <div onClick={router.back} className='product-redirect'>
                 <span>Go back</span>

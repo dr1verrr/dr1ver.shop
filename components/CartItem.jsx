@@ -4,40 +4,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useCart } from '../contexts/cart'
 import { useLayout } from '../contexts/layout'
 
-function CartItem({ product, cartVisible }) {
+function CartItem({ product }) {
   const [selected, setSelected] = useState('')
   const [active, setActive] = useState(true)
-  const productRef = useRef()
-  const { setCartData, cartData } = useCart()
-  const { setShowModal } = useLayout()
+  const { removeProduct } = useCart()
 
   useEffect(() => {
     setSelected(product.options)
   }, [product])
 
-  function removeProduct() {
-    try {
-      setCartData(arr => arr.filter(item => (product.id == item.id && product.options === item.options ? false : true)))
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setShowModal({
-        title: '',
-        message: 'The product is removed from the basket.',
-        visible: true,
-      })
-    }
-  }
-
   function countHandler(e) {}
 
-  if (!cartData.length) return <div>No products in cart</div>
-
   return (
-    <div className='cart-item' ref={productRef}>
+    <div className='cart-item'>
       <div className='cart-left'>
         <div className='product-wrapper'>
-          <div className='product-remove' onClick={removeProduct}>
+          <div className='product-remove' onClick={() => removeProduct({ id: product.id, options: product.options })}>
             <svg className='' xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>

@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useCart } from '../contexts/cart'
 import { useLayout } from '../contexts/layout'
 import CartItem from './CartItem'
 
-function Cart({ cartVisible, setCartVisible }) {
+function Cart() {
   const { cartData, lastModified } = useCart()
   const [mounted, setMounted] = useState(false)
-  const { showModal, setShowModal } = useLayout()
+  //const { setCartVisibility, isCartVisible } = useLayout()
 
   useEffect(() => {
     setMounted(true)
@@ -18,7 +18,7 @@ function Cart({ cartVisible, setCartVisible }) {
   if (mounted) {
     return (
       <div className='cart'>
-        <div className='cart-vision-switcher' onClick={() => setCartVisible(false)}>
+        <div className='cart-vision-switcher' onClick={() => setCartVisibility(false)}>
           <div className='icon modal__cart-continue-shopping-arrow icon__animated'>
             <svg className='arrow4' xmlns='http://www.w3.org/2000/svg' viewBox=''>
               <path d='M2.2 16L16.7 1.5c.4-.4.4-.9 0-1.3s-.9-.4-1.3 0L.3 15.4c-.4.4-.4.9 0 1.3l15.2 15.1c.2.2.4.3.6.3.2 0 .5-.1.6-.3.4-.4.4-.9 0-1.3L2.2 16z'></path>
@@ -27,9 +27,10 @@ function Cart({ cartVisible, setCartVisible }) {
           <span>Continue shopping</span>
         </div>
         <div className='cart-inner'>
+          {!cartData.length && <div>No products in cart</div>}
           <div className='cart-items'>
             {cartData?.map(item => {
-              return <CartItem key={item.id + item.options} product={item} cartVisible={cartVisible} />
+              return <CartItem key={item.id + item.options} product={item} />
             })}
           </div>
         </div>
@@ -43,7 +44,7 @@ function Cart({ cartVisible, setCartVisible }) {
             bottom: 0;
             min-width: fit-content;
             width: 400px;
-            transform: ${cartVisible ? 'translateX(0)' : 'translateX(100%)'};
+            transform: ${isCartVisible ? 'translateX(0)' : 'translateX(100%)'};
             z-index: 1100;
             color: #000;
             overflow-x: hidden;
@@ -89,8 +90,8 @@ function Cart({ cartVisible, setCartVisible }) {
             height: 100%;
             text-transform: uppercase;
             max-height: 106.5px;
-            letter-spacing: 1.5px;
-            font-size: 1.4rem;
+            letter-spacing: 1.75px;
+            font-size: 1.5rem;
             cursor: pointer;
           }
 
@@ -107,4 +108,4 @@ function Cart({ cartVisible, setCartVisible }) {
   return null
 }
 
-export default Cart
+export default memo(Cart)

@@ -1,24 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useLayout } from '../contexts/layout'
 
 const Modal = props => {
-  const modalRef = useRef()
-  const handler = useCallback(() => props.onClose(), [])
+  const handler = useCallback(hideModal, [])
   const [pause, setPause] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const timeoutRef = useRef()
-
-  useEffect(() => {
-    if (!mounted && props.show) setMounted(true)
-  }, [props.show])
+  const { modal, setModal } = useLayout()
 
   function runTimeout() {
     clearTimeout(timeoutRef.current)
-    if (mounted) timeoutRef.current = setTimeout(() => props.onClose(), 4000)
+    if (modal.visible) timeoutRef.current = setTimeout(hideModal, 4000)
+  }
+
+  function hideModal() {
+    setModal(prev => ({ ...prev, visible: false }))
   }
 
   useEffect(() => {
     return () => {
-      props.onClose()
+      hideModal()
       stopTimeout()
     }
   }, [])
@@ -28,16 +28,15 @@ const Modal = props => {
   }
 
   useEffect(() => {
-    if (props.show) {
+    if (modal.visible) {
       if (pause) stopTimeout()
       if (!pause) runTimeout()
     }
-  }, [pause, props.show, mounted])
+  }, [pause, modal.visible])
 
   return (
     <div
       className='modal'
-      ref={modalRef}
       onMouseEnter={() => {
         setPause(true)
       }}
@@ -94,9 +93,9 @@ const Modal = props => {
           opacity: ${props.show ? 0.1 : 0};
           color: rgba(255, 255, 255, 0.85);
           flex-direction: column;
-          min-width: fit-content;
           text-align: center;
-          width: 300px;
+          width: 100%;
+          max-width: 340px;
           border-radius: 20px;
           position: fixed;
           bottom: 15px;
@@ -110,13 +109,12 @@ const Modal = props => {
           animation: fade-modal 4s ease;
           animation-fill-mode: forwards;
           cursor: default;
-          padding: 2rem 7rem 2rem;
         }
 
         .modal[paused='false'][show='true'] {
           opacity: 1;
         }
-        .modal[paused='true'] {
+        .modal[paused='true'][show='true'] {
           animation: none;
           opacity: 1;
         }
@@ -137,17 +135,19 @@ const Modal = props => {
         }
 
         .modal-content {
+          padding: 1.5rem;
           width: 100%;
         }
 
         .notification-timer {
+          transition: ${props.show ? 'width 4s ease' : 'none'};
           content: '';
           display: block;
           position: absolute;
           bottom: 0;
           left: 0;
           right: 0;
-          width: ${props.show ? '100%' : '0%'};
+          width: ${props.show ? '0%' : '100%'};
           height: 5px;
           background: #c6c9ce;
         }
@@ -162,13 +162,14 @@ const Modal = props => {
           }
         }
 
-        .notification-timer[paused='true'] {
-          animation: none;
-        }
-
-        .notification-timer[paused='false'] {
+        /*.notification-timer[paused='false'] {
           animation: timer 4s ease;
           animation-fill-mode: forwards;
+        }*/
+
+        .notification-timer[paused='true'] {
+          transition: 1s ease;
+          width: 100%;
         }
 
         @media (max-width: 500px) {
@@ -190,4 +191,4 @@ const Modal = props => {
   )
 }
 
-export default Modal
+export default memo(Modal)
