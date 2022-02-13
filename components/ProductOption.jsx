@@ -66,7 +66,7 @@ function ProductOption({ fld }) {
           border-style: none;
           background: #474852;
           border-radius: 3rem;
-          padding: 1rem 1.5rem;
+          padding: 0.75rem 1.5rem;
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;

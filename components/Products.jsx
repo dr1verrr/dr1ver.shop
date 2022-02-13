@@ -42,6 +42,7 @@ function Products({ products }) {
         }
 
         .product-button {
+          will-change: background-color, color;
           display: block;
           margin-top: 2rem;
           width: 100%;
@@ -51,7 +52,8 @@ function Products({ products }) {
           border-radius: 30px;
           transition: background-color 0.4s ease, color 0.4s ease;
           letter-spacing: 2px;
-          font-size: 1.9rem;
+          font-size: 2rem;
+          font-weight: 500;
           cursor: pointer;
         }
 
@@ -71,7 +73,7 @@ function Products({ products }) {
           padding: 0.75rem 2.5rem 0.75rem 2rem;
           color: #fff;
           font-size: 2.2rem;
-          font-weight: 600;
+          font-weight: 500;
           background-color: #1d1f21;
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;
@@ -120,9 +122,10 @@ function Products({ products }) {
         }
 
         .product-link {
-          transition: background 0.4s ease, opacity 0.4s ease;
-          background: transparent;
+          will-change: background, opacity;
+          transition: opacity 0.4s ease;
           opacity: 0;
+          background: transparent;
           position: absolute;
           top: 0;
           left: 0;
@@ -134,8 +137,8 @@ function Products({ products }) {
         }
 
         .product-inner:hover .product-link {
+          background: #000;
           opacity: 0.5;
-          background-color: #000;
         }
 
         .product-inner:hover .product-button {

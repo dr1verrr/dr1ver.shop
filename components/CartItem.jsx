@@ -1,17 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useRef, useState } from 'react'
-import { useCart } from '../contexts/cart'
-import { useLayout } from '../contexts/layout'
+import React, { useState } from 'react'
 
 function CartItem({ product }) {
-  const [selected, setSelected] = useState('')
+  const [selected, setSelected] = useState(product.options)
   const [active, setActive] = useState(true)
-  const { removeProduct } = useCart()
-
-  useEffect(() => {
-    setSelected(product.options)
-  }, [product])
 
   function countHandler(e) {}
 
@@ -19,7 +12,7 @@ function CartItem({ product }) {
     <div className='cart-item'>
       <div className='cart-left'>
         <div className='product-wrapper'>
-          <div className='product-remove' onClick={() => removeProduct({ id: product.id, options: product.options })}>
+          <div className='product-remove' onClick={() => {}}>
             <svg className='' xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>
@@ -108,6 +101,7 @@ function CartItem({ product }) {
         }
 
         .product-cart-price {
+          font-weight: 600;
           position: absolute;
           right: 30px;
           bottom: -30px;
@@ -170,7 +164,7 @@ function CartItem({ product }) {
           padding: 0 5px;
           border-right: 1px solid #ccc;
           border-left: 1px solid #ccc;
-          font-weight: bold;
+          font-weight: 600;
           margin-top: 2.5px;
         }
 
@@ -183,18 +177,18 @@ function CartItem({ product }) {
         .product-info-sizes-inner {
           display: flex;
           flex-wrap: wrap;
+          max-width: fit-content;
+          max-height: fit-content;
+          width: 100%;
+          height: 100%;
+          justify-content: center;
           padding-top: 0.75rem;
           width: calc(100% + 7px);
         }
 
         @media (max-width: 340px) {
           .product-info-sizes-inner {
-            flex-direction: column;
             margin-bottom: 1rem;
-          }
-
-          .product-info-sizes-input {
-            padding: 0.5rem 0 !important;
           }
         }
 
@@ -285,6 +279,22 @@ function CartItem({ product }) {
         }
         .product-image-mask:hover {
           opacity: 0.1;
+        }
+
+        @media (max-width: 320px) {
+          .cart-item {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .product-image {
+            margin-bottom: 3rem;
+            width: 100%;
+          }
+
+          .product-info-sizes-inner {
+            flex-direction: row;
+          }
         }
       `}</style>
     </div>

@@ -7,7 +7,7 @@ import { memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import ProductInfo from '../../components/ProductInfo'
 import store from '../../redux/store'
-import { CART_ADD, PRODUCT_UPDATE } from '../../redux/types'
+import { CART_ADD, CART_SHOW, PRODUCT_UPDATE } from '../../redux/types'
 
 function Product({ product }) {
   const router = useRouter()
@@ -66,7 +66,12 @@ function Product({ product }) {
       }
 
       if (data) {
-        dispatch({ type: CART_ADD, payload: data })
+        try {
+          dispatch({ type: CART_ADD, payload: data })
+        } catch (error) {
+        } finally {
+          dispatch({ type: CART_SHOW })
+        }
       }
     }
   }, [])
@@ -101,8 +106,6 @@ function Product({ product }) {
       <style jsx global>
         {`
           body {
-            color: #fff;
-            transition: background 0.2s ease;
             background: rgba(17, 17, 19, 1);
           }
 
@@ -113,6 +116,9 @@ function Product({ product }) {
       </style>
       <style jsx>{`
         .product {
+          transition: transform 0.25s ease;
+          transform: rotate(360deg);
+          color: #fff;
           background: transparent;
           padding: 0 0.5rem 10rem;
           position: relative;
@@ -185,6 +191,7 @@ function Product({ product }) {
         }
 
         .product-redirect {
+          will-change: text-decoration;
           display: inline-block;
           cursor: pointer;
           padding: 1rem;

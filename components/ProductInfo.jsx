@@ -42,6 +42,7 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
           text-transform: uppercase;
           border-radius: 3rem;
           padding: 1.5rem 5rem;
+          font-weight: 500;
         }
 
         .product-info-add-to-cart:active {
@@ -68,7 +69,7 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
 
           .product-info-description {
             font-size: 1.8rem;
-            margin-top: 7rem;
+            margin-top: 3rem;
           }
         }
 

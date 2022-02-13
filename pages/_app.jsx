@@ -1,15 +1,17 @@
 import Head from 'next/head'
-import React from 'react'
+import { Fragment, Suspense } from 'react'
 import { Provider } from 'react-redux'
+import Cart from '../components/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import AuthProvider from '../contexts/auth'
+import GlobalStyles from '../providers/GlobalStyles'
 import store from '../redux/store'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <React.Fragment>
+    <Fragment>
       <Head>
         <title>dr1ver.shop</title>
         <link rel='shortcut icon' href='/images/favicon.ico' />
@@ -18,12 +20,11 @@ function MyApp({ Component, pageProps }) {
         <link rel='icon' type='image/png' sizes='16x16' href='/images/favicon-16x16.png' />
       </Head>
       {/*<AuthModal />*/}
-      {/*<Cart />
-          <Header />*/}
       <Provider store={store}>
+        <GlobalStyles />
+        <Cart />
         <AuthProvider>
           <Header />
-
           <main className='main'>
             <Component {...pageProps} />
           </main>
@@ -36,7 +37,7 @@ function MyApp({ Component, pageProps }) {
           height: 100%;
         }
       `}</style>
-    </React.Fragment>
+    </Fragment>
   )
 }
 
