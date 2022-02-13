@@ -8,22 +8,18 @@ const cartReducer = (state = initialState, action) => {
       return findExist(state, action.payload)
 
     case CART_REMOVE:
-      return removeProduct(state.cartData, action.payload)
+      return removeProduct(state, action.payload)
 
     default:
       return state
   }
 }
 
-function removeProduct(cartArr, product) {
-  return cartArr.filter(item => (product.id == item.id && product.options === item.options ? false : true))
-  //setModal({
-  //  type: 'SHOW_MODAL',
-  //  payload: {
-  //    title: '',
-  //    message: 'The product is removed from the basket.',
-  //  },
-  //})
+function removeProduct(state, product) {
+  return {
+    ...state,
+    cartData: state.cartData.filter(item => (product.id == item.id && product.options === item.options ? false : true)),
+  }
 }
 
 const findExist = (state, newProduct) => {
@@ -70,11 +66,6 @@ const findExist = (state, newProduct) => {
   }
 
   return { cartData: [...cartData, newProduct], lastModified }
-  //setModal({
-  //  type: 'SHOW_MODAL',
-  //  payload: { title: '', message: 'The product was added to the shopping cart.' },
-  //})
-  //setCartVisibility(true)
 }
 
 export default cartReducer

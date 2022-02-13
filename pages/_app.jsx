@@ -1,13 +1,13 @@
 import Head from 'next/head'
-import { Fragment, Suspense } from 'react'
+import { Fragment } from 'react'
 import { Provider } from 'react-redux'
-import Cart from '../components/CartWrapper'
+import Cart from '../components/Cart'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import AuthProvider from '../contexts/auth'
-import GlobalStyles from '../providers/GlobalStyles'
 import store from '../redux/store'
 import '../styles/globals.css'
+import GlobalStyles from '../styles/GlobalStyles'
 
 function MyApp({ Component, pageProps }) {
   return (

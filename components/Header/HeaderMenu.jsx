@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
-import categories from '../data/categories.json'
-import { MENU_HIDE } from '../redux/types'
+import categories from '../../data/categories.json'
+import { MENU_HIDE } from '../../redux/types'
 
 export default function HeaderMenu() {
   const dispatch = useDispatch()

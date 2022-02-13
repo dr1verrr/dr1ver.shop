@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import ProductButton from './ProductButton'
 
 function Products({ products }) {
   return (
@@ -25,6 +26,9 @@ function Products({ products }) {
                     )}
                   </div>
                   <a className='product-link'></a>
+                  <div className='product-button-wrapper'>
+                    <ProductButton>Read more</ProductButton>
+                  </div>
                 </div>
                 <span className='product-button'>{product.title}</span>
               </div>
@@ -57,6 +61,23 @@ function Products({ products }) {
           cursor: pointer;
         }
 
+        .product-button-wrapper {
+          will-change: opacity;
+          transition: opacity 0.25s ease;
+          z-index: 100;
+          opacity: 0;
+          visibility: hidden;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          white-space: nowrap;
+        }
+
+        .product-inner:hover .product-button-wrapper {
+          visibility: visible;
+          opacity: 1;
+        }
         .container {
           position: relative !important;
           margin: 0 auto;
@@ -122,9 +143,10 @@ function Products({ products }) {
         }
 
         .product-link {
-          will-change: background, opacity;
-          transition: opacity 0.4s ease;
+          will-change: background, opacity, visibility;
+          transition: opacity 0.4s ease, visibility 0.4s ease, background 0.4s ease;
           opacity: 0;
+          visibility: hidden;
           background: transparent;
           position: absolute;
           top: 0;
@@ -137,6 +159,7 @@ function Products({ products }) {
         }
 
         .product-inner:hover .product-link {
+          visibility: visible;
           background: #000;
           opacity: 0.5;
         }

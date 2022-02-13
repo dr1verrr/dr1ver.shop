@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { MENU_SHOW } from '../redux/types'
+import { MENU_SHOW } from '../../redux/types'
 
 export default function HeaderMobileMenu() {
   const dispatch = useDispatch()

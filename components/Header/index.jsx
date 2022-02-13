@@ -1,27 +1,8 @@
-import router from 'next/router'
 import React from 'react'
-import { useAuth } from '../contexts/auth'
 import HeaderFirst from './HeaderFirst'
 import HeaderSecond from './HeaderSecond'
 
 const Header = () => {
-  const { isAuthenticated } = useAuth()
-  //const cartData = useSelector(state => state.cart.cartData)
-  //const dispatch = useDispatch()
-
-  function profileHandler() {
-    if (isAuthenticated) {
-      router.push('/profile')
-    } else {
-      //setPopup(prev => ({ ...prev, login: !prev.login }))
-    }
-  }
-
-  //useEffect(() => {
-  //  console.log(cartData)
-  //  setTotalPrice(getTotal(cartData))
-  //}, [cartData])
-
   return (
     <header className='header'>
       <div className='container'>

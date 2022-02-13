@@ -1,25 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { CART_SHOW } from '../redux/types'
+import { useAuth } from '../../contexts/auth'
+import { CART_SHOW } from '../../redux/types'
 
 export default function HeaderSecondOther() {
   const dispatch = useDispatch()
   const { cartData = [] } = useSelector(state => state.cart)
+  const [totalPrice, setTotalPrice] = useState()
+  const { isAuthenticated } = useAuth()
 
-  function getTotal(arr) {
+  useEffect(() => {
+    setTotalPrice(getTotal(cartData))
+  }, [cartData])
+
+  function getTotal(cartData) {
     let value = 0
 
-    for (let index = 0; index < arr.length; index++) {
-      value += arr[index].price * arr[index].count
+    for (let index = 0; index < cartData.length; index++) {
+      value += cartData[index].price * cartData[index].count
     }
 
     return value.toFixed(2)
   }
 
+  function profileHandler() {
+    if (isAuthenticated) {
+      router.push('/profile')
+    } else {
+      //setPopup(prev => ({ ...prev, login: !prev.login }))
+    }
+  }
+
   return (
     <div className='header-second-other'>
       {/* profileHandler fn */}
-      <div className='header-account-icon icon' onClick={() => {}}>
+      <div className='header-account-icon icon' onClick={profileHandler}>
         <svg xmlns='http://www.w3.org/2000/svg'>
           <title />
           <g data-name='Layer 2' id='Layer_2'>
@@ -49,7 +64,7 @@ export default function HeaderSecondOther() {
         </svg>
       </div>
       <div className='header-cart-total-cost' onClick={() => dispatch({ type: CART_SHOW })}>
-        {`${getTotal(cartData) || ''} USD` || 'USD'}
+        {totalPrice} USD
       </div>
       <style jsx>{`
         .header-cart-total-cost {

@@ -1,10 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { CART_REMOVE } from '../../redux/types'
 
 function CartItem({ product }) {
   const [selected, setSelected] = useState(product.options)
   const [active, setActive] = useState(true)
+  const dispatch = useDispatch()
 
   function countHandler(e) {}
 
@@ -12,7 +15,7 @@ function CartItem({ product }) {
     <div className='cart-item'>
       <div className='cart-left'>
         <div className='product-wrapper'>
-          <div className='product-remove' onClick={() => {}}>
+          <div className='product-remove' onClick={() => dispatch({ type: CART_REMOVE, payload: product })}>
             <svg className='' xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>

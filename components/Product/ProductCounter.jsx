@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PRODUCT_UPDATE } from '../redux/types'
+import { PRODUCT_UPDATE } from '../../redux/types'
 
 function ProductCounter() {
   const dispatch = useDispatch()
@@ -18,7 +18,9 @@ function ProductCounter() {
       return
     }
 
-    dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
+    if (value >= 1) {
+      dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
+    }
   }, [])
 
   return (

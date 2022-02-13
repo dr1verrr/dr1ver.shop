@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PRODUCT_UPDATE } from '../redux/types'
+import { PRODUCT_UPDATE } from '../../redux/types'
 
 function ProductOption({ fld }) {
   const selected = useSelector(state => state.product?.selected)
@@ -20,14 +20,7 @@ function ProductOption({ fld }) {
   return (
     <div key={fld.id} className='product-info-sizes'>
       <div style={{ color: '#636573', fontWeight: '600', fontSize: '1.7rem' }}>{fld.title}:</div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.5rem',
-          paddingTop: '0.75rem',
-        }}
-      >
+      <div className='input-wrapper'>
         {select.map(s => {
           const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
           const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
@@ -83,6 +76,19 @@ function ProductOption({ fld }) {
 
         .product-info-sizes-input:last-child {
           margin-right: 0;
+        }
+
+        .input-wrapper {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          padding-top: 0.75rem;
+        }
+
+        @media (max-width: 620px) {
+          .input-wrapper {
+            justify-content: center;
+          }
         }
       `}</style>
     </div>

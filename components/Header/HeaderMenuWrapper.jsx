@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { MENU_HIDE } from '../redux/types'
+import { MENU_HIDE } from '../../redux/types'
 
 export default function HeaderMenuWrapper({ children }) {
   const dispatch = useDispatch()
@@ -50,6 +50,7 @@ export default function HeaderMenuWrapper({ children }) {
             font-size: 1.4rem;
             height: 100%;
             max-height: 78px;
+            user-select: none;
           }
         }
       `}</style>
