@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CART_HIDE } from '../../redux/types'
-import CartItem from './CartItem'
+import CartItems from './CartItems'
 
 export default function Cart() {
   const { cartData = [] } = useSelector(state => state.cart)
   const isCartVisible = useSelector(state => state.ui.cart)
-  const [mounted, setMounted] = useState(false)
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (!mounted && isCartVisible) setMounted(true)
-  }, [isCartVisible])
-
   return (
-    <div className='cart'>
+    <div className='cart' visible={`${isCartVisible}`}>
       <div className='cart-vision-switcher' onClick={() => dispatch({ type: CART_HIDE })}>
         <div className='icon modal__cart-continue-shopping-arrow icon__animated'>
           <svg className='arrow4' xmlns='http://www.w3.org/2000/svg'>
@@ -24,7 +19,8 @@ export default function Cart() {
         <span>Continue shopping</span>
       </div>
       <div className='cart-inner'>
-        {mounted && !cartData.length && (
+        <CartItems cartData={cartData} />
+        {!cartData.length && (
           <div className='no-products'>
             <span>No</span>
             <span>products</span>
@@ -32,19 +28,11 @@ export default function Cart() {
             <span>cart</span>
           </div>
         )}
-        <div className='cart-items'>
-          {mounted &&
-            cartData?.map(item => {
-              //CartItem need to be rewrited. The reason is performance
-              return <CartItem key={item.id + item.options} product={item} />
-            })}
-        </div>
       </div>
       <style jsx>{`
         .cart {
-          will-change: transform;
+          transform: translateX(100%);
           transition: transform 0.75s cubic-bezier(0.29, 0.58, 0.05, 1);
-
           content: '';
           position: fixed;
           right: 0;
@@ -52,16 +40,16 @@ export default function Cart() {
           bottom: 0;
           min-width: fit-content;
           width: 400px;
-          transform: ${isCartVisible ? 'translateX(0)' : 'translateX(100%)'};
           z-index: 1500;
           color: #000;
           overflow-x: hidden;
           scrollbar-width: none;
           user-select: none;
+          scroll-behavior: smooth;
         }
 
-        .cart-items {
-          padding: 0 3rem;
+        .cart[visible='true'] {
+          transform: translateX(0%);
         }
 
         .cart-inner {

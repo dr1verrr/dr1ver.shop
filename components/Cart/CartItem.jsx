@@ -1,12 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { CART_REMOVE } from '../../redux/types'
 
 function CartItem({ product }) {
-  const [selected, setSelected] = useState(product.options)
-  const [active, setActive] = useState(true)
   const dispatch = useDispatch()
 
   function countHandler(e) {}
@@ -50,10 +48,10 @@ function CartItem({ product }) {
                         type='button'
                         key={s}
                         className='product-info-sizes-input'
-                        active={active && selected === option ? 'true' : 'false'}
+                        active={product.options === option ? 'true' : 'false'}
                         value={option}
                         onClick={e => {
-                          setSelected(e.target.value)
+                          //setSelected(e.target.value)
                         }}
                       />
                     )
@@ -113,6 +111,7 @@ function CartItem({ product }) {
         .modal__cart-product-count-plus {
           margin-right: 2.5px;
         }
+
         .icon svg {
           height: 10px;
           width: 10px;
@@ -189,12 +188,6 @@ function CartItem({ product }) {
           width: calc(100% + 7px);
         }
 
-        @media (max-width: 340px) {
-          .product-info-sizes-inner {
-            margin-bottom: 1rem;
-          }
-        }
-
         input {
           border: none;
           background-image: none;
@@ -209,16 +202,6 @@ function CartItem({ product }) {
           display: flex;
           flex-direction: column;
           width: 100%;
-        }
-
-        @media (max-width: 340px) {
-          .cart-item {
-            padding-bottom: 7rem;
-          }
-
-          .product-cart-price {
-            bottom: -35px;
-          }
         }
 
         .product-image {
@@ -245,7 +228,6 @@ function CartItem({ product }) {
           border: 1px solid #9ca4ab;
           background: #fff;
           cursor: pointer;
-          transition: all 0.5s;
           z-index: 6;
         }
 
@@ -267,7 +249,7 @@ function CartItem({ product }) {
         }
 
         .product-image-mask {
-          transition: all 0.25s ease;
+          transition: opacity 0.25s ease;
           position: absolute;
           top: 0;
           right: 0;
@@ -282,6 +264,20 @@ function CartItem({ product }) {
         }
         .product-image-mask:hover {
           opacity: 0.1;
+        }
+
+        @media (max-width: 340px) {
+          .product-info-sizes-inner {
+            margin-bottom: 1rem;
+          }
+
+          .cart-item {
+            padding-bottom: 7rem;
+          }
+
+          .product-cart-price {
+            bottom: -35px;
+          }
         }
 
         @media (max-width: 320px) {
