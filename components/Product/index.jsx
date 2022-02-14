@@ -12,6 +12,14 @@ function Product({ product }) {
   const router = useRouter()
 
   //useEffect(() => {
+  //  router.beforePopState(state => {
+  //    console.log(window.scrollY)
+  //    state.options.scroll = false
+  //    return true
+  //  })
+  //}, [])
+
+  //useEffect(() => {
   //  const listener = document.addEventListener('keydown', e => {
   //    if (e.key === 'Escape') {
   //      setModal({ type: 'HIDE_MODAL' })
@@ -95,7 +103,7 @@ function Product({ product }) {
       <style jsx global>
         {`
           body {
-            background: rgba(17, 17, 19, 1);
+            background: #111113;
           }
 
           .header {
@@ -106,7 +114,6 @@ function Product({ product }) {
       <style jsx>{`
         .product {
           transition: transform 0.25s ease;
-          transform: rotate(360deg);
           color: #fff;
           background: transparent;
           padding: 0 0.5rem 10rem;
@@ -134,13 +141,6 @@ function Product({ product }) {
           filter: blur(2rem);
         }
 
-        @media (max-width: 567px) {
-          .product::after {
-            background-repeat: repeat-y;
-            background-size: 75%;
-          }
-        }
-
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
           -webkit-appearance: none;
@@ -157,14 +157,7 @@ function Product({ product }) {
 
         .product-inner {
           display: flex;
-          flex-wrap: wrap;
           gap: 2rem;
-        }
-
-        @media (max-width: 567px) {
-          .product-inner {
-            flex-direction: column;
-          }
         }
 
         .product-title {
@@ -173,14 +166,7 @@ function Product({ product }) {
           padding-bottom: 3rem;
         }
 
-        @media (max-width: 570px) {
-          .product-title {
-            padding: 0;
-          }
-        }
-
         .product-redirect {
-          will-change: text-decoration;
           display: inline-block;
           cursor: pointer;
           padding: 1rem;
@@ -227,6 +213,21 @@ function Product({ product }) {
           margin: 0 auto;
           max-width: 91vw;
           padding: 0 1rem;
+        }
+
+        @media (max-width: 570px) {
+          .product-title {
+            padding: 0;
+          }
+        }
+        @media (max-width: 567px) {
+          .product-inner {
+            flex-direction: column;
+          }
+          .product::after {
+            background-repeat: repeat-y;
+            background-size: 75%;
+          }
         }
       `}</style>
     </>
