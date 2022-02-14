@@ -12,10 +12,11 @@ const Header = () => {
       <style jsx>{`
         .header {
           position: relative;
-          background: #111113;
+          background: #000;
           color: #fff;
           min-height: 75px;
           font-size: 2rem;
+          font-weight: 400;
         }
 
         @media (max-width: 567px) {

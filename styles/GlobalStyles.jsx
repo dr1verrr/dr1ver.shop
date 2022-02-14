@@ -28,7 +28,6 @@ function GlobalStyles() {
       ></div>
       <style jsx>{`
         .mask {
-          will-change: pointer-events, opacity, transition;
           position: fixed;
           top: 0;
           right: 0;
@@ -38,8 +37,8 @@ function GlobalStyles() {
           opacity: 0;
           height: 100%;
           background: #000;
-          z-index: 1050;
-          pointer-events: ${isMask ? 'all' : 'none'};
+          z-index: 500;
+          pointer-events: none;
         }
 
         .mask[active='false'] {
@@ -49,6 +48,7 @@ function GlobalStyles() {
 
         .mask[active='true'] {
           opacity: 0.5;
+          pointer-events: all;
         }
 
         .mask[anim-type='menu'] {
