@@ -5,9 +5,16 @@ import api from '../config/api'
 function Home({ products }) {
   return (
     <React.Fragment>
-      <h2 style={{ textAlign: 'center', fontSize: '3.5rem', padding: '1rem 0 3rem 0', fontWeight: 400 }}>All cards</h2>
-
       <Products products={products} />
+      <style jsx>{`
+        h2 {
+          margin: 0;
+        }
+
+        h2 {
+          padding: 3rem 0;
+        }
+      `}</style>
     </React.Fragment>
   )
 }

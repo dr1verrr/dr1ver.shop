@@ -6,6 +6,7 @@ html,
 body {
   scrollbar-width: none;
   line-height: 1.5;
+  scroll-behavior: smooth;
 }
 
 body::-webkit-scrollbar {
@@ -27,6 +28,14 @@ body {
 
 button {
   cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
 }
 
 input,

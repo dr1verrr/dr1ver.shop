@@ -1,15 +1,17 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Provider } from 'react-redux'
 import Cart from '../components/Cart'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
-import '../styles/globals.css'
 import GlobalStyles from '../styles/GlobalStyles'
+import '../styles/globals.css'
+import ScrollRestorer from '../providers/ScrollRestorer'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router }) {
   return (
     <Fragment>
       <Head>
@@ -25,16 +27,45 @@ function MyApp({ Component, pageProps }) {
         <Cart />
         <AuthProvider>
           <Header />
-          <main className='main'>
-            <Component {...pageProps} />
-          </main>
+          <AnimatePresence exitBeforeEnter>
+            <motion.div
+              key={router.asPath}
+              initial='pageInitial'
+              animate='pageAnimate'
+              exit='pageExit'
+              variants={{
+                pageInitial: {
+                  opacity: 0,
+                },
+                pageAnimate: {
+                  opacity: 1,
+                },
+
+                pageExit: {
+                  opacity: 0,
+                },
+              }}
+            >
+              <main className='main'>
+                <ScrollRestorer />
+                <Component {...pageProps} />
+              </main>
+            </motion.div>
+          </AnimatePresence>
         </AuthProvider>
       </Provider>
       <Footer />
       <style jsx>{`
         .main {
+          position: relative;
           min-height: 100vh;
           height: 100%;
+          margin-top: 0;
+        }
+      `}</style>
+      <style jsx global>{`
+        body {
+          background: #000;
         }
       `}</style>
     </Fragment>
