@@ -7,7 +7,7 @@ export default function ProductPrice({ price }) {
   return (
     <button type='button' className='product-info-price'>
       <span className='wrapper'>
-        <span className='price'>{parseFloat(price + optionPrice)}</span> <span className='currency'>USD</span>
+        <span className='price'>{price + optionPrice}</span> <span className='currency'>USD</span>
       </span>
       <style jsx>{`
         .product-info-price {

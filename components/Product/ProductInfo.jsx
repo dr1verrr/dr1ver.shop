@@ -15,7 +15,7 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
 
       <ProductCounter />
       <div className='product-button-wrapper'>
-        <ProductButton someProp=''>Add to cart</ProductButton>
+        <ProductButton>Add to cart</ProductButton>
       </div>
       <style jsx>{`
         .product-info {
@@ -30,6 +30,10 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
 
         .product-info {
           flex: 1;
+        }
+
+        .product-button-wrapper {
+          white-space: nowrap;
         }
 
         button {
@@ -71,12 +75,6 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
             font-size: 1.8rem;
             margin-top: 3rem;
           }
-        }
-
-        .product-button-wrapper {
-        }
-
-        .product-button-wrapper:hover {
         }
       `}</style>
     </div>

@@ -53,13 +53,13 @@ function ProductOption({ fld }) {
           display: block;
           color: #797b8c;
           position: relative;
-          transition: all 0.2s ease;
+          transition-duration: 0.2s;
           transition-property: color, background-color, transform, border;
           cursor: pointer;
           border-style: none;
           background: #474852;
           border-radius: 3rem;
-          padding: 0.75rem 1.5rem;
+          padding: 0.8rem 1.5rem;
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;

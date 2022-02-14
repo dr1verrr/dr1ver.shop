@@ -27,7 +27,7 @@ export default function HeaderFirst() {
         }
 
         .header-logo-second {
-          background: #111113;
+          background: transparent;
           color: #fff;
         }
 

@@ -8,13 +8,49 @@ export default function HeaderMenuWrapper({ children }) {
 
   return (
     <div className='header-menu-wrapper'>
-      <div className='header-mobile-menu-close' onClick={() => dispatch({ type: MENU_HIDE })}>
-        Hide menu
+      <div className='header-mobile-menu-close'>
+        <div className='header-mobile-menu-close-inner' onClick={() => dispatch({ type: MENU_HIDE })}>
+          <div className='header-mobile-menu-hide'>hide</div>
+          <div className='icon header-mobile-menu-cross icon__animated'>
+            <svg className='cross' xmlns='http://www.w3.org/2000/svg'>
+              <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
+            </svg>
+          </div>
+        </div>
       </div>
       {children}
       <style jsx>{`
         .header-mobile-menu-close {
+          position: relative;
           display: none;
+        }
+
+        .header-mobile-menu-cross {
+          fill: #cacaca;
+          cursor: pointer;
+        }
+
+        .header-mobile-menu-close-inner {
+          position: absolute;
+          right: 5px;
+          top: 0;
+          display: flex;
+          cursor: pointer;
+          padding: 1.25rem;
+        }
+
+        .header-mobile-menu-hide {
+          text-transform: none;
+          display: flex;
+          align-items: center;
+          height: 15px;
+          color: #cacaca;
+          margin-right: 10px;
+        }
+
+        .icon .cross {
+          width: 15px;
+          height: 15px;
         }
 
         @media (max-width: 1170px) {
@@ -44,7 +80,6 @@ export default function HeaderMenuWrapper({ children }) {
             border-bottom: 2px solid #ebeef1;
             border-top: 0;
             text-transform: uppercase;
-            cursor: pointer;
             padding: 1.5rem;
             letter-spacing: 1.5px;
             font-size: 1.4rem;

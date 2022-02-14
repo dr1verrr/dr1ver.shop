@@ -13,13 +13,13 @@ function ProductCounter() {
       return
     }
 
-    if (value == NaN || value == undefined) {
-      dispatch({ type: PRODUCT_UPDATE, payload: { count: parseInt('') } })
+    if (value >= 1) {
+      dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
       return
     }
 
-    if (value >= 1) {
-      dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
+    if (value <= 0) {
+      dispatch({ type: PRODUCT_UPDATE, payload: { count: 1 } })
     }
   }, [])
 

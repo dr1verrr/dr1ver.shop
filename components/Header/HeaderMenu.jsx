@@ -34,7 +34,7 @@ export default function HeaderMenu() {
         .header-menu-link {
           padding: 2.25rem 0.5rem;
           display: block;
-          font-weight: 500;
+          font-weight: 400;
         }
 
         .header-menu-category {
@@ -43,7 +43,6 @@ export default function HeaderMenu() {
 
         .header-menu-link span::before,
         .header-menu-link span::after {
-          will-change: width;
           transition: width 0.4s ease;
           content: '';
           position: absolute;
@@ -83,8 +82,9 @@ export default function HeaderMenu() {
           }
 
           .header-menu-link {
-            border-bottom: 2px solid #ebeef1;
+            border-bottom: 1px solid #ebeef1;
             padding-left: 2rem;
+            font-weight: 500;
           }
 
           .header-menu-link,
