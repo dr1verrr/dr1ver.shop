@@ -1,17 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { motion } from 'framer-motion'
 import fetch from 'isomorphic-fetch'
-import React from 'react'
+import { useRouter } from 'next/router'
+import React, { Fragment } from 'react'
 import Products from '../../components/Products'
 
 function Category({ products }) {
-  return (
-    <React.Fragment>
-      <h2 style={{ textAlign: 'center', fontSize: '3.5rem', padding: '1rem 0 3rem 0', fontWeight: 400 }}>
-        {products?.name}
-      </h2>
-      {products && <Products products={products.products} />}
-    </React.Fragment>
-  )
+  return <Fragment>{products && <Products products={products.products} title={products.name} />}</Fragment>
 }
 
 export async function getServerSideProps(context) {
