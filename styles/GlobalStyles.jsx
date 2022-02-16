@@ -1,21 +1,36 @@
-import React, { Fragment, memo, useEffect, useState } from 'react'
+import React, { Fragment, memo, useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MASK_HIDE } from '../redux/types'
 
 function GlobalStyles() {
   const ui = useSelector(state => state.ui)
-  const isMask = ui.modal || ui.authModal || ui.cart || ui.menu
+  const isMask = ui.authModal.visible || ui.cart || ui.menu
   const dispatch = useDispatch()
   const [animType, setAnimType] = useState('')
+
+  useLayoutEffect(() => {
+    setAnimType('init')
+
+    const timeout = setTimeout(() => {
+      setAnimType('')
+    }, 3000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log(animType)
+  }, [animType])
 
   useEffect(() => {
     if (!animType && ui.menu) setAnimType('menu')
   }, [ui.menu])
 
   useEffect(() => {
-    if (ui.modal || ui.authModal || ui.cart) {
-      setAnimType('')
-    }
+    if (ui.cart) setAnimType('')
+    if (ui.authModal.visible) setAnimType('auth')
   }, [ui])
 
   return (
@@ -24,7 +39,7 @@ function GlobalStyles() {
         className='mask'
         onClick={() => dispatch({ type: MASK_HIDE })}
         active={`${isMask}`}
-        anim-type={animType || ui.menu ? 'menu' : ''}
+        anim-type={animType}
       ></div>
       <style jsx>{`
         .mask {
@@ -52,6 +67,30 @@ function GlobalStyles() {
         }
 
         .mask[anim-type='menu'] {
+          transition: opacity 0.3s ease;
+        }
+
+        @keyframes init {
+          0% {
+            opacity: 1;
+          }
+
+          50% {
+            opacity: 1;
+          }
+
+          100% {
+            opacity: 0;
+          }
+        }
+
+        .mask[anim-type='init'] {
+          transition: none;
+          animation: init 2.5s;
+          opacity: 0;
+        }
+
+        .mask[anim-type='auth'] {
           transition: opacity 0.3s ease;
         }
       `}</style>

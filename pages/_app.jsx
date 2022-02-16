@@ -1,17 +1,16 @@
-import { AnimatePresence, motion } from 'framer-motion'
 import Head from 'next/head'
-import { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { Provider } from 'react-redux'
-import Cart from '../components/Cart/Cart'
+import AuthModal from '../components/AuthModal'
+import CartWrapper from '../components/Cart/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import Layout from '../components/Layout'
+import ProductModal from '../components/ProductModal'
 import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
-import GlobalStyles from '../styles/GlobalStyles'
 import '../styles/globals.css'
-import ScrollRestorer from '../providers/ScrollRestorer'
-import CartWrapper from '../components/Cart/CartWrapper'
-import Layout from '../components/Layout'
+import GlobalStyles from '../styles/GlobalStyles'
 
 function MyApp({ Component, pageProps, router }) {
   return (
@@ -23,9 +22,10 @@ function MyApp({ Component, pageProps, router }) {
         <link rel='icon' type='image/png' sizes='32x32' href='/images/favicon-32x32.png' />
         <link rel='icon' type='image/png' sizes='16x16' href='/images/favicon-16x16.png' />
       </Head>
-      {/*<AuthModal />*/}
       <Provider store={store}>
         <GlobalStyles />
+        <ProductModal />
+        <AuthModal />
         <CartWrapper />
         <AuthProvider>
           <Header />
