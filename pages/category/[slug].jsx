@@ -6,7 +6,11 @@ import React, { Fragment } from 'react'
 import Products from '../../components/Products'
 
 function Category({ products }) {
-  return <Fragment>{products && <Products products={products.products} title={products.name} />}</Fragment>
+  return (
+    <Fragment>
+      <Products products={products.products} title={products.name} />
+    </Fragment>
+  )
 }
 
 export async function getServerSideProps(context) {

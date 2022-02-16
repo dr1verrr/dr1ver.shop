@@ -30,6 +30,11 @@ button {
   cursor: pointer;
 }
 
+ul,
+li {
+  list-style: none;
+}
+
 h1,
 h2,
 h3,
@@ -38,10 +43,9 @@ h5 {
   margin: 0;
 }
 
-input,
-form,
-button {
+* {
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 body::-webkit-scrollbar {
@@ -53,12 +57,26 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 ul,
 li {
   margin: 0;
   padding: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='email'] {
+  -moz-appearance: textfield;
+}
+
+input[type='email']::-webkit-outer-spin-button,
+input[type='email']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }

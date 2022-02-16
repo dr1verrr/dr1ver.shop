@@ -117,6 +117,14 @@ export default function HeaderSecondOther() {
             display: none;
           }
 
+          .icon svg {
+            transform: scale(0.9);
+          }
+
+          .icon svg {
+            margin-right: 3px;
+          }
+
           .header-second-other {
             position: static;
           }

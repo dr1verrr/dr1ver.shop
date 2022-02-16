@@ -8,11 +8,9 @@ export default function HeaderFirst() {
         <div className='header-logo'>
           <div className='header-logo-first logo'>
             <span className='original-logo'>DR1VER</span>
-            <span className='logo-mobile'>D</span>
           </div>
           <div className='header-logo-second logo'>
             <span className='original-logo'>SHOP</span>
-            <span className='logo-mobile'>S</span>
           </div>
         </div>
       </Link>
@@ -55,25 +53,13 @@ export default function HeaderFirst() {
           font-size: 2.5rem;
         }
 
-        .logo-mobile {
-          display: none;
-        }
-
-        .original-logo {
-          display: block;
-        }
-
         @media (max-width: 567px) {
           .header-first {
-            padding: 1.5rem;
+            padding: 0;
+            padding-left: 10px;
           }
 
-          .logo-mobile {
-            display: block;
-          }
-
-          .original-logo {
-            display: none;
+          .header-logo {
           }
 
           .logo {
@@ -91,16 +77,14 @@ export default function HeaderFirst() {
             right: 0;
           }
 
-          @media (max-width: 567px) {
-            .logo {
-              padding: 0.75rem;
-              font-size: 2rem;
-              border: 1px solid #fff;
-            }
+          .logo {
+            padding: 0.75rem;
+            font-size: 2rem;
+            border: 1px solid #fff;
+          }
 
-            .logo::before {
-              height: 1px;
-            }
+          .logo::before {
+            height: 1px;
           }
         }
       `}</style>

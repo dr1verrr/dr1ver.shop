@@ -10,7 +10,7 @@ function Products({ products, title }) {
         className='product-title'
         style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 400, padding: '3rem' }}
       >
-        {title}
+        {title || 'All cards'}
       </h2>
       <div className='container'>
         <div className='product-wrapper'>
@@ -109,7 +109,7 @@ function Products({ products, title }) {
           padding: 0.75rem 2.5rem 0.75rem 2rem;
           color: #fff;
           font-size: 2.2rem;
-          font-weight: 500;
+          font-weight: 400;
           background-color: #1d1f21;
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;

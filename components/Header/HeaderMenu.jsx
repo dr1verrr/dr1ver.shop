@@ -21,10 +21,11 @@ export default function HeaderMenu() {
         .header-menu {
           display: flex;
           height: 100%;
-          letter-spacing: 0.1rem;
+          letter-spacing: 1.3px;
           align-items: center;
           justify-content: space-between;
           color: #fff;
+          flex-wrap: wrap;
         }
 
         .header-menu-link span {
@@ -37,32 +38,24 @@ export default function HeaderMenu() {
           font-weight: 400;
         }
 
-        .header-menu-category {
-          overflow-x: auto;
-        }
-
-        .header-menu-link span::before,
-        .header-menu-link span::after {
-          transition: width 0.4s ease;
+        .header-menu-link span::before {
+          transition: transform 0.4s ease;
+          transform: scale(0);
+          width: 100%;
           content: '';
           position: absolute;
           bottom: -0.25rem;
-          width: 0%;
           height: 1px;
           background-color: #fff;
         }
 
         .header-menu-link:hover span::before,
         .header-menu-link:hover span::after {
-          width: 50%;
+          transform: scale(1);
         }
 
         .header-menu-link span::before {
-          left: 50%;
-        }
-
-        .header-menu-link span::after {
-          right: 50%;
+          left: 0%;
         }
 
         @media (max-width: 1170px) {
@@ -79,6 +72,10 @@ export default function HeaderMenu() {
             color: #000;
             align-items: start;
             justify-content: start;
+          }
+
+          .header-menu-category {
+            overflow-x: auto;
           }
 
           .header-menu-link {

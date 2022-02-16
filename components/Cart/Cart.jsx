@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CART_HIDE } from '../../redux/types'
 import CartItems from './CartItems'
 
-export default function Cart() {
+function Cart({ isCartVisible }) {
   const { cartData = [] } = useSelector(state => state.cart)
-  const isCartVisible = useSelector(state => state.ui.cart)
+  const [mounted, setMounted] = useState(false)
   const dispatch = useDispatch()
 
-  return (
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return mounted ? (
     <div className='cart' visible={`${isCartVisible}`}>
       <div className='cart-vision-switcher' onClick={() => dispatch({ type: CART_HIDE })}>
         <div className='icon modal__cart-continue-shopping-arrow icon__animated'>
@@ -126,5 +130,7 @@ export default function Cart() {
         }
       `}</style>
     </div>
-  )
+  ) : null
 }
+
+export default memo(Cart)

@@ -30,7 +30,9 @@ function CartItem({ product }) {
         <div className='product-cart-price'>{(product.count * product.price).toFixed(2)} USD</div>
 
         <div className='product-title'>
-          <Link href={`/product/${product.slug}`}>{product.name}</Link>
+          <Link href={`/product/${product.slug}`}>
+            <a className='product-title-link'>{product.name}</a>
+          </Link>
         </div>
 
         <div className='product-options'>
@@ -90,6 +92,7 @@ function CartItem({ product }) {
           border-bottom: 1px solid #e0e3e6;
           display: flex;
           margin: 0 auto;
+          user-select: none;
         }
 
         .cart-left {
@@ -129,6 +132,7 @@ function CartItem({ product }) {
           max-width: 50px;
           font-size: 1.5rem;
           border-right: 1px solid #ccc;
+          user-select: none;
         }
 
         .counter-control {
@@ -137,14 +141,14 @@ function CartItem({ product }) {
           flex: 1;
         }
 
-        .product-title {
-          color: rgba(0, 0, 0, 1);
+        .product-title-link {
           transition: 0.25s color ease;
+          color: rgba(0, 0, 0, 1);
           font-weight: 600;
           font-size: 1.8rem;
         }
 
-        .product-title:hover {
+        .product-title-link:hover {
           color: rgba(0, 0, 0, 0.6);
         }
         .count-title {
