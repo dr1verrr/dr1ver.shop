@@ -40,7 +40,7 @@ export default function HeaderMenu() {
 
         .header-menu-link span::before {
           transition: transform 0.4s ease;
-          transform: scale(0);
+          transform: scaleX(0);
           width: 100%;
           content: '';
           position: absolute;
@@ -49,9 +49,9 @@ export default function HeaderMenu() {
           background-color: #fff;
         }
 
-        .header-menu-link:hover span::before,
-        .header-menu-link:hover span::after {
-          transform: scale(1);
+        .header-menu-link:hover span::before {
+          transform: scaleX(1);
+          opacity: 1;
         }
 
         .header-menu-link span::before {

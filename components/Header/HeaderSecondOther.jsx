@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../../contexts/auth'
-import { CART_SHOW } from '../../redux/types'
+import { AUTH_MODAL_UPDATE, CART_SHOW } from '../../redux/types'
 
 export default function HeaderSecondOther() {
   const dispatch = useDispatch()
@@ -27,7 +27,7 @@ export default function HeaderSecondOther() {
     if (isAuthenticated) {
       router.push('/profile')
     } else {
-      //setPopup(prev => ({ ...prev, login: !prev.login }))
+      dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: true } })
     }
   }
 

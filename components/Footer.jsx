@@ -1,11 +1,16 @@
-import React from 'react'
-import categories from '../data/categories.json'
+/* eslint-disable react/display-name */
+import React, { memo } from 'react'
+import mockCategories from '../data/categories.json'
 import Link from 'next/link'
 import FooterIcons from '../icons/social-icons'
 import MadeWithIcons from '../icons/made-with'
 import PaymentsIcons from '../icons/payments'
 
-export default function Footer() {
+export default function FooterWrapper() {
+  return <Footer categories={mockCategories} />
+}
+
+const Footer = memo(({ categories }) => {
   return (
     <footer className='footer'>
       <div className='footer-content'>
@@ -198,7 +203,7 @@ export default function Footer() {
 
         .footer-menu-link span::before {
           transition: transform 0.4s ease;
-          transform: scale(0);
+          transform: scaleX(0);
           width: 100%;
           content: '';
           position: absolute;
@@ -208,7 +213,7 @@ export default function Footer() {
         }
 
         .footer-menu-link:hover span::before {
-          transform: scale(1);
+          transform: scaleX(1);
         }
 
         .footer-menu-link span::before {
@@ -260,12 +265,6 @@ export default function Footer() {
           .footer-socials {
             flex-direction: column;
             justify-content: space-around;
-          }
-
-          .header-logo {
-          }
-
-          .footer-socials-logo {
           }
         }
 
@@ -319,4 +318,4 @@ export default function Footer() {
       `}</style>
     </footer>
   )
-}
+})
