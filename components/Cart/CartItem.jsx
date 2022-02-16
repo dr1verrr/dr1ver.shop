@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import React, { Fragment, memo } from 'react'
 import { useDispatch } from 'react-redux'
-import { CART_REMOVE } from '../../redux/types'
+import { CART_REMOVE, PRODUCT_MODAL_SHOW } from '../../redux/types'
 
 function CartItem({ product }) {
   const dispatch = useDispatch()
+  const showProductModal = () => dispatch({ type: PRODUCT_MODAL_SHOW, payload: product.slug })
 
   function countHandler(e) {}
 
@@ -18,23 +18,17 @@ function CartItem({ product }) {
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>
           </div>
-          <div className='product-image'>
+          <div className='product-image' onClick={showProductModal}>
             <Image src={`${process.env.NEXT_PUBLIC_API_URL}${product.image}`} width={150} height={150} alt='' />
-            <Link href={`/product/${product.slug}`} passHref>
-              <div className='product-image-mask'></div>
-            </Link>
+            <div className='product-image-mask'></div>
           </div>
         </div>
       </div>
       <div className='cart-right'>
         <div className='product-cart-price'>{(product.count * product.price).toFixed(2)} USD</div>
-
-        <div className='product-title'>
-          <Link href={`/product/${product.slug}`}>
-            <a className='product-title-link'>{product.name}</a>
-          </Link>
+        <div className='product-title' onClick={() => showProductModal}>
+          {product.name}
         </div>
-
         <div className='product-options'>
           {product?.Custom_Field.map(fld => {
             const select = fld.options.split('|')
@@ -94,37 +88,30 @@ function CartItem({ product }) {
           margin: 0 auto;
           user-select: none;
         }
-
         .cart-left {
           padding-right: 2rem;
         }
-
         button[type='button'] {
           background: none;
           border: none;
         }
-
         .product-cart-price {
           font-weight: 600;
           position: absolute;
           right: 30px;
           bottom: -30px;
         }
-
         .modal__cart-product-count-plus {
           margin-right: 2.5px;
         }
-
         .icon svg {
           height: 10px;
           width: 10px;
         }
-
         .counter {
           display: flex;
           align-items: center;
         }
-
         .counter-input {
           -moz-appearance: textfield;
           outline: none;
@@ -134,37 +121,33 @@ function CartItem({ product }) {
           border-right: 1px solid #ccc;
           user-select: none;
         }
-
         .counter-control {
           position: relative;
           padding: 0 10px;
           flex: 1;
         }
-
-        .product-title-link {
+        .product-title {
           transition: 0.25s color ease;
           color: rgba(0, 0, 0, 1);
           font-weight: 600;
           font-size: 1.8rem;
+          cursor: pointer;
+          width: fit-content;
         }
-
-        .product-title-link:hover {
+        .product-title:hover {
           color: rgba(0, 0, 0, 0.6);
         }
         .count-title {
           font-size: 1.6rem;
           color: #929da1;
         }
-
         input[active='false']:first-child {
           padding-left: 0;
         }
-
         input[active='false'] {
           padding-top: 5px;
           padding-bottom: 5px;
         }
-
         input[active='true'] {
           color: #000;
           padding: 0 5px;
@@ -173,13 +156,11 @@ function CartItem({ product }) {
           font-weight: 600;
           margin-top: 2.5px;
         }
-
         .product-info-sizes-input {
           cursor: pointer;
           font-size: 1.5rem;
           padding: 0 0.5rem;
         }
-
         .product-info-sizes-inner {
           display: flex;
           flex-wrap: wrap;
@@ -191,7 +172,6 @@ function CartItem({ product }) {
           padding-top: 0.75rem;
           width: calc(100% + 7px);
         }
-
         input {
           border: none;
           background-image: none;
@@ -200,14 +180,12 @@ function CartItem({ product }) {
           -moz-box-shadow: none;
           box-shadow: none;
         }
-
         .cart-right {
           position: relative;
           display: flex;
           flex-direction: column;
           width: 100%;
         }
-
         .product-image {
           position: relative;
           width: 120px;
@@ -217,7 +195,6 @@ function CartItem({ product }) {
           border-radius: 10px;
           cursor: pointer;
         }
-
         .product-remove {
           transition: 0.25s filter ease;
           position: absolute;
@@ -234,24 +211,19 @@ function CartItem({ product }) {
           cursor: pointer;
           z-index: 6;
         }
-
         .product-remove:hover {
           filter: brightness(0.9);
         }
-
         .product-wrapper {
           position: relative;
         }
-
         .product-remove:hover .product-image-mask {
           pointer-events: none;
         }
-
         .product-remove svg {
           width: 7px;
           height: 7px;
         }
-
         .product-image-mask {
           transition: opacity 0.25s ease;
           position: absolute;
@@ -269,32 +241,31 @@ function CartItem({ product }) {
         .product-image-mask:hover {
           opacity: 0.1;
         }
-
+        @media (max-width: 420px) {
+          .product-count {
+            margin-bottom: 2rem;
+          }
+        }
         @media (max-width: 340px) {
           .product-info-sizes-inner {
             margin-bottom: 1rem;
           }
-
           .cart-item {
             padding-bottom: 7rem;
           }
-
           .product-cart-price {
             bottom: -35px;
           }
         }
-
         @media (max-width: 320px) {
           .cart-item {
             flex-direction: column;
             align-items: center;
           }
-
           .product-image {
             margin-bottom: 3rem;
             width: 100%;
           }
-
           .product-info-sizes-inner {
             flex-direction: row;
           }
@@ -304,4 +275,4 @@ function CartItem({ product }) {
   )
 }
 
-export default CartItem
+export default memo(CartItem)
