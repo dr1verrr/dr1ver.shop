@@ -1,17 +1,18 @@
 import { useRouter } from 'next/router'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
-import { useLayout } from '../contexts/layout'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import useRequest from '../hooks/useRequest'
+import { AUTH_MODAL_UPDATE } from '../redux/types'
 
 function AuthModal() {
   const { loadUserFromCookies } = useAuth()
   const popupRef = useRef()
   const router = useRouter()
   const sendAuthData = useRequest()
-  const { popup, setPopup } = useLayout()
-  const isPopupActive = popup.login || popup.register
+  const authModal = useSelector(state => state.ui.authModal)
+  const dispatch = useDispatch()
 
   const [userData, setUserData] = useState({
     identifier: '',
@@ -21,16 +22,16 @@ function AuthModal() {
   })
 
   useOnClickOutside(popupRef, () => {
-    if (isPopupActive) setPopup({ login: false, register: false })
+    if (authModal.visible) dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
   })
 
   async function handleSubmit(e) {
     e.preventDefault()
 
-    sendAuthData({ method: 'post', url: `${popup.login ? '/api/login' : '/api/register'}`, data: userData })
+    sendAuthData({ method: 'post', url: `${authModal.login ? '/api/login' : '/api/register'}`, data: userData })
       .then(() => loadUserFromCookies())
       .then(() => {
-        setPopup({ login: false, register: false })
+        dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
         router.push('/profile')
       })
   }
@@ -53,7 +54,7 @@ function AuthModal() {
           maxWidth: '15px',
           maxHeight: '15px',
         }}
-        onClick={() => setPopup({ login: false, register: false })}
+        onClick={() => dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })}
       >
         <polygon
           points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'
@@ -61,7 +62,7 @@ function AuthModal() {
         ></polygon>
       </svg>
       <form className='login-modal-window' onSubmit={handleSubmit}>
-        {popup.register && (
+        {authModal.register && (
           <React.Fragment>
             <label htmlFor='username'>Name: </label>
             <input
@@ -76,7 +77,7 @@ function AuthModal() {
         )}
 
         <label htmlFor='email'>Email: </label>
-        {popup.login && (
+        {authModal.login && (
           <input
             className='login-modal-email'
             type='email'
@@ -87,7 +88,7 @@ function AuthModal() {
             required
           />
         )}
-        {popup.register && (
+        {authModal.register && (
           <input
             className='login-modal-email'
             type='email'
@@ -108,13 +109,15 @@ function AuthModal() {
           onChange={handleChange}
           required
         />
-        <input className='login-modal-submit' type='submit' value={popup.login ? 'Sign in' : 'Sign up'} />
+        <input className='login-modal-submit' type='submit' value={authModal.login ? 'Sign in' : 'Sign up'} />
         <div
           style={{ fontSize: '1.8rem' }}
-          onClick={() => setPopup({ login: !popup.login, register: !popup.register })}
+          onClick={() =>
+            dispatch({ type: AUTH_MODAL_UPDATE, payload: { login: !authModal.login, register: !authModal.register } })
+          }
         >
-          {popup.login ? 'Want to create an account ? ' : 'Already registered ? '}
-          <span style={{ cursor: 'pointer' }}>{popup.login ? 'Register' : 'Login'}</span>
+          {authModal.login ? 'Want to create an account ? ' : 'Already registered ? '}
+          <span style={{ cursor: 'pointer' }}>{authModal.login ? 'Register' : 'Login'}</span>
         </div>
       </form>
       <style jsx>{`
@@ -160,8 +163,8 @@ function AuthModal() {
           padding: 4rem;
           border-radius: 15px;
           z-index: 1200;
-          opacity: ${isPopupActive ? 1 : 0};
-          visibility: ${isPopupActive ? 'visible' : 'hidden'};
+          opacity: ${authModal.visible ? 1 : 0};
+          visibility: ${authModal.visible ? 'visible' : 'hidden'};
           color: #000;
           max-width: 500px;
           width: 100%;

@@ -34,6 +34,7 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
 
         .product-button-wrapper {
           white-space: nowrap;
+          display: inline-block;
         }
 
         button {

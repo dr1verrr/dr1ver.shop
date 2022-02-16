@@ -54,7 +54,7 @@ function ProductOption({ fld }) {
           color: #797b8c;
           position: relative;
           transition-duration: 0.2s;
-          transition-property: color, background-color, transform, border;
+          transition-property: color, background-color, transform, border, filter;
           cursor: pointer;
           border-style: none;
           background: #474852;
@@ -63,11 +63,11 @@ function ProductOption({ fld }) {
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;
-          border: 1px solid transparent;
+          font-weight: 600;
         }
 
         .product-info-sizes-input[active='false']:hover {
-          border: 1px solid #fff;
+          filter: brightness(1.5);
         }
 
         .product-info-sizes-input:active {

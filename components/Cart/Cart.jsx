@@ -83,7 +83,7 @@ function Cart({ isCartVisible }) {
           padding: 2rem 0;
           height: 100%;
           text-transform: uppercase;
-          max-height: 106.5px;
+          max-height: 102.5px;
           letter-spacing: 1.5px;
           font-weight: 500;
           font-size: 1.6rem;

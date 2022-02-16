@@ -1,11 +1,10 @@
-import React, { memo } from 'react'
+import React, { Fragment, memo } from 'react'
 import CartItem from './CartItem'
 
 function CartItems({ cartData }) {
   return (
     <div className='cart-items'>
       {cartData?.map(item => {
-        //CartItem need to be rewrited. The reason is performance
         return <CartItem key={item.id + item.options} product={item} />
       })}
       <style jsx>{`
