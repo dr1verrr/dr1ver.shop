@@ -1,20 +1,78 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ProductButton from './ProductButton'
+import { PRODUCT_INCREMENT } from '../consants'
+import useDebouncedFunction from '../hooks/useDebouncedFunction'
+import { Router } from 'next/router'
 
 function Products({ products, title }) {
+  const [loading, setLoading] = useState(false)
+  const [count, setCount] = useState(PRODUCT_INCREMENT)
+  const productPage = useRef()
+
+  useEffect(() => {
+    const start = () => {
+      console.log('start')
+      //NProgress.start()
+      setLoading(true)
+    }
+    const end = () => {
+      console.log('finished')
+      //NProgress.done()
+      setLoading(false)
+    }
+
+    Router.events.on('routeChangeStart', start)
+    Router.events.on('routeChangeComplete', end)
+    Router.events.on('routeChangeError', end)
+    return () => {
+      Router.events.off('routeChangeStart', start)
+      Router.events.off('routeChangeComplete', end)
+      Router.events.off('routeChangeError', end)
+    }
+  }, [])
+
+  const handleScroll = useDebouncedFunction(() => {
+    if (window.innerHeight + document.documentElement.scrollTop < productPage.current.offsetHeight || loading) {
+      return false
+    }
+
+    setLoading(true)
+  }, 200)
+
+  useEffect(() => {
+    if (!loading) return
+
+    if (count + PRODUCT_INCREMENT >= products.length) {
+      setCount(products.length)
+    } else {
+      setCount(count + PRODUCT_INCREMENT)
+    }
+
+    setLoading(false)
+  }, [loading])
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
-    <div className='product-page'>
+    <div className='product-page' ref={productPage}>
       <h2
         className='product-title'
-        style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 400, padding: '3rem' }}
+        style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 600, padding: '5rem' }}
       >
         {title || 'All cards'}
       </h2>
       <div className='container'>
         <div className='product-wrapper'>
-          {products?.map(product => {
+          {products?.slice(0, count)?.map(product => {
             return (
               <Link key={product.id} href='/product/[slug]' as={`/product/${product.slug}`} passHref>
                 <div className='product-inner'>

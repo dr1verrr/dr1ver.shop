@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import ProductInfo from './ProductInfo'
 import store from '../../redux/store'
-import { CART_ADD, CART_SHOW, PRODUCT_UPDATE } from '../../redux/types'
+import { CART_ADD, CART_SHOW, MODAL_SHOW, PRODUCT_UPDATE } from '../../redux/types'
+import ProductInfo from './ProductInfo'
 
 function Product({ product }) {
   const router = useRouter()
@@ -32,6 +32,17 @@ function Product({ product }) {
 
   //  return listener
   //}, [])
+
+  const addToCart = data => {
+    try {
+      dispatch({ type: CART_ADD, payload: data })
+    } catch (error) {
+      console.error('something went wrong')
+    } finally {
+      dispatch({ type: CART_SHOW })
+      dispatch({ type: MODAL_SHOW, payload: 'Product was added to the shopping cart.' })
+    }
+  }
 
   const dispatch = useDispatch()
   useEffect(() => dispatch({ type: PRODUCT_UPDATE, payload: { price: product.price, count: 1 } }), [])
@@ -63,12 +74,7 @@ function Product({ product }) {
       }
 
       if (data) {
-        try {
-          dispatch({ type: CART_ADD, payload: data })
-        } catch (error) {
-        } finally {
-          dispatch({ type: CART_SHOW })
-        }
+        addToCart(data)
       }
     }
   }, [])
@@ -102,10 +108,6 @@ function Product({ product }) {
       </div>
       <style jsx global>
         {`
-          body {
-            background: #111113;
-          }
-
           .header {
             background: transparent !important;
           }
@@ -132,6 +134,7 @@ function Product({ product }) {
           left: 0;
           right: 0;
           bottom: 0;
+          background-color: #111113;
           background-image: url(${process.env.NEXT_PUBLIC_API_URL}${product.image.url});
           background-repeat: repeat-x;
           background-size: 50%;
@@ -180,6 +183,24 @@ function Product({ product }) {
           justify-content: center;
           flex: 1;
           min-width: 250px;
+          z-index: 10;
+        }
+
+        .product-image::before {
+          position: absolute;
+          content: '';
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 25%;
+          height: 25%;
+          border-radius: 50%;
+          filter: blur(100px);
+          opacity: 0.5;
+          box-shadow: inset 0 0 50px #fff, /* inner white */ inset 20px 0 80px #fff,
+            /* inner left magenta short */ inset -20px 0 80px #fff, /* inner right cyan short */ inset 20px 0 300px #fff,
+            /* inner left magenta broad */ inset -20px 0 300px #fff, /* inner right cyan broad */ 0 0 50px #fff,
+            /* outer white */ -10px 0 80px #fff, /* outer left magenta */ 10px 0 80px #fff; /* outer right cyan */
         }
 
         .product-redirect:hover {

@@ -1,24 +1,22 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useLayout } from '../contexts/layout'
+import { useDispatch, useSelector } from 'react-redux'
+import { MODAL_HIDE, MODAL_SHOW } from '../redux/types'
 
 const Modal = props => {
-  const handler = useCallback(hideModal, [])
   const [pause, setPause] = useState(false)
   const timeoutRef = useRef()
-  const { modal, setModal } = useLayout()
+  const dispatch = useDispatch()
+  const modal = useSelector(state => state.ui.modal)
+  const closeModal = () => dispatch({ type: MODAL_HIDE })
 
   function runTimeout() {
     clearTimeout(timeoutRef.current)
-    if (modal.visible) timeoutRef.current = setTimeout(hideModal, 4000)
-  }
-
-  function hideModal() {
-    setModal(prev => ({ ...prev, visible: false }))
+    if (modal.visible) timeoutRef.current = setTimeout(closeModal, 4000)
   }
 
   useEffect(() => {
     return () => {
-      hideModal()
+      closeModal()
       stopTimeout()
     }
   }, [])
@@ -34,28 +32,32 @@ const Modal = props => {
     }
   }, [pause, modal.visible])
 
+  useEffect(() => {
+
+    if (modal.override) {
+      dispatch({ type: MODAL_SHOW })
+    }
+  }, [modal])
+
   return (
     <div
       className='modal'
-      onMouseEnter={() => {
-        setPause(true)
-      }}
-      onMouseLeave={() => {
-        setPause(false)
-      }}
-      onClick={handler}
+      onMouseEnter={() => setPause(true)}
+      onMouseLeave={() => setPause(false)}
+      onClick={closeModal}
       paused={`${pause}`}
-      show={`${props.show}`}
+      show={`${modal.visible}`}
+      override={`${modal.override}`}
     >
-      <div className='modal-button' onClick={handler}>
+      <div className='modal-button' onClick={closeModal}>
         <svg className='cross' xmlns='http://www.w3.org/2000/svg' style={{ fill: '#c6c9ce' }}>
           <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
         </svg>
       </div>
       <div className='modal-content'>
-        <div className='modal-header'>{props.title}</div>
+        <div className='modal-header'></div>
         <div className='modal-body'>
-          <p>{props.children}</p>
+          <p>{modal.message}</p>
         </div>
 
         <div className='modal-footer'></div>
@@ -90,7 +92,7 @@ const Modal = props => {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
           display: flex;
           background: rgba(158, 161, 169, 1);
-          opacity: ${props.show ? 0.1 : 0};
+          opacity: ${modal.visible ? 0.1 : 0};
           color: rgba(255, 255, 255, 0.85);
           flex-direction: column;
           text-align: center;
@@ -101,8 +103,8 @@ const Modal = props => {
           bottom: 15px;
           right: 35px;
           overflow: hidden;
-          visibility: ${props.show ? 'visible' : 'hidden'};
-          z-index: 1500;
+          visibility: ${modal.visible ? 'visible' : 'hidden'};
+          z-index: 2000;
           font-size: 1.5rem;
           letter-spacing: 0.75px;
           pointer-events: stroke;
@@ -140,14 +142,14 @@ const Modal = props => {
         }
 
         .notification-timer {
-          transition: ${props.show ? 'width 4s ease' : 'none'};
+          transition: ${modal.visible ? 'transform 4s ease' : 'none'};
           content: '';
           display: block;
           position: absolute;
           bottom: 0;
-          left: 0;
-          right: 0;
-          width: ${props.show ? '0%' : '100%'};
+          width: 100%;
+          left: -50%;
+          transform: ${modal.visible ? 'scaleX(0)' : 'scaleX(2)'};
           height: 5px;
           background: #c6c9ce;
         }
@@ -168,8 +170,8 @@ const Modal = props => {
         }*/
 
         .notification-timer[paused='true'] {
-          transition: 1s ease;
-          width: 100%;
+          transition: none;
+          transform: scaleX(2);
         }
 
         @media (max-width: 500px) {

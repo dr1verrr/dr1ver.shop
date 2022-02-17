@@ -21,10 +21,6 @@ export default function ProductModal() {
 
   useOnClickOutside(modalRef, hideProductModal)
 
-  useEffect(() => {
-    console.log(product)
-  }, [product])
-
   const getProduct = async slug => {
     const product = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`)
     const res = await product.json()

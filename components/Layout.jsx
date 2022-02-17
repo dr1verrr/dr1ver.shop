@@ -38,11 +38,6 @@ export default function Layout({ children, router }) {
           margin-top: 0;
         }
       `}</style>
-      <style jsx global>{`
-        body {
-          background: #000;
-        }
-      `}</style>
     </div>
   )
 }

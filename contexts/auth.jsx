@@ -19,10 +19,6 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  React.useEffect(() => {
-    console.log('layount mounted ' + new Date())
-  }, [])
-
   useEffect(checkRoute, [router.pathname, user, loading])
 
   async function loadUserFromCookies() {

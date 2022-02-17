@@ -1,19 +1,36 @@
+import throttle from 'lodash.throttle'
 import Image from 'next/image'
-import React, { Fragment, memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { CART_REMOVE, PRODUCT_MODAL_SHOW } from '../../redux/types'
+import { CART_REMOVE, CART_UPDATE, MODAL_SHOW, PRODUCT_MODAL_SHOW } from '../../redux/types'
 
 function CartItem({ product }) {
   const dispatch = useDispatch()
   const showProductModal = () => dispatch({ type: PRODUCT_MODAL_SHOW, payload: product.slug })
 
-  function countHandler(e) {}
+  const updateProduct = (e, count) => {
+    throttle(() => {
+      if (e.target.name) {
+        dispatch({ type: CART_UPDATE, payload: { ...product, [e.target.name]: e.target.value } })
+      } else {
+        if (count > 0 && count <= 99) {
+          console.log(count)
+          dispatch({ type: CART_UPDATE, payload: { ...product, count } })
+        }
+      }
+    }, 2000)
+  }
+
+  const removeProduct = () => {
+    dispatch({ type: CART_REMOVE, payload: product })
+    dispatch({ type: MODAL_SHOW, payload: 'Product was removed from the basket.' })
+  }
 
   return (
     <div className='cart-item'>
       <div className='cart-left'>
         <div className='product-wrapper'>
-          <div className='product-remove' onClick={() => dispatch({ type: CART_REMOVE, payload: product })}>
+          <div className='product-remove' onClick={removeProduct}>
             <svg className='' xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>
@@ -39,6 +56,7 @@ function CartItem({ product }) {
                   {select.map(s => {
                     const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
                     /// value = option
+
                     return (
                       <input
                         type='button'
@@ -46,9 +64,8 @@ function CartItem({ product }) {
                         className='product-info-sizes-input'
                         active={product.options === option ? 'true' : 'false'}
                         value={option}
-                        onClick={e => {
-                          //setSelected(e.target.value)
-                        }}
+                        onClick={updateProduct}
+                        name='options'
                       />
                     )
                   })}
@@ -60,16 +77,30 @@ function CartItem({ product }) {
         <div className='product-count'>
           <div className='count-title'>Count: </div>
           <div className='counter'>
-            <input type='number' className='counter-input' value={product.count} onChange={countHandler} />
+            <input
+              type='number'
+              className='counter-input'
+              value={product.count}
+              onChange={updateProduct}
+              name='count'
+            />
             <div className='counter-control'>
-              <button type='button' className='modal__cart-product-count-plus'>
+              <button
+                type='button'
+                className='modal__cart-product-count-plus'
+                onClick={e => updateProduct(e, product.count + 1)}
+              >
                 <div className='icon icon__animated'>
                   <svg className='plus' xmlns='http://www.w3.org/2000/svg'>
                     <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
                   </svg>
                 </div>
               </button>
-              <button type='button' className='modal__cart-product-count-minus'>
+              <button
+                type='button'
+                className='modal__cart-product-count-minus'
+                onClick={e => updateProduct(e, product.count - 1)}
+              >
                 <div className='icon icon__animated'>
                   <svg className='minus' xmlns='http://www.w3.org/2000/svg'>
                     <path d='M9 4v1H0V4z'></path>
@@ -141,26 +172,20 @@ function CartItem({ product }) {
           font-size: 1.6rem;
           color: #929da1;
         }
-        input[active='false']:first-child {
-          padding-left: 0;
-        }
+
         input[active='false'] {
-          padding-top: 5px;
-          padding-bottom: 5px;
         }
         input[active='true'] {
           color: #000;
-          padding: 0 5px;
-          border-right: 1px solid #ccc;
-          border-left: 1px solid #ccc;
           font-weight: 600;
-          margin-top: 2.5px;
         }
+
         .product-info-sizes-input {
           cursor: pointer;
           font-size: 1.5rem;
           padding: 0 0.5rem;
         }
+
         .product-info-sizes-inner {
           display: flex;
           flex-wrap: wrap;

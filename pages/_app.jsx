@@ -6,6 +6,7 @@ import CartWrapper from '../components/Cart/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/Layout'
+import Modal from '../components/Modal'
 import ProductModal from '../components/ProductModal'
 import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
@@ -24,6 +25,7 @@ function MyApp({ Component, pageProps, router }) {
       </Head>
       <Provider store={store}>
         <GlobalStyles />
+        <Modal />
         <ProductModal />
         <AuthModal />
         <CartWrapper />

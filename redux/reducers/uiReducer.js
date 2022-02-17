@@ -13,7 +13,7 @@ import {
 
 const initialState = {
   cart: false,
-  modal: false,
+  modal: { visible: false, override: false, message: '' },
   productModal: { visible: false, slug: '' },
   authModal: {
     login: true,
@@ -32,10 +32,17 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, cart: false }
 
     case MODAL_SHOW:
-      return { ...state, modal: true }
+      return {
+        ...state,
+        modal: {
+          visible: state.modal.visible ? false : true,
+          override: state.modal.visible ? true : false,
+          message: action.payload || state.modal.message,
+        },
+      }
 
     case MODAL_HIDE:
-      return { ...state, modal: false }
+      return { ...state, modal: { visible: false, override: false } }
 
     case AUTH_MODAL_UPDATE:
       return { ...state, authModal: { ...state.authModal, ...action.payload } }
@@ -53,7 +60,7 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, productModal: { visible: false, slug: action.payload } }
 
     case MASK_HIDE:
-      return initialState
+      return { ...initialState, modal: { ...state.modal } }
 
     default:
       return state

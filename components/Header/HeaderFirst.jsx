@@ -54,13 +54,27 @@ export default function HeaderFirst() {
           }
         }
 
-        @keyframes strip {
+        @keyframes strip-left {
           0% {
-            transform: scaleX(0);
+            transform: scaleX(0) translateX(-200%);
           }
 
           50% {
-            transform: scaleX(0);
+            transform: translateX(-200%);
+          }
+
+          100% {
+            transform: scaleX(1);
+          }
+        }
+
+        @keyframes strip-right {
+          0% {
+            transform: scaleX(0) translateX(200%);
+          }
+
+          50% {
+            transform: translateX(200%);
           }
 
           100% {
@@ -161,11 +175,18 @@ export default function HeaderFirst() {
         }
 
         .strip {
-          animation: strip 4s ease;
           width: 100%;
           height: 2px;
           background-color: #fff;
           transform: scaleX(1);
+        }
+
+        .leftStrip {
+          animation: strip-left 4s ease;
+        }
+
+        .rightStrip {
+          animation: strip-right 4s ease;
         }
 
         .header-logo {

@@ -1,4 +1,4 @@
-import { CART_ADD, CART_REMOVE } from '../types'
+import { CART_ADD, CART_REMOVE, CART_UPDATE } from '../types'
 
 const initialState = { cartData: [], lastModified: {} }
 
@@ -9,6 +9,8 @@ const cartReducer = (state = initialState, action) => {
 
     case CART_REMOVE:
       return removeProduct(state, action.payload)
+    //case CART_UPDATE:
+    //  return updateProduct(state, action.payload)
 
     default:
       return state
@@ -21,6 +23,15 @@ function removeProduct(state, product) {
     cartData: state.cartData.filter(item => (product.id == item.id && product.options === item.options ? false : true)),
   }
 }
+
+//const updateProduct = (state, newProduct) => {
+//  const cartData = state.cartData
+//  const isExist = index => cartData[index].id == newProduct.id && cartData[index].options === newProduct.options
+
+//  for (let index = 0; index < cartData.length; index++) {
+//    const element = cartData[index]
+//  }
+//}
 
 const findExist = (state, newProduct) => {
   const cartData = state.cartData
