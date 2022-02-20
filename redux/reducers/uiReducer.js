@@ -9,6 +9,7 @@ import {
   MODAL_SHOW,
   PRODUCT_MODAL_HIDE,
   PRODUCT_MODAL_SHOW,
+  PROGRESS_CHANGE,
 } from '../types'
 
 const initialState = {
@@ -20,10 +21,13 @@ const initialState = {
     register: false,
     visible: false,
   },
+  progressBar: '',
   menu: false,
 }
 
 const uiReducer = (state = initialState, action) => {
+  const modal = state.modal
+
   switch (action.type) {
     case CART_SHOW:
       return { ...state, cart: true }
@@ -32,14 +36,35 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, cart: false }
 
     case MODAL_SHOW:
-      return {
-        ...state,
-        modal: {
-          visible: state.modal.visible ? false : true,
-          override: state.modal.visible ? true : false,
-          message: action.payload || state.modal.message,
-        },
+      if (!modal.visible) {
+        return {
+          ...state,
+          modal: { ...modal, visible: true, override: false, message: action.payload || modal.message },
+        }
       }
+
+      if (modal.visible) {
+        return {
+          ...state,
+          modal: { ...modal, visible: false, override: true, message: action.payload || modal.message },
+        }
+      }
+
+      if (modal.override) {
+        return {
+          ...state,
+          modal: { ...modal, visible: true },
+        }
+      }
+
+    //return {
+    //  ...state,
+    //  modal: {
+    //    visible: state.modal.override || !state.modal.visible ? true : false,
+    //    override: state.modal.visible ? true : false,
+    //    message: action.payload || state.modal.message,
+    //  },
+    //}
 
     case MODAL_HIDE:
       return { ...state, modal: { visible: false, override: false } }
@@ -61,6 +86,9 @@ const uiReducer = (state = initialState, action) => {
 
     case MASK_HIDE:
       return { ...initialState, modal: { ...state.modal } }
+
+    case PROGRESS_CHANGE:
+      return { ...state, progressBar: action.payload || state.progressBar }
 
     default:
       return state
