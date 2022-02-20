@@ -2,37 +2,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import ProductButton from './ProductButton'
+import { useDispatch } from 'react-redux'
 import { PRODUCT_INCREMENT } from '../consants'
 import useDebouncedFunction from '../hooks/useDebouncedFunction'
-import { Router } from 'next/router'
+import ProductButton from './ProductButton'
 
 function Products({ products, title }) {
   const [loading, setLoading] = useState(false)
   const [count, setCount] = useState(PRODUCT_INCREMENT)
   const productPage = useRef()
-
-  useEffect(() => {
-    const start = () => {
-      console.log('start')
-      //NProgress.start()
-      setLoading(true)
-    }
-    const end = () => {
-      console.log('finished')
-      //NProgress.done()
-      setLoading(false)
-    }
-
-    Router.events.on('routeChangeStart', start)
-    Router.events.on('routeChangeComplete', end)
-    Router.events.on('routeChangeError', end)
-    return () => {
-      Router.events.off('routeChangeStart', start)
-      Router.events.off('routeChangeComplete', end)
-      Router.events.off('routeChangeError', end)
-    }
-  }, [])
 
   const handleScroll = useDebouncedFunction(() => {
     if (window.innerHeight + document.documentElement.scrollTop < productPage.current.offsetHeight || loading) {
@@ -40,10 +18,12 @@ function Products({ products, title }) {
     }
 
     setLoading(true)
-  }, 200)
+  }, 150)
 
   useEffect(() => {
     if (!loading) return
+
+    if (count == products.length) return
 
     if (count + PRODUCT_INCREMENT >= products.length) {
       setCount(products.length)
@@ -128,6 +108,7 @@ function Products({ products, title }) {
         .product-page {
           min-height: 100vh;
           background: #fafafc;
+          opacity: 1;
         }
 
         .product-button-wrapper {
