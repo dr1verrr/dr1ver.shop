@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 import { Provider } from 'react-redux'
 import AuthModal from '../components/AuthModal'
-import CartWrapper from '../components/Cart/CartWrapper'
+import Cart from '../components/Cart/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/Layout'
@@ -12,6 +12,7 @@ import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
 import '../styles/globals.css'
 import GlobalStyles from '../styles/GlobalStyles'
+import ProgressBar from '../components/ProgressBar'
 
 function MyApp({ Component, pageProps, router }) {
   return (
@@ -25,10 +26,11 @@ function MyApp({ Component, pageProps, router }) {
       </Head>
       <Provider store={store}>
         <GlobalStyles />
+        <ProgressBar />
         <Modal />
         <ProductModal />
         <AuthModal />
-        <CartWrapper />
+        <Cart />
         <AuthProvider>
           <Header />
           <Layout router={router}>

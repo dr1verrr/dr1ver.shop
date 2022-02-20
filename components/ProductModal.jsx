@@ -1,40 +1,40 @@
-import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import { CART_HIDE, PRODUCT_MODAL_HIDE } from '../redux/types'
-import Image from 'next/image'
-import Link from 'next/link'
 
-export default function ProductModal() {
-  const productModal = useSelector(state => state.ui.productModal)
+const ProductModal = memo(({ productModal }) => {
   const dispatch = useDispatch()
   const hideProductModal = () => dispatch({ type: PRODUCT_MODAL_HIDE, payload: '' })
   const hideCart = () => dispatch({ type: CART_HIDE })
   const modalRef = useRef()
   const [product, setProduct] = useState({})
-  const [mounted, setMounted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const hideModals = () => {
     hideProductModal()
     hideCart()
   }
 
-  useOnClickOutside(modalRef, hideProductModal)
+  useOnClickOutside(modalRef, () => {
+    if (productModal.visible) hideProductModal()
+  })
 
   const getProduct = async slug => {
+    setLoading(true)
     const product = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`)
     const res = await product.json()
 
     if (product.status == 200) {
-      setMounted(true)
       setProduct(res)
+      setLoading(false)
     }
   }
 
   useEffect(() => {
-    const fetchProduct = slug => getProduct(slug)
-    if (productModal.visible && productModal.slug) fetchProduct(productModal.slug)
-    return () => {}
+    if (productModal.visible && productModal.slug) getProduct(productModal.slug)
   }, [productModal])
 
   return (
@@ -42,7 +42,7 @@ export default function ProductModal() {
       <div className='product-modal-inside'>
         <div className='modal-tile' ref={modalRef}>
           <div className='modal-content'>
-            {mounted && (
+            {!loading && (
               <div className='modal-content-inner'>
                 {product.image && (
                   <Link href={`/product/${product.slug}`} passHref>
@@ -103,6 +103,8 @@ export default function ProductModal() {
 
         .product-image {
           min-width: 200px;
+          max-width: 300px;
+          width: 100%;
           cursor: pointer;
         }
 
@@ -138,6 +140,7 @@ export default function ProductModal() {
 
         .modal-tile {
           overflow-y: auto;
+          min-height: 500px;
         }
 
         .modal-content-inner {
@@ -197,4 +200,12 @@ export default function ProductModal() {
       `}</style>
     </div>
   )
+})
+
+const ProductModalWrapper = () => {
+  const productModal = useSelector(state => state.ui.productModal)
+
+  return <ProductModal productModal={productModal} />
 }
+
+export default ProductModalWrapper

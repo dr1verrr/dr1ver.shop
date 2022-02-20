@@ -1,10 +1,13 @@
-import React from 'react'
+/* eslint-disable react/display-name */
+import React, { memo, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import ProductButton from '../ProductButton'
+import AddToCartBtn from './AddToCartBtn'
 import ProductCounter from './ProductCounter'
 import ProductOption from './ProductOption'
 import ProductPrice from './ProductPrice'
 
-function ProductInfo({ info: { Custom_field, price, description } }) {
+const ProductInfo = memo(({ info: { Custom_field, price, description } }) => {
   return (
     <div className='product-info'>
       <ProductPrice price={price} />
@@ -14,9 +17,8 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
       ))}
 
       <ProductCounter />
-      <div className='product-button-wrapper'>
-        <ProductButton>Add to cart</ProductButton>
-      </div>
+      <AddToCartBtn />
+
       <style jsx>{`
         .product-info {
           flex: 1;
@@ -30,11 +32,6 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
 
         .product-info {
           flex: 1;
-        }
-
-        .product-button-wrapper {
-          white-space: nowrap;
-          display: inline-block;
         }
 
         button {
@@ -64,7 +61,7 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .product-info {
             display: flex;
             flex-direction: column;
@@ -80,6 +77,10 @@ function ProductInfo({ info: { Custom_field, price, description } }) {
       `}</style>
     </div>
   )
+})
+
+const ProductInfoWrapper = props => {
+  return <ProductInfo {...props} />
 }
 
-export default ProductInfo
+export default ProductInfoWrapper

@@ -70,10 +70,6 @@ function ProductOption({ fld }) {
           filter: brightness(1.5);
         }
 
-        .product-info-sizes-input:active {
-          transform: scale(1.1);
-        }
-
         .product-info-sizes-input:last-child {
           margin-right: 0;
         }

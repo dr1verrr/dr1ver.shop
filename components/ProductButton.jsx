@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function ProductButton({ children }) {
+export default function ProductButton({ children, isDisabled }) {
   return (
-    <button type='submit' className='product-info-add-to-cart'>
+    <button type='submit' className='product-info-add-to-cart' disabled={isDisabled}>
       <span>{children}</span>
       <div className='icon product-info-add-to-cart-arrow icon__animated'>
         <svg className='arrow' xmlns='http://www.w3.org/2000/svg'>
@@ -25,14 +25,39 @@ export default function ProductButton({ children }) {
           min-width: fit-content;
         }
 
-        .product-info-add-to-cart:active {
-          transform: scale(1.09);
-        }
-
         .product-info-add-to-cart:hover {
           filter: brightness(80%);
         }
 
+        @keyframes button-disabled {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          25% {
+            transform: rotate(5deg);
+          }
+
+          50% {
+            transform: rotate(0deg);
+          }
+
+          75% {
+            transform: rotate(-5deg);
+          }
+
+          100% {
+            transform: rotate(0deg);
+          }
+        }
+
+        .product-info-add-to-cart:disabled {
+          opacity: 0.6;
+          color: #000;
+        }
+        .product-info-add-to-cart:disabled:active {
+          animation: button-disabled 0.1s ease;
+        }
         button {
           outline: none;
           padding: 2rem;
