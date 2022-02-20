@@ -1,6 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import { Router } from 'next/router'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import ScrollRestorer from '../providers/ScrollRestorer'
+import { PROGRESS_CHANGE } from '../redux/types'
 
 export default function Layout({ children, router }) {
   return (
@@ -32,9 +35,6 @@ export default function Layout({ children, router }) {
       </AnimatePresence>
       <style jsx>{`
         .main {
-          position: relative;
-          min-height: 100vh;
-          height: 100%;
           margin-top: 0;
         }
       `}</style>

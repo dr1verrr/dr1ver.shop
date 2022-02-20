@@ -85,7 +85,7 @@ export default function HeaderSecondOther() {
         }
 
         .icon:hover {
-          filter: brightness(70%);
+          filter: brightness(80%);
         }
 
         .icon {
@@ -112,7 +112,7 @@ export default function HeaderSecondOther() {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .header-cart-total-cost {
             display: none;
           }

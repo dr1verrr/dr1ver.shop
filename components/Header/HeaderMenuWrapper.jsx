@@ -59,7 +59,7 @@ export default function HeaderMenuWrapper({ children }) {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .header-menu-wrapper {
             display: ${isMenuActive ? 'block' : 'none'};
             position: fixed;
@@ -84,7 +84,7 @@ export default function HeaderMenuWrapper({ children }) {
             letter-spacing: 1.5px;
             font-size: 1.4rem;
             height: 100%;
-            max-height: 78px;
+            max-height: 75px;
             user-select: none;
           }
         }

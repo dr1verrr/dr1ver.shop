@@ -8,11 +8,18 @@ export default function HeaderMenu() {
 
   return (
     <div className='header-menu'>
+      <div className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
+        <Link href='/all'>
+          <a className='header-menu-link'>
+            <span>All</span>
+          </a>
+        </Link>
+      </div>
       {categories?.map(category => (
         <div key={category.id} className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
           <Link href='/category/[slug]' as={`/category/${category.slug}`}>
             <a className='header-menu-link'>
-              <span>{category.name?.toUpperCase()}</span>
+              <span>{category.name}</span>
             </a>
           </Link>
         </div>
@@ -21,7 +28,7 @@ export default function HeaderMenu() {
         .header-menu {
           display: flex;
           height: 100%;
-          letter-spacing: 1.3px;
+          letter-spacing: 1px;
           align-items: center;
           justify-content: space-between;
           color: #fff;
@@ -36,6 +43,7 @@ export default function HeaderMenu() {
           padding: 2.25rem 0.5rem;
           display: block;
           font-weight: 400;
+          text-transform: uppercase;
         }
 
         .header-menu-link span::before {
@@ -64,7 +72,7 @@ export default function HeaderMenu() {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .header-menu {
             flex-direction: column;
             overflow-y: auto;

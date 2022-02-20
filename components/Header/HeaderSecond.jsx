@@ -21,6 +21,21 @@ export default function HeaderSecond() {
           align-items: center;
           justify-content: center;
           margin: 0 auto;
+          animation: header-second 2.5s ease;
+        }
+
+        @keyframes header-second {
+          0% {
+            opacity: 0;
+          }
+
+          75% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
         }
 
         @media (max-width: 1170px) {
@@ -29,7 +44,7 @@ export default function HeaderSecond() {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .header-second {
             position: static;
             padding: 0;

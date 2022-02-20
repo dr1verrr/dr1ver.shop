@@ -241,7 +241,7 @@ export default function HeaderFirst() {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .header-first {
             padding: 0;
             padding-left: 10px;
