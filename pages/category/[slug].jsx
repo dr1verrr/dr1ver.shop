@@ -8,12 +8,16 @@ function Category({ products }) {
 }
 
 export async function getServerSideProps(context) {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${context.params.slug}`)
+  try {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${context.params.slug}`)
 
-  return {
-    props: {
-      products: res.data,
-    },
+    return {
+      props: {
+        products: res.data,
+      },
+    }
+  } catch (err) {
+    console.error(err)
   }
 }
 

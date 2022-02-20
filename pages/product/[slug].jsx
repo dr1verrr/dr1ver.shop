@@ -2,18 +2,22 @@
 /* eslint-disable import/no-anonymous-default-export */
 import React from 'react'
 import Product from '../../components/Product'
-import axios from 'axios'
+import { getProduct } from '../api/product'
 
 export default function ProductPage({ product }) {
   return <Product product={product} />
 }
 
 export async function getServerSideProps(context) {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${context.params.slug}`)
+  try {
+    const product = await getProduct(context)
 
-  return {
-    props: {
-      product: res.data,
-    },
+    return {
+      props: {
+        ...product,
+      },
+    }
+  } catch (err) {
+    console.error(err)
   }
 }

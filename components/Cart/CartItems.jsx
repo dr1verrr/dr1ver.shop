@@ -1,7 +1,7 @@
-import React, { Fragment, memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import CartItem from './CartItem'
 
-function CartItems({ cartData }) {
+const CartItems = ({ cartData }) => {
   return (
     <div className='cart-items'>
       {cartData?.map(item => {

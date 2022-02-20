@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router'
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useLayoutEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import useRequest from '../hooks/useRequest'
 import { AUTH_MODAL_UPDATE } from '../redux/types'
 
-function AuthModal() {
+const AuthModal = memo(({ authModal }) => {
   const { loadUserFromCookies } = useAuth()
   const popupRef = useRef()
   const router = useRouter()
   const sendAuthData = useRequest()
-  const authModal = useSelector(state => state.ui.authModal)
   const dispatch = useDispatch()
 
   const [userData, setUserData] = useState({
@@ -179,6 +178,12 @@ function AuthModal() {
       `}</style>
     </div>
   )
+})
+
+const AuthModalWrapper = () => {
+  const authModal = useSelector(state => state.ui.authModal)
+
+  return <AuthModal authModal={authModal} />
 }
 
-export default memo(AuthModal)
+export default AuthModalWrapper

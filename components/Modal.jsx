@@ -1,12 +1,12 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+/* eslint-disable react/display-name */
+import { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MODAL_HIDE, MODAL_SHOW } from '../redux/types'
 
-const Modal = props => {
+const Modal = memo(({ modal }) => {
   const [pause, setPause] = useState(false)
   const timeoutRef = useRef()
   const dispatch = useDispatch()
-  const modal = useSelector(state => state.ui.modal)
   const closeModal = () => dispatch({ type: MODAL_HIDE })
 
   function runTimeout() {
@@ -26,6 +26,10 @@ const Modal = props => {
   }
 
   useEffect(() => {
+    console.log(modal)
+  }, [modal])
+
+  useEffect(() => {
     if (modal.visible) {
       if (pause) stopTimeout()
       if (!pause) runTimeout()
@@ -33,11 +37,10 @@ const Modal = props => {
   }, [pause, modal.visible])
 
   useEffect(() => {
-
     if (modal.override) {
       dispatch({ type: MODAL_SHOW })
     }
-  }, [modal])
+  }, [modal.override])
 
   return (
     <div
@@ -111,6 +114,7 @@ const Modal = props => {
           animation: fade-modal 4s ease;
           animation-fill-mode: forwards;
           cursor: default;
+          user-select: none;
         }
 
         .modal[paused='false'][show='true'] {
@@ -191,6 +195,12 @@ const Modal = props => {
       `}</style>
     </div>
   )
+})
+
+const ModalWrapper = () => {
+  const modal = useSelector(state => state.ui.modal)
+
+  return <Modal modal={modal} />
 }
 
-export default memo(Modal)
+export default ModalWrapper

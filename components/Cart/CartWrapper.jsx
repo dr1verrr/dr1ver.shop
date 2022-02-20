@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import Cart from './Cart'
 
 export default function CartWrapper() {
-  const selector = useSelector(state => state.ui.cart)
-  const isCartVisible = useMemo(() => selector, [selector])
+  const isCartVisible = useSelector(state => state.ui.cart)
 
   return <Cart isCartVisible={isCartVisible} />
 }
