@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CART_HIDE } from '../../redux/types'
 import CartItems from './CartItems'
@@ -6,10 +6,11 @@ import CartItems from './CartItems'
 function Cart({ isCartVisible }) {
   const { cartData = [] } = useSelector(state => state.cart)
   const [mounted, setMounted] = useState(false)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setMounted(true)
+    if (!mounted) setMounted(true)
   }, [])
 
   return mounted ? (
@@ -35,6 +36,7 @@ function Cart({ isCartVisible }) {
       </div>
       <style jsx>{`
         .cart {
+          will-change: transform;
           transform: translateX(100%);
           transition: transform 0.75s cubic-bezier(0.29, 0.58, 0.05, 1);
           content: '';
@@ -44,7 +46,7 @@ function Cart({ isCartVisible }) {
           bottom: 0;
           min-width: fit-content;
           width: 400px;
-          z-index: 1500;
+          z-index: 1600;
           color: #000;
           overflow-x: hidden;
           scrollbar-width: none;
@@ -123,9 +125,9 @@ function Cart({ isCartVisible }) {
           }
         }
 
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .cart-vision-switcher {
-            max-height: 78px;
+            max-height: 75px;
           }
         }
       `}</style>

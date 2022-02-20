@@ -21,10 +21,6 @@ function GlobalStyles() {
   }, [])
 
   useEffect(() => {
-    console.log(animType)
-  }, [animType])
-
-  useEffect(() => {
     if (!animType && ui.menu) setAnimType('menu')
   }, [ui.menu])
 
@@ -52,7 +48,7 @@ function GlobalStyles() {
           opacity: 0;
           height: 100%;
           background: #000;
-          z-index: 500;
+          z-index: 1000;
           pointer-events: none;
         }
 
@@ -98,6 +94,31 @@ function GlobalStyles() {
         {`
           body {
             overflow: ${isMask ? 'hidden' : 'auto'};
+          }
+
+          @keyframes fade-header {
+            0% {
+              filter: brightness(0.5);
+            }
+
+            100% {
+              filter: brightness(1);
+            }
+          }
+
+          .header {
+            z-index: ${isMask ? 'auto' : 1500} !important;
+            animation: ${isMask ? 'none' : 'fade-header 0.5s ease'};
+          }
+
+          @media (max-width: 630px) {
+            .header-menu-wrapper {
+              z-index: ${isMask ? 1500 : 'auto'} !important;
+            }
+
+            .header-second {
+              z-index: auto !important;
+            }
           }
         `}
       </style>

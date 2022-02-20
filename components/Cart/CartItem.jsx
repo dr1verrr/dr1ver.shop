@@ -1,10 +1,10 @@
 import throttle from 'lodash.throttle'
 import Image from 'next/image'
-import React, { memo, useEffect, useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { CART_REMOVE, CART_UPDATE, MODAL_SHOW, PRODUCT_MODAL_SHOW } from '../../redux/types'
 
-function CartItem({ product }) {
+const CartItem = ({ product }) => {
   const dispatch = useDispatch()
   const showProductModal = () => dispatch({ type: PRODUCT_MODAL_SHOW, payload: product.slug })
 
@@ -43,7 +43,7 @@ function CartItem({ product }) {
       </div>
       <div className='cart-right'>
         <div className='product-cart-price'>{(product.count * product.price).toFixed(2)} USD</div>
-        <div className='product-title' onClick={() => showProductModal}>
+        <div className='product-title' onClick={showProductModal}>
           {product.name}
         </div>
         <div className='product-options'>
@@ -300,4 +300,4 @@ function CartItem({ product }) {
   )
 }
 
-export default memo(CartItem)
+export default CartItem
