@@ -4,48 +4,21 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { addToCart } from '../../redux/actions'
 import store from '../../redux/store'
 import { CART_ADD, CART_SHOW, MODAL_SHOW, PRODUCT_UPDATE } from '../../redux/types'
 import ProductInfo from './ProductInfo'
 
 function Product({ product }) {
   const router = useRouter()
-
-  //useEffect(() => {
-  //  router.beforePopState(state => {
-  //    console.log(window.scrollY)
-  //    state.options.scroll = false
-  //    return true
-  //  })
-  //}, [])
-
-  //useEffect(() => {
-  //  const listener = document.addEventListener('keydown', e => {
-  //    if (e.key === 'Escape') {
-  //      setModal({ type: 'HIDE_MODAL' })
-  //    }
-
-  //    if (e.key === 'Enter' && document.activeElement === inputCountRef.current) {
-  //      setModal({ type: 'HIDE_MODAL' })
-  //    }
-  //  })
-
-  //  return listener
-  //}, [])
-
-  const addToCart = data => {
-    try {
-      dispatch({ type: CART_ADD, payload: data })
-    } catch (error) {
-      console.error('something went wrong')
-    } finally {
-      dispatch({ type: CART_SHOW })
-      dispatch({ type: MODAL_SHOW, payload: 'Product was added to the shopping cart.' })
-    }
-  }
+  console.log(product)
 
   const dispatch = useDispatch()
-  useEffect(() => dispatch({ type: PRODUCT_UPDATE, payload: { price: product.price, count: 1 } }), [])
+
+  useEffect(() => {
+    dispatch({ type: PRODUCT_UPDATE, payload: { price: product.price, count: 1 } })
+    window.scrollTo({ top: 0, left: 0 })
+  }, [])
 
   const submitHandler = useCallback(e => {
     e.preventDefault()
@@ -74,7 +47,7 @@ function Product({ product }) {
       }
 
       if (data) {
-        addToCart(data)
+        dispatch(addToCart(data))
       }
     }
   }, [])
@@ -134,7 +107,6 @@ function Product({ product }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: #111113;
           background-image: url(${process.env.NEXT_PUBLIC_API_URL}${product.image.url});
           background-repeat: repeat-x;
           background-size: 50%;
@@ -241,7 +213,7 @@ function Product({ product }) {
             padding: 0;
           }
         }
-        @media (max-width: 567px) {
+        @media (max-width: 630px) {
           .product-inner {
             flex-direction: column;
           }
