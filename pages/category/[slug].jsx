@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios'
-import React, { Fragment } from 'react'
+import React from 'react'
 import Products from '../../components/Products'
 
 function Category({ products }) {

@@ -29,9 +29,9 @@ function MyApp({ Component, pageProps, router }) {
         <ProgressBar />
         <Modal />
         <ProductModal />
-        <AuthModal />
         <Cart />
         <AuthProvider>
+          <AuthModal />
           <Header />
           <Layout router={router}>
             <Component {...pageProps} />

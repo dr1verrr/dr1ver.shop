@@ -35,7 +35,7 @@ export default function ProgressBar() {
           top: 0;
           left: 0;
           opacity: 1;
-          height: 3px;
+          height: 1px;
           pointer-events: none;
           width: 100%;
         }
@@ -50,7 +50,7 @@ export default function ProgressBar() {
 
         .progress-bar-progress[active='start'] {
           animation: progress-start 0.5s ease;
-          transform: scaleX(0.5);
+          transform: scaleX(0.4);
         }
 
         .progress-bar-progress[active='end'] {
@@ -73,7 +73,7 @@ export default function ProgressBar() {
 
         @keyframes progress-end {
           0% {
-            transform: scaleX(0.5);
+            transform: scaleX(0.4);
           }
 
           75% {
@@ -84,6 +84,12 @@ export default function ProgressBar() {
           100% {
             transform: scaleX(1);
             opacity: 0;
+          }
+        }
+
+        @media (max-width: 620px) {
+          .progress-bar {
+            height: 2px;
           }
         }
       `}</style>

@@ -19,7 +19,7 @@ function ProductOption({ fld }) {
 
   return (
     <div key={fld.id} className='product-info-sizes'>
-      <div style={{ color: '#636573', fontWeight: '600', fontSize: '1.7rem' }}>{fld.title}:</div>
+      <div style={{ color: '#636573', fontWeight: 500 }}>{fld.title}:</div>
       <div className='input-wrapper'>
         {select.map(s => {
           const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
@@ -63,7 +63,7 @@ function ProductOption({ fld }) {
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;
-          font-weight: 600;
+          font-weight: 700;
         }
 
         .product-info-sizes-input[active='false']:hover {

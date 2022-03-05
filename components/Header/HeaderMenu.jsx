@@ -28,11 +28,11 @@ export default function HeaderMenu() {
         .header-menu {
           display: flex;
           height: 100%;
-          letter-spacing: 1px;
           align-items: center;
           justify-content: space-between;
           color: #fff;
           flex-wrap: wrap;
+          letter-spacing: 1px;
         }
 
         .header-menu-link span {
@@ -42,7 +42,7 @@ export default function HeaderMenu() {
         .header-menu-link {
           padding: 2.25rem 0.5rem;
           display: block;
-          font-weight: 400;
+
           text-transform: uppercase;
         }
 
@@ -89,7 +89,6 @@ export default function HeaderMenu() {
           .header-menu-link {
             border-bottom: 1px solid #ebeef1;
             padding-left: 2rem;
-            font-weight: 500;
           }
 
           .header-menu-link,

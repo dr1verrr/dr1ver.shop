@@ -31,7 +31,7 @@ const CartItem = ({ product }) => {
       <div className='cart-left'>
         <div className='product-wrapper'>
           <div className='product-remove' onClick={removeProduct}>
-            <svg className='' xmlns='http://www.w3.org/2000/svg'>
+            <svg xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>
           </div>
@@ -51,7 +51,7 @@ const CartItem = ({ product }) => {
             const select = fld.options.split('|')
             return (
               <div key={fld.id} className='product-info-sizes'>
-                <div style={{ color: '#818d92', fontWeight: '400', fontSize: '1.6rem' }}>Size: </div>
+                <div style={{ color: '#818d92', fontWeight: '400', fontSize: '1.5rem' }}>Size: </div>
                 <div className='product-info-sizes-inner'>
                   {select.map(s => {
                     const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
@@ -76,7 +76,20 @@ const CartItem = ({ product }) => {
         </div>
         <div className='product-count'>
           <div className='count-title'>Count: </div>
-          <div className='counter'>
+          <div className='product-info-count-counter'>
+            <button type='button' className='product-info-count-counter-minus button-counter'>
+              <svg className='counter-icon' xmlns='http://www.w3.org/2000/svg'>
+                <path d='M9 4v1H0V4z'></path>
+              </svg>
+            </button>
+            <input type='number' className='product-info-count-input' value={product.count} />
+            <button type='button' className='product-info-count-counter-plus button-counter'>
+              <svg className='counter-icon' xmlns='http://www.w3.org/2000/svg'>
+                <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
+              </svg>
+            </button>
+          </div>
+          {/*<div className='counter'>
             <input
               type='number'
               className='counter-input'
@@ -108,7 +121,7 @@ const CartItem = ({ product }) => {
                 </div>
               </button>
             </div>
-          </div>
+          </div>*/}
         </div>
       </div>
       <style jsx>{`
@@ -116,19 +129,54 @@ const CartItem = ({ product }) => {
           padding: 3rem 0 5rem;
           border-bottom: 1px solid #e0e3e6;
           display: flex;
-          margin: 0 auto;
+          flex-direction: column;
           user-select: none;
         }
+
+        .product-info-count-counter {
+          display: flex;
+          max-width: fit-content;
+          border-radius: 3rem;
+          border: 2px solid #e2e7ec;
+          margin-bottom: 1.5rem;
+        }
+
+        .product-info-count-input {
+          box-sizing: border-box;
+          width: 5rem;
+          text-align: center;
+
+          outline: none;
+          border: none;
+          background: #e2e7ec;
+          color: #333;
+          font-size: 1.6rem;
+        }
+
+        .counter-icon {
+          fill: #000;
+          height: 9px;
+          width: 9px;
+        }
+
+        .product-options {
+          margin-bottom: 2rem;
+        }
+        .cart-item:first-child {
+          padding-top: 0;
+        }
         .cart-left {
-          padding-right: 2rem;
+          padding-bottom: 2rem;
+          flex: 0 0 100%;
+          height: 100%;
         }
         button[type='button'] {
           background: none;
           border: none;
         }
         .product-cart-price {
-          font-weight: 600;
           position: absolute;
+
           right: 30px;
           bottom: -30px;
         }
@@ -139,63 +187,59 @@ const CartItem = ({ product }) => {
           height: 10px;
           width: 10px;
         }
-        .counter {
-          display: flex;
-          align-items: center;
-        }
-        .counter-input {
-          -moz-appearance: textfield;
-          outline: none;
-          padding: 0 20px 0 10px;
-          max-width: 50px;
-          font-size: 1.5rem;
-          border-right: 1px solid #ccc;
-          user-select: none;
-        }
-        .counter-control {
-          position: relative;
-          padding: 0 10px;
-          flex: 1;
-        }
+
         .product-title {
           transition: 0.25s color ease;
           color: rgba(0, 0, 0, 1);
-          font-weight: 600;
-          font-size: 1.8rem;
+          font-size: 2rem;
           cursor: pointer;
           width: fit-content;
+          padding-bottom: 1rem;
         }
         .product-title:hover {
           color: rgba(0, 0, 0, 0.6);
         }
         .count-title {
-          font-size: 1.6rem;
+          font-size: 1.5rem;
           color: #929da1;
         }
 
-        input[active='false'] {
-        }
         input[active='true'] {
+          transition: color 0.2s ease;
+
           color: #000;
-          font-weight: 600;
+          background: #fff;
+          border: 2px solid rgba(0, 200, 200, 0.3);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07),
+            0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
         }
 
+        input[active='true']:hover {
+          filter: none;
+          color: #999;
+        }
         .product-info-sizes-input {
+          transition: filter 0.25s ease;
           cursor: pointer;
           font-size: 1.5rem;
-          padding: 0 0.5rem;
+          background: #e2e7ec;
+          border-radius: 3rem;
+          border: 1px solid #dcdcdc;
+          padding: 0.5rem 1rem;
+          color: #333;
+        }
+
+        .product-info-sizes-input:hover {
+          filter: brightness(0.9);
         }
 
         .product-info-sizes-inner {
           display: flex;
           flex-wrap: wrap;
-          max-width: fit-content;
-          max-height: fit-content;
           width: 100%;
           height: 100%;
-          justify-content: center;
+          gap: 1rem;
           padding-top: 0.75rem;
-          width: calc(100% + 7px);
         }
         input {
           border: none;
@@ -213,10 +257,12 @@ const CartItem = ({ product }) => {
         }
         .product-image {
           position: relative;
-          width: 120px;
           padding: 11px;
           background: #fff;
           border: 1px solid #e2e7ec;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           border-radius: 10px;
           cursor: pointer;
         }
@@ -266,6 +312,27 @@ const CartItem = ({ product }) => {
         .product-image-mask:hover {
           opacity: 0.1;
         }
+
+        .button-counter {
+          transition: 0.25s background ease, 0.25s filter ease;
+          box-sizing: border-box;
+          outline: none;
+          background-color: #fff;
+          padding: 1rem 2rem;
+          border: none;
+          cursor: pointer;
+          border-radius: 3rem 0 0 3rem;
+        }
+
+        .button-counter:hover {
+          background-color: #f2f3f4;
+        }
+
+        .product-info-count-counter-plus {
+          border: none;
+          border-radius: 0 3rem 3rem 0;
+        }
+
         @media (max-width: 420px) {
           .product-count {
             margin-bottom: 2rem;
@@ -283,17 +350,6 @@ const CartItem = ({ product }) => {
           }
         }
         @media (max-width: 320px) {
-          .cart-item {
-            flex-direction: column;
-            align-items: center;
-          }
-          .product-image {
-            margin-bottom: 3rem;
-            width: 100%;
-          }
-          .product-info-sizes-inner {
-            flex-direction: row;
-          }
         }
       `}</style>
     </div>

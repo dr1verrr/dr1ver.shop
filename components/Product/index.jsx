@@ -6,13 +6,13 @@ import { memo, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/actions'
 import store from '../../redux/store'
-import { CART_ADD, CART_SHOW, MODAL_SHOW, PRODUCT_UPDATE } from '../../redux/types'
+import { PRODUCT_UPDATE } from '../../redux/types'
+import ProductRecommended from '../ProductRecommended'
 import ProductInfo from './ProductInfo'
 
-function Product({ product }) {
-  const router = useRouter()
+function Product({ product, categories }) {
   console.log(product)
-
+  const router = useRouter()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -54,30 +54,38 @@ function Product({ product }) {
 
   return (
     <>
-      <div className='product'>
-        <div className='container'>
-          <form action='' onSubmit={submitHandler}>
-            <div className='product-header'>
-              <div onClick={router.back} className='product-redirect'>
-                <span>Go back</span>
+      <div className='product-wrapper'>
+        <div className='product'>
+          <div className='container'>
+            <form action='' onSubmit={submitHandler}>
+              <div className='product-header'>
+                <div onClick={router.back} className='product-redirect'>
+                  <span>Go back</span>
+                </div>
+                <div className='product-title'>{product.title}</div>
               </div>
-              <div className='product-title'>{product.title}</div>
-            </div>
-            <div className='product-inner'>
-              <div className='product-image'>
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                  alt=''
-                  width={product.image.width}
-                  height={product.image.height}
+              <div className='product-inner'>
+                <div className='product-image'>
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                    alt=''
+                    width={product.image.width}
+                    height={product.image.height}
+                  />
+                </div>
+                <ProductInfo
+                  info={{
+                    Custom_field: product.Custom_field,
+                    price: product.price,
+                    description: product.description,
+                    categories: product.categories,
+                  }}
                 />
               </div>
-              <ProductInfo
-                info={{ Custom_field: product.Custom_field, price: product.price, description: product.description }}
-              />
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
+        <ProductRecommended categories={categories} />
       </div>
       <style jsx global>
         {`
@@ -93,7 +101,7 @@ function Product({ product }) {
           background: transparent;
           padding: 0 0.5rem 10rem;
           position: relative;
-          min-height: 100vh;
+          min-height: calc(100vh - 182.5px);
         }
 
         * {
@@ -139,6 +147,7 @@ function Product({ product }) {
           font-size: 4rem;
           text-align: center;
           padding-bottom: 3rem;
+          letter-spacing: 2px;
         }
 
         .product-redirect {
@@ -146,6 +155,7 @@ function Product({ product }) {
           cursor: pointer;
           padding: 1rem;
           position: relative;
+          font-weight: 300;
         }
 
         .product-image {
@@ -206,6 +216,14 @@ function Product({ product }) {
           margin: 0 auto;
           max-width: 91vw;
           padding: 0 1rem;
+          display: flex;
+          flex-direction: column;
+        }
+
+        @media (max-width: 1170px) {
+          .product {
+            min-height: calc(100vh - 232.5px);
+          }
         }
 
         @media (max-width: 570px) {
@@ -220,6 +238,10 @@ function Product({ product }) {
           .product::after {
             background-repeat: repeat-y;
             background-size: 75%;
+          }
+
+          .product {
+            min-height: calc(100vh - 75px);
           }
         }
       `}</style>

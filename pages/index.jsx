@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 
 export default function Home() {
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 })
+    window.scrollTo({ top: 0 })
   }, [])
 
   return (
     <div className='home-page-wrapper'>
       <div className='home-page-video'>
-        <video className='video' loop autoPlay playsInline muted>
-          <source src='videos/full-hd.mp4' type='video/mp4' />
+        <video className='video' loop playsInline muted autoPlay>
+          <source src='videos/NYC.mp4' type='video/mp4' />
         </video>
       </div>
       <div className='home-page'>
@@ -21,8 +21,7 @@ export default function Home() {
               <span className='accent-word'>enjoy</span>
             </div>
             <div className='second-part'>
-              <span>austrian</span>
-              <span>mountains!</span>
+              <span>new york city!</span>
             </div>
           </div>
         </div>
@@ -35,6 +34,7 @@ export default function Home() {
           height: 85vh;
           overflow: hidden;
           z-index: -100;
+          filter: saturate(1.25);
         }
         .home-page-wrapper {
           position: static;
@@ -42,7 +42,7 @@ export default function Home() {
 
         .home-page {
           position: relative;
-          height: calc(100vh - 177.5px);
+          height: calc(100vh - 182.5px);
         }
 
         .home-page-video::after {
@@ -71,9 +71,9 @@ export default function Home() {
           align-items: center;
           justify-content: center;
           height: 15vh;
-          letter-spacing: 1.5px;
-          font-weight: 600;
           font-size: 2.1rem;
+          font-weight: 500;
+          letter-spacing: 1.5px;
         }
 
         .home-page-title span {
@@ -88,6 +88,7 @@ export default function Home() {
           padding: 10px 20px;
           background: #000;
           color: #fff;
+          font-weight: 700;
         }
 
         .home-page-title-inner {
@@ -104,9 +105,16 @@ export default function Home() {
           object-fit: cover;
           z-index: -100;
         }
+
+        @media (min-width: 1040px) {
+          .video {
+            object-fit: fill;
+          }
+        }
+
         @media (max-width: 1170px) {
           .home-page {
-            height: calc(100vh - 227.5px);
+            height: calc(100vh - 232.5px);
           }
         }
 

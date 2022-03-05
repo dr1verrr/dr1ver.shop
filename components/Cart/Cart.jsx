@@ -13,6 +13,16 @@ function Cart({ isCartVisible }) {
     if (!mounted) setMounted(true)
   }, [])
 
+  function getTotal(cartData) {
+    let value = 0
+
+    for (let index = 0; index < cartData.length; index++) {
+      value += cartData[index].price * cartData[index].count
+    }
+
+    return value.toFixed(2)
+  }
+
   return mounted ? (
     <div className='cart' visible={`${isCartVisible}`}>
       <div className='cart-vision-switcher' onClick={() => dispatch({ type: CART_HIDE })}>
@@ -24,15 +34,24 @@ function Cart({ isCartVisible }) {
         <span>Continue shopping</span>
       </div>
       <div className='cart-inner'>
-        <CartItems cartData={cartData} />
-        {!cartData.length && (
-          <div className='no-products'>
-            <span>No</span>
-            <span>products</span>
-            <span>in</span>
-            <span>cart</span>
+        <div className='my-purchases'>
+          <div className='my-purchases-title'>My purchases</div>
+          <div className='my-purchases-list'>
+            <CartItems cartData={cartData} />
           </div>
-        )}
+        </div>
+
+        <div className='cart-footer'>
+          <div className='cart-total'>
+            <div className='cart-total-label'>TOTAL: </div>
+            <div className='cart-total-price'>
+              {getTotal(cartData)} <span>USD</span>
+            </div>
+          </div>
+          <button type='button' className='cart-checkout'>
+            <span>CHECKOUT</span>
+          </button>
+        </div>
       </div>
       <style jsx>{`
         .cart {
@@ -44,14 +63,78 @@ function Cart({ isCartVisible }) {
           right: 0;
           top: 0;
           bottom: 0;
-          min-width: fit-content;
-          width: 400px;
+          width: 380px;
           z-index: 1600;
           color: #000;
           overflow-x: hidden;
           scrollbar-width: none;
           user-select: none;
           scroll-behavior: smooth;
+        }
+
+        .cart-footer {
+          padding: 30px 30px 0;
+        }
+
+        .cart-checkout {
+          transition: background 0.4s ease;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 1.7rem 7rem;
+          border-radius: 30px;
+          background: #000;
+          border: none;
+          color: #fff;
+          font-size: 1.5rem;
+          margin-top: 4rem;
+          letter-spacing: 2px;
+        }
+
+        .cart-checkout:hover {
+          background: rgba(0, 0, 0, 0.7);
+        }
+
+        .cart-total {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .cart-total-label {
+          font-size: 1.4rem;
+          color: #818d92;
+        }
+
+        .cart-total-price {
+          font-size: 2.5rem;
+        }
+
+        .my-purchases {
+          display: flex;
+          flex-direction: column;
+          border-bottom: 2px solid #484848;
+          padding-bottom: 5rem;
+        }
+
+        .my-purchases-title {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          padding: 0 18px;
+          font-size: 32px;
+          line-height: 108px;
+        }
+
+        .my-purchases-title:after {
+          content: '';
+          flex: 1 1;
+          height: 2px;
+          margin-left: 18px;
+          margin-top: 6px;
+          background: #000;
         }
 
         .cart[visible='true'] {
@@ -85,49 +168,26 @@ function Cart({ isCartVisible }) {
           padding: 2rem 0;
           height: 100%;
           text-transform: uppercase;
-          max-height: 102.5px;
-          letter-spacing: 1.5px;
-          font-weight: 500;
+          max-height: 112px;
+          letter-spacing: 2px;
           font-size: 1.6rem;
           cursor: pointer;
-        }
-
-        .no-products {
-          font-size: 3rem;
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          justify-content: center;
-          padding-top: 2rem;
-          text-transform: uppercase;
-          text-align: center;
-        }
-
-        .no-products span {
-          border-radius: 10px;
-          margin: 1rem;
-          min-width: fit-content;
-          width: 75%;
-        }
-
-        .no-products span:nth-child(2) {
-          background: #333;
-          color: #fff;
-        }
-
-        .no-products span:nth-child(2n + 1) {
-          background: #eee;
         }
 
         @media (max-width: 440px) {
           .cart {
             width: 100%;
           }
+
+          .cart-checkout {
+            font-size: 4vw;
+          }
         }
 
         @media (max-width: 630px) {
           .cart-vision-switcher {
             max-height: 75px;
+            border-bottom: 1px solid #e0e3e6;
           }
         }
       `}</style>

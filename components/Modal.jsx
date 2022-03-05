@@ -1,17 +1,18 @@
 /* eslint-disable react/display-name */
 import { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { MODAL_HIDE, MODAL_SHOW } from '../redux/types'
+import { MODAL_HIDE, MODAL_OVERRIDE, MODAL_SHOW } from '../redux/types'
 
 const Modal = memo(({ modal }) => {
   const [pause, setPause] = useState(false)
   const timeoutRef = useRef()
   const dispatch = useDispatch()
   const closeModal = () => dispatch({ type: MODAL_HIDE })
+  const visible = modal.visible && !modal.override
 
   function runTimeout() {
     clearTimeout(timeoutRef.current)
-    if (modal.visible) timeoutRef.current = setTimeout(closeModal, 4000)
+    if (visible) timeoutRef.current = setTimeout(closeModal, 4000)
   }
 
   useEffect(() => {
@@ -30,15 +31,15 @@ const Modal = memo(({ modal }) => {
   }, [modal])
 
   useEffect(() => {
-    if (modal.visible) {
+    if (visible) {
       if (pause) stopTimeout()
       if (!pause) runTimeout()
     }
-  }, [pause, modal.visible])
+  }, [pause, visible])
 
   useEffect(() => {
     if (modal.override) {
-      dispatch({ type: MODAL_SHOW })
+      dispatch({ type: MODAL_OVERRIDE })
     }
   }, [modal.override])
 
@@ -49,7 +50,7 @@ const Modal = memo(({ modal }) => {
       onMouseLeave={() => setPause(false)}
       onClick={closeModal}
       paused={`${pause}`}
-      show={`${modal.visible}`}
+      show={`${visible}`}
       override={`${modal.override}`}
     >
       <div className='modal-button' onClick={closeModal}>
@@ -95,7 +96,7 @@ const Modal = memo(({ modal }) => {
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
           display: flex;
           background: rgba(158, 161, 169, 1);
-          opacity: ${modal.visible ? 0.1 : 0};
+          opacity: ${visible ? 0.1 : 0};
           color: rgba(255, 255, 255, 0.85);
           flex-direction: column;
           text-align: center;
@@ -104,17 +105,17 @@ const Modal = memo(({ modal }) => {
           border-radius: 20px;
           position: fixed;
           bottom: 15px;
-          right: 35px;
+          right: 20px;
           overflow: hidden;
-          visibility: ${modal.visible ? 'visible' : 'hidden'};
+          visibility: ${visible ? 'visible' : 'hidden'};
           z-index: 2000;
           font-size: 1.5rem;
-          letter-spacing: 0.75px;
           pointer-events: stroke;
           animation: fade-modal 4s ease;
           animation-fill-mode: forwards;
           cursor: default;
           user-select: none;
+          font-weight: 300;
         }
 
         .modal[paused='false'][show='true'] {
@@ -146,14 +147,14 @@ const Modal = memo(({ modal }) => {
         }
 
         .notification-timer {
-          transition: ${modal.visible ? 'transform 4s ease' : 'none'};
+          transition: ${visible ? 'transform 4s ease' : 'none'};
           content: '';
           display: block;
           position: absolute;
           bottom: 0;
           width: 100%;
           left: -50%;
-          transform: ${modal.visible ? 'scaleX(0)' : 'scaleX(2)'};
+          transform: ${visible ? 'scaleX(0)' : 'scaleX(2)'};
           height: 5px;
           background: #c6c9ce;
         }
@@ -178,18 +179,13 @@ const Modal = memo(({ modal }) => {
           transform: scaleX(2);
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 440px) {
           .modal {
+            bottom: 15px;
             padding: 2rem;
             left: 0;
             right: 0;
             margin: 0 auto;
-          }
-        }
-
-        @media (max-width: 440px) {
-          .modal {
-            bottom: 15px;
           }
         }
       `}</style>

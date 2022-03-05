@@ -21,10 +21,45 @@ export default function HeaderFirst() {
       <Link href='/' as='/' passHref>
         <div className='header-logo' animate={`${animation}`}>
           <div className='header-logo-first logo'>
-            <span className='original-logo'>DR1VER</span>
+            <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '112px', maxHeight: '72px' }}>
+              <defs>
+                <mask id='mask' x='0' y='0' width='100%' height='100%'>
+                  <rect id='overlay' x='0' y='0' width='100%' height='100%' />
+                  <text
+                    x='3'
+                    y='40'
+                    fontFamily='JetBrains Mono'
+                    fontSize='27'
+                    fontWeight='700'
+                    fill='#000'
+                    className='first-logo-text'
+                    id='text'
+                  >
+                    DR1VER
+                  </text>
+                  <rect id='square-dot' width='5px' height='5px' fill='#000' x='103' y='43' />
+                </mask>
+              </defs>
+
+              <rect id='r' x='0' y='0' width='100%' height='100%' />
+            </svg>
           </div>
           <div className='header-logo-second logo'>
-            <span className='original-logo'>SHOP</span>
+            <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '72px', maxHeight: '72px' }}>
+              <g>
+                <text
+                  x='3'
+                  y='40'
+                  fontFamily='JetBrains Mono'
+                  fontSize='27'
+                  fontWeight='700'
+                  fill='#fff'
+                  style={{ letterSpacing: '-1px', transform: 'scale(1.05, 1.2)' }}
+                >
+                  SHOP
+                </text>
+              </g>
+            </svg>
           </div>
         </div>
       </Link>
@@ -34,6 +69,15 @@ export default function HeaderFirst() {
           padding-top: 4rem;
           display: flex;
           align-items: flex-end;
+        }
+
+        svg #r {
+          fill: white;
+          mask: url(#mask);
+        }
+
+        svg #overlay {
+          fill: white;
         }
 
         @keyframes init {
@@ -54,27 +98,13 @@ export default function HeaderFirst() {
           }
         }
 
-        @keyframes strip-left {
+        @keyframes strip {
           0% {
-            transform: scaleX(0) translateX(-200%);
+            transform: scaleX(0);
           }
 
           50% {
-            transform: translateX(-200%);
-          }
-
-          100% {
-            transform: scaleX(1);
-          }
-        }
-
-        @keyframes strip-right {
-          0% {
-            transform: scaleX(0) translateX(200%);
-          }
-
-          50% {
-            transform: translateX(200%);
+            transform: scaleX(0);
           }
 
           100% {
@@ -112,42 +142,43 @@ export default function HeaderFirst() {
 
         @keyframes logo-text {
           0% {
-            transform: translateX(-150%);
+            transform: translateX(-150%) scale(1.05, 1.2);
           }
 
           50% {
-            transform: translateX(-150%);
+            transform: translateX(-150%) scale(1.05, 1.2);
           }
 
           100% {
-            transform: translateX(0);
+            transform: translateX(0) scale(1.05, 1.2);
           }
         }
 
-        .header-logo-first {
-          color: #1d1f21;
-          background-color: #fff;
+        .header-logo-first,
+        #square-dot {
+          animation: logo-first-move 1s;
         }
 
         .logo {
           overflow: hidden;
+          max-height: 72px;
         }
 
-        .original-logo {
+        .first-logo-text {
           display: inline-block;
+          transform: scale(1.05, 1.2) translateX(0);
           animation: logo-text 1s;
-          transform: translateX(0);
+          letter-spacing: -1px;
+        }
+
+        svg rect {
         }
 
         .header-logo-second {
           position: relative;
           background: transparent;
-          color: #fff;
           animation: logo-second-move 1s;
-        }
-
-        .header-logo-first {
-          animation: logo-first-move 1s;
+          margin-left: 5px;
         }
 
         .header-logo-second::after,
@@ -162,31 +193,37 @@ export default function HeaderFirst() {
 
         .header-logo-second::before {
           top: 0;
-          left: 15%;
-          width: 70%;
+          left: 7px;
+          width: 75%;
         }
 
         .header-logo-second::after {
           bottom: 0;
+          width: 100%;
+          left: 7px;
         }
 
         .logo {
-          padding: 1.25rem;
+           {
+            /*padding: 1.25rem 1rem;*/
+          }
         }
 
         .strip {
           width: 100%;
           height: 2px;
           background-color: #fff;
+          transform-origin: bottom left;
           transform: scaleX(1);
         }
 
         .leftStrip {
-          animation: strip-left 4s ease;
+          animation: strip 4s ease;
         }
 
         .rightStrip {
-          animation: strip-right 4s ease;
+          transform-origin: bottom right;
+          animation: strip 4s ease;
         }
 
         .header-logo {
@@ -200,22 +237,28 @@ export default function HeaderFirst() {
           cursor: pointer;
           position: relative;
           font-size: 2.5rem;
+          font-family: 'JetBrains Mono';
         }
 
         .header-logo[animate='false'] {
           z-index: 300;
         }
+
+        .logo span {
+          letter-spacing: 2px;
+        }
+
         @keyframes init-mobile {
           0% {
-            transform: translate(120%, 650%) scale(0);
+            transform: translate(100%, 650%) scale(0);
           }
 
           25% {
-            transform: translate(120%, 650%) scale(2);
+            transform: translate(100%, 650%) scale(2);
           }
 
           50% {
-            transform: translate(120%, 650%) scale(2);
+            transform: translate(100%, 650%) scale(2);
           }
 
           100% {
@@ -247,28 +290,25 @@ export default function HeaderFirst() {
             padding-left: 10px;
           }
 
-          .logo {
-            padding: 1.25rem;
-          }
-
           .header-logo {
             animation: init-mobile 2.5s;
           }
 
-          .header-logo-second::after,
-          .header-logo-second::before {
-            height: 1px;
-          }
-
-          .logo {
-            padding: 0.75rem;
-            font-size: 2rem;
+          .header-first {
+            transform: scale(0.7);
+            margin-left: -25px;
           }
         }
 
         @media (max-width: 500px) {
           .header-logo {
             animation: init-mobile-1 2.5s;
+          }
+        }
+
+        @media (max-width: 420px) {
+          .header-logo {
+            font-size: 1.6rem;
           }
         }
       `}</style>

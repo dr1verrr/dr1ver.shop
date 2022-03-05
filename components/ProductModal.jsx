@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import { CART_HIDE, PRODUCT_MODAL_HIDE } from '../redux/types'
@@ -121,7 +121,6 @@ const ProductModal = memo(({ productModal }) => {
           color: #fff;
           padding: 1rem 2.5rem;
           font-size: 2.2rem;
-          font-weight: 600;
           min-width: fit-content;
           margin: 2rem 0;
           white-space: nowrap;
@@ -133,9 +132,9 @@ const ProductModal = memo(({ productModal }) => {
 
         .product-description {
           color: #484450;
-          letter-spacing: 0.5px;
           font-size: 1.8rem;
           color: #484450;
+          word-break: break-word;
         }
 
         .modal-tile {
@@ -149,9 +148,7 @@ const ProductModal = memo(({ productModal }) => {
         }
 
         .product-title {
-          font-weight: 600;
           font-size: 2.5rem;
-          letter-spacing: 1.2px;
         }
 
         .product-modal[visible='true'] {
@@ -203,7 +200,9 @@ const ProductModal = memo(({ productModal }) => {
 })
 
 const ProductModalWrapper = () => {
-  const productModal = useSelector(state => state.ui.productModal)
+  const selector = useSelector(state => state.ui.productModal)
+
+  const productModal = useMemo(() => selector, [selector])
 
   return <ProductModal productModal={productModal} />
 }

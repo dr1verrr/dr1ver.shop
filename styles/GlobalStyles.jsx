@@ -29,6 +29,10 @@ function GlobalStyles() {
     if (ui.authModal.visible) setAnimType('auth')
   }, [ui])
 
+  useEffect(() => {
+    console.log(isMask)
+  }, [isMask])
+
   return (
     <Fragment>
       <div
@@ -37,6 +41,38 @@ function GlobalStyles() {
         active={`${isMask}`}
         anim-type={animType}
       ></div>
+      <style jsx global>
+        {`
+          body {
+            overflow: ${isMask ? 'hidden' : 'auto'};
+          }
+
+          @keyframes fade-header {
+            0% {
+              filter: brightness(0.5);
+            }
+
+            100% {
+              filter: brightness(1);
+            }
+          }
+
+          .header {
+            z-index: ${isMask ? 'auto' : 1500} !important;
+            animation: ${isMask ? 'none' : 'fade-header 0.5s ease'};
+          }
+
+          @media (max-width: 630px) {
+            .header-menu-wrapper {
+              z-index: ${isMask ? 1500 : 'auto'} !important;
+            }
+
+            .header-second {
+              z-index: auto !important;
+            }
+          }
+        `}
+      </style>
       <style jsx>{`
         .mask {
           position: fixed;
@@ -90,38 +126,6 @@ function GlobalStyles() {
           transition: opacity 0.3s ease;
         }
       `}</style>
-      <style jsx global>
-        {`
-          body {
-            overflow: ${isMask ? 'hidden' : 'auto'};
-          }
-
-          @keyframes fade-header {
-            0% {
-              filter: brightness(0.5);
-            }
-
-            100% {
-              filter: brightness(1);
-            }
-          }
-
-          .header {
-            z-index: ${isMask ? 'auto' : 1500} !important;
-            animation: ${isMask ? 'none' : 'fade-header 0.5s ease'};
-          }
-
-          @media (max-width: 630px) {
-            .header-menu-wrapper {
-              z-index: ${isMask ? 1500 : 'auto'} !important;
-            }
-
-            .header-second {
-              z-index: auto !important;
-            }
-          }
-        `}
-      </style>
     </Fragment>
   )
 }

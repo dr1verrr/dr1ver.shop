@@ -87,8 +87,8 @@ function ProductCounter() {
         .product-info-count-title {
           color: #636573;
           padding: 0.5rem 0;
-          font-weight: 600;
           font-size: 1.7rem;
+          font-weight: 500;
         }
 
         .product-info-count {
@@ -98,14 +98,14 @@ function ProductCounter() {
         .product-info-count-input {
           width: 5rem;
           text-align: center;
-          font-weight: 600;
           outline: none;
           border: none;
-          background: rgba(255, 255, 255, 0.1);
-          color: #fff;
+          background: #fff;
+          color: #000;
           border-left: 2px solid #fff;
           border-right: 2px solid #fff;
           font-size: 1.6rem;
+          font-weight: 600;
         }
 
         .product-info-count {
@@ -121,7 +121,7 @@ function ProductCounter() {
         button {
           outline: none;
           background-color: transparent;
-          padding: 2rem;
+          padding: 1.5rem 2rem;
           border: none;
           cursor: pointer;
         }

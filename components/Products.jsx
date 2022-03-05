@@ -2,7 +2,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { PRODUCT_INCREMENT } from '../consants'
 import useDebouncedFunction from '../hooks/useDebouncedFunction'
 import ProductButton from './ProductButton'
@@ -46,7 +45,13 @@ function Products({ products, title }) {
     <div className='product-page' ref={productPage}>
       <h2
         className='product-title'
-        style={{ textAlign: 'center', fontSize: '3.5rem', fontWeight: 600, padding: '5rem' }}
+        style={{
+          textAlign: 'center',
+          fontSize: '3.5rem',
+          fontWeight: 500,
+          padding: '5rem',
+          letterSpacing: '2px',
+        }}
       >
         {title || 'All cards'}
       </h2>
@@ -86,14 +91,14 @@ function Products({ products, title }) {
         .product-wrapper {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          grid-gap: 3rem;
           padding-bottom: 10rem;
+          grid-gap: 3rem;
           height: 100%;
         }
         .product-button {
           display: block;
           margin-top: 2rem;
-          width: 100%;
+          max-width: 100%;
           text-align: center;
           border: 2px solid #f1f3f5;
           padding: 1.5rem;
@@ -101,8 +106,11 @@ function Products({ products, title }) {
           transition: background-color 0.4s ease, color 0.4s ease;
           letter-spacing: 2px;
           font-size: 2rem;
-          font-weight: 500;
           cursor: pointer;
+          white-space: normal;
+          word-wrap: break-word;
+          overflow: hidden;
+          font-weight: 500;
         }
 
         .product-page {
@@ -121,10 +129,7 @@ function Products({ products, title }) {
           top: 50%;
           transform: translate(-50%, -50%);
           white-space: nowrap;
-        }
-
-        .product-button-wrapper button {
-          letter-spacing: 0 !important;
+          font-size: 1.5rem;
         }
 
         .product-inner:hover .product-button-wrapper {
@@ -147,14 +152,13 @@ function Products({ products, title }) {
           z-index: 5;
           padding: 0.75rem 2.5rem 0.75rem 2rem;
           color: #fff;
-          font-size: 2.2rem;
-          font-weight: 400;
+          font-size: 2rem;
+
           background-color: #1d1f21;
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;
         }
         .product-title {
-          font-weight: 700;
           font-size: 2.1rem;
         }
         .product {

@@ -7,7 +7,7 @@ const Profile = props => {
   const logoutRequest = useRequest()
 
   async function logout() {
-    logoutRequest({ url: '/api/logout', method: 'get' }).then(() => setUser(null))
+    logoutRequest('/api/logout', { method: 'get' }).then(() => setUser(null))
   }
 
   return (

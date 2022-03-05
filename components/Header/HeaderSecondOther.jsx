@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../../contexts/auth'
@@ -8,6 +9,7 @@ export default function HeaderSecondOther() {
   const { cartData = [] } = useSelector(state => state.cart)
   const [totalPrice, setTotalPrice] = useState()
   const { isAuthenticated } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     setTotalPrice(getTotal(cartData))
@@ -34,33 +36,15 @@ export default function HeaderSecondOther() {
   return (
     <div className='header-second-other'>
       {/* profileHandler fn */}
-      <div className='header-account-icon icon' onClick={profileHandler}>
-        <svg xmlns='http://www.w3.org/2000/svg'>
-          <title />
-          <g data-name='Layer 2' id='Layer_2'>
-            <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
-            <path d='M16,15a6,6,0,1,1,6-6A6,6,0,0,1,16,15ZM16,5a4,4,0,1,0,4,4A4,4,0,0,0,16,5Z' />
-            <path d='M24,30H8a5,5,0,0,1-5-5,1,1,0,0,1,.06-.35A13.4,13.4,0,0,1,15.54,16h.92a13.4,13.4,0,0,1,12.48,8.65A1,1,0,0,1,29,25,5,5,0,0,1,24,30ZM5,25.17A3,3,0,0,0,8,28H24a3,3,0,0,0,3-2.83A11.39,11.39,0,0,0,16.46,18h-.92A11.39,11.39,0,0,0,5,25.17Z' />
-          </g>
-          <g id='frame'>
-            <rect height='32' width='32' className='cls-1' />
-          </g>
+      <div className='header-account icon' onClick={profileHandler}>
+        <svg className='account' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+          <path d='M10.5 0C6.82 0 3.82 3 3.82 6.68c0 2.29 1.16 4.31 2.92 5.52A9.534 9.534 0 00.95 21h1.91c0-4.26 3.37-7.64 7.64-7.64s7.64 3.37 7.64 7.64h1.91c0-3.95-2.37-7.35-5.79-8.8a6.68 6.68 0 002.92-5.52C17.18 3 14.18 0 10.5 0zm0 1.91c2.65 0 4.77 2.13 4.77 4.77s-2.13 4.77-4.77 4.77-4.77-2.12-4.77-4.77 2.12-4.77 4.77-4.77z'></path>
         </svg>
       </div>
 
       <div className='header-cart icon' onClick={() => dispatch({ type: CART_SHOW })}>
-        <svg xmlns='http://www.w3.org/2000/svg'>
-          <title />
-          <g data-name='Layer 2' id='Layer_2'>
-            <path d='M24.33,23H13.53a3,3,0,0,1-2.9-2.21L8,11.26a1,1,0,0,1,.17-.87A1,1,0,0,1,9,10H28a1,1,0,0,1,.77.36,1,1,0,0,1,.21.82l-1.7,9.36A3,3,0,0,1,24.33,23Zm-14-11,2.25,8.26a1,1,0,0,0,1,.74h10.8a1,1,0,0,0,1-.82L26.8,12Z' />
-            <path d='M9,12a1,1,0,0,1-1-.73L6.45,5.73a1,1,0,0,0-1-.73H4A1,1,0,0,1,4,3H5.49A3,3,0,0,1,8.38,5.18L10,10.73A1,1,0,0,1,9.27,12,.84.84,0,0,1,9,12Z' />
-            <path d='M16,29a2,2,0,1,1,2-2A2,2,0,0,1,16,29Zm0-2h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Zm0,0h0Z' />
-            <path d='M22,29a2,2,0,1,1,2-2A2,2,0,0,1,22,29Zm0-2Z' />
-            <path d='M22,17H16a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z' />
-          </g>
-          <g id='frame'>
-            <rect height='32' width='32' className='cls-1' />
-          </g>
+        <svg classNmae='cart' xmlns='http://www.w3.org/2000/svg' viewBox=''>
+          <path d='M6.02 7L4.27 0H.11v1.75h2.84l3.5 14h11.81L20.89 7H6.02zm10.93 7H7.77L6.45 8.75h12.03L16.95 14zM9.3 16.63c1.21 0 2.19.98 2.19 2.19S10.5 21 9.3 21s-2.19-.98-2.19-2.19.98-2.18 2.19-2.18zm3.93 2.18a2.19 2.19 0 104.379.001 2.19 2.19 0 00-4.379-.001z'></path>
         </svg>
       </div>
       <div className='header-cart-total-cost' onClick={() => dispatch({ type: CART_SHOW })}>
@@ -72,8 +56,9 @@ export default function HeaderSecondOther() {
           user-select: none;
         }
 
-        .header-account-icon {
+        .header-account {
           position: relative;
+          margin-right: 0.75rem;
         }
 
         .header-second-other {
@@ -95,8 +80,8 @@ export default function HeaderSecondOther() {
         }
 
         .icon svg {
-          width: 3rem;
-          height: 3rem;
+          width: 21px;
+          height: 21px;
           fill: #fff;
           margin: 0 0.5rem;
         }
@@ -117,8 +102,8 @@ export default function HeaderSecondOther() {
             display: none;
           }
 
-          .icon svg {
-            transform: scale(0.9);
+          .header-cart {
+            margin-right: 0.75rem;
           }
 
           .icon svg {

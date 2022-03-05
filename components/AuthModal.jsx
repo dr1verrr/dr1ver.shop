@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { memo, useLayoutEffect, useRef, useState } from 'react'
+import React, { memo, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
@@ -27,7 +27,7 @@ const AuthModal = memo(({ authModal }) => {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    sendAuthData({ method: 'post', url: `${authModal.login ? '/api/login' : '/api/register'}`, data: userData })
+    sendAuthData(authModal.login ? '/api/login' : '/api/register', { method: 'post', data: userData })
       .then(() => loadUserFromCookies())
       .then(() => {
         dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
@@ -79,6 +79,7 @@ const AuthModal = memo(({ authModal }) => {
         {authModal.login && (
           <input
             className='login-modal-email'
+            autoComplete='username'
             type='email'
             name='identifier'
             id='email'
@@ -90,6 +91,7 @@ const AuthModal = memo(({ authModal }) => {
         {authModal.register && (
           <input
             className='login-modal-email'
+            autoComplete='username'
             type='email'
             name='email'
             id='email'
@@ -104,6 +106,7 @@ const AuthModal = memo(({ authModal }) => {
           type='password'
           name='password'
           id='password'
+          autoComplete='current-password'
           value={userData.password}
           onChange={handleChange}
           required
@@ -181,7 +184,8 @@ const AuthModal = memo(({ authModal }) => {
 })
 
 const AuthModalWrapper = () => {
-  const authModal = useSelector(state => state.ui.authModal)
+  const selector = useSelector(state => state.ui.authModal)
+  const authModal = useMemo(() => selector, [selector])
 
   return <AuthModal authModal={authModal} />
 }

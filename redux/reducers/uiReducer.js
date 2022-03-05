@@ -6,6 +6,7 @@ import {
   MENU_HIDE,
   MENU_SHOW,
   MODAL_HIDE,
+  MODAL_OVERRIDE,
   MODAL_SHOW,
   PRODUCT_MODAL_HIDE,
   PRODUCT_MODAL_SHOW,
@@ -23,6 +24,7 @@ const initialState = {
   },
   progressBar: '',
   menu: false,
+  video: false,
 }
 
 const uiReducer = (state = initialState, action) => {
@@ -39,22 +41,25 @@ const uiReducer = (state = initialState, action) => {
       if (!modal.visible) {
         return {
           ...state,
-          modal: { ...modal, visible: true, override: false, message: action.payload || modal.message },
+          modal: { visible: true, override: false, message: action.payload || modal.message },
         }
       }
 
       if (modal.visible) {
         return {
           ...state,
-          modal: { ...modal, visible: false, override: true, message: action.payload || modal.message },
+          modal: { visible: false, override: true, message: action.payload || modal.message },
         }
       }
 
-      if (modal.override) {
-        return {
-          ...state,
-          modal: { ...modal, visible: true },
-        }
+    case MODAL_OVERRIDE:
+      return {
+        ...state,
+        modal: {
+          visible: true,
+          override: false,
+          message: action.payload || modal.message,
+        },
       }
 
     //return {
@@ -85,7 +90,7 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, productModal: { visible: false, slug: action.payload } }
 
     case MASK_HIDE:
-      return { ...initialState, modal: { ...state.modal } }
+      return { ...initialState, modal: { ...modal } }
 
     case PROGRESS_CHANGE:
       return { ...state, progressBar: action.payload || state.progressBar }

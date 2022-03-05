@@ -14,8 +14,8 @@ export default function ProductPrice({ price }) {
           background-color: #fff;
           color: #1d1f21;
           padding: 1rem;
-          font-size: 2.2rem;
-          font-weight: 600;
+          font-size: 2.5rem;
+
           min-width: 150px;
           white-space: nowrap;
           border-radius: 3rem;

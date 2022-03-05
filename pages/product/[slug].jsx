@@ -4,8 +4,8 @@ import React from 'react'
 import Product from '../../components/Product'
 import { getProduct } from '../api/product'
 
-export default function ProductPage({ product }) {
-  return <Product product={product} />
+export default function ProductPage({ product, categories }) {
+  return <Product product={product} categories={categories} />
 }
 
 export async function getServerSideProps(context) {
@@ -14,7 +14,8 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
-        ...product,
+        product: product.product,
+        categories: product.categories,
       },
     }
   } catch (err) {

@@ -14,15 +14,14 @@ export default function ProductButton({ children, isDisabled }) {
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 1.6rem;
+          font-size: inherit;
           transition: filter 0.2s ease, transform 0.2s ease, opacity 0.25s ease;
           background-color: #fff;
-          letter-spacing: 2px;
           text-transform: uppercase;
           border-radius: 3rem;
           padding: 1.5rem 5rem;
-          font-weight: 500;
           min-width: fit-content;
+          letter-spacing: 2px;
         }
 
         .product-info-add-to-cart:hover {

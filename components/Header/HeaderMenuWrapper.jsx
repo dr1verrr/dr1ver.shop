@@ -71,6 +71,7 @@ export default function HeaderMenuWrapper({ children }) {
             background: #fff;
             width: 280px;
             font-size: 1.5rem;
+            font-weight: 400;
           }
 
           .header-mobile-menu-close {
@@ -81,7 +82,6 @@ export default function HeaderMenuWrapper({ children }) {
             border-top: 0;
             text-transform: uppercase;
             padding: 1.5rem;
-            letter-spacing: 1.5px;
             font-size: 1.4rem;
             height: 100%;
             max-height: 75px;

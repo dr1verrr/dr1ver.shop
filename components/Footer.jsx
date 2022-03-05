@@ -29,15 +29,49 @@ const Footer = memo(({ categories }) => {
           <div className='footer-content-left'>
             <div className='footer-content-left-links'>
               <div className='footer-socials'>
-                <Link href='/'>
-                  <a className='header-logo footer-logo'>
+                <Link href='/' passHref>
+                  <div className='header-logo footer-logo'>
                     <div className='header-logo-first logo'>
-                      <span className='original-logo'>DR1VER</span>
+                      <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '112px', maxHeight: '72px' }}>
+                        <defs>
+                          <mask id='mask' x='0' y='0' width='100%' height='100%'>
+                            <rect id='overlay' x='0' y='0' width='100%' height='100%'></rect>
+                            <text
+                              x='3'
+                              y='40'
+                              fontFamily='JetBrains Mono'
+                              fontSize='27'
+                              fontWeight='700'
+                              fill='#000'
+                              id='text'
+                              className='first-logo-text'
+                            >
+                              DR1VER
+                            </text>
+                            <rect id='square-dot' width='5px' height='5px' fill='#000' x='103' y='43'></rect>
+                          </mask>
+                        </defs>
+                        <rect id='r' x='0' y='0' width='100%' height='100%'></rect>
+                      </svg>
                     </div>
                     <div className='header-logo-second logo'>
-                      <span className='original-logo'>SHOP</span>
+                      <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '72px', maxHeight: '72px' }}>
+                        <g>
+                          <text
+                            x='3'
+                            y='40'
+                            fontFamily='JetBrains Mono'
+                            fontSize='27'
+                            fontWeight='700'
+                            fill='#d6d5dc'
+                            style={{ letterSpacing: '-1px', transform: 'scale(1.05, 1.2)' }}
+                          >
+                            SHOP
+                          </text>
+                        </g>
+                      </svg>
                     </div>
-                  </a>
+                  </div>
                 </Link>
                 <div className='footer-socials-logos'>
                   {FooterIcons.map(icon => (
@@ -96,6 +130,22 @@ const Footer = memo(({ categories }) => {
           font-size: 1.8rem;
           display: flex;
           justify-content: space-between;
+          font-weight: 300;
+        }
+
+        svg #r {
+          fill: #d6d5dc;
+          mask: url(#mask);
+        }
+
+        svg #overlay {
+          fill: #d6d5dc;
+        }
+
+        .first-logo-text {
+          display: inline-block;
+          transform: scale(1.05, 1.2) translateX(0);
+          letter-spacing: -1px;
         }
 
         .footer-content-right {
@@ -114,14 +164,11 @@ const Footer = memo(({ categories }) => {
           grid-gap: 1rem;
         }
 
-        .payment-method {
-        }
-
         .label {
           color: #7a7a7c;
-          font-weight: 600;
           font-size: 14px;
           text-transform: uppercase;
+          font-weight: 400;
         }
 
         .footer-content-left-links {
@@ -155,9 +202,6 @@ const Footer = memo(({ categories }) => {
           cursor: pointer;
         }
 
-        .footer-content {
-        }
-
         .footer-content-inner {
           display: flex;
           flex-direction: column;
@@ -171,30 +215,32 @@ const Footer = memo(({ categories }) => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          letter-spacing: 1.5px;
           padding: 2rem 0;
           flex-wrap: wrap;
         }
 
         .header-logo {
           display: flex;
+          justify-content: center;
+          align-items: center;
+          font-family: 'JetBrains Mono';
+          margin-right: 1rem;
           border: 1px solid #d6d5dc;
-          max-width: fit-content;
-          font-size: 2.5rem;
-        }
-
-        .logo {
-          padding: 0.5rem;
+          cursor: pointer;
         }
 
         .header-logo-first {
-          background: #d6d5dc;
-          color: #000;
+          max-height: 72px;
         }
 
         .header-logo-second {
-          color: #d6d5dc;
-          background: #000;
+          line-height: 1.5;
+          letter-spacing: 0.5px;
+          font-size: 2.5rem;
+          max-height: 72px;
+          position: relative;
+          background: transparent;
+          margin-left: 5px;
         }
 
         .footer-menu-link span {
@@ -240,10 +286,6 @@ const Footer = memo(({ categories }) => {
         .footer-socials-logos {
           display: flex;
           gap: 1rem;
-        }
-
-        .header-logo {
-          margin-right: 1rem;
         }
 
         @media (max-width: 1670px) {
