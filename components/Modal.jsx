@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { overrideModal } from '../redux/actions'
 import { MODAL_HIDE, MODAL_OVERRIDE, MODAL_SHOW } from '../redux/types'
 
 const Modal = memo(({ modal }) => {
@@ -12,7 +13,7 @@ const Modal = memo(({ modal }) => {
 
   function runTimeout() {
     clearTimeout(timeoutRef.current)
-    if (visible) timeoutRef.current = setTimeout(closeModal, 4000)
+    if (visible) timeoutRef.current = setTimeout(closeModal, 5000)
   }
 
   useEffect(() => {
@@ -27,21 +28,11 @@ const Modal = memo(({ modal }) => {
   }
 
   useEffect(() => {
-    console.log(modal)
-  }, [modal])
-
-  useEffect(() => {
     if (visible) {
       if (pause) stopTimeout()
       if (!pause) runTimeout()
     }
   }, [pause, visible])
-
-  useEffect(() => {
-    if (modal.override) {
-      dispatch({ type: MODAL_OVERRIDE })
-    }
-  }, [modal.override])
 
   return (
     <div
@@ -111,7 +102,7 @@ const Modal = memo(({ modal }) => {
           z-index: 2000;
           font-size: 1.5rem;
           pointer-events: stroke;
-          animation: fade-modal 4s ease;
+          animation: fade-modal 5s ease;
           animation-fill-mode: forwards;
           cursor: default;
           user-select: none;
@@ -147,7 +138,7 @@ const Modal = memo(({ modal }) => {
         }
 
         .notification-timer {
-          transition: ${visible ? 'transform 4s ease' : 'none'};
+          transition: ${visible ? 'transform 5s ease' : 'none'};
           content: '';
           display: block;
           position: absolute;
@@ -196,7 +187,7 @@ const Modal = memo(({ modal }) => {
 const ModalWrapper = () => {
   const modal = useSelector(state => state.ui.modal)
 
-  return <Modal modal={modal} />
+  return modal ? <Modal modal={modal} /> : null
 }
 
 export default ModalWrapper

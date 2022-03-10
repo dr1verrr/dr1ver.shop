@@ -20,10 +20,10 @@ export default function HeaderSecond() {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto;
           animation: header-second 2.5s ease;
           font-size: 1.7rem;
           font-weight: 300;
+          margin: 0 auto;
         }
 
         @keyframes header-second {

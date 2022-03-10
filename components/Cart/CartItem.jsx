@@ -1,29 +1,17 @@
-import throttle from 'lodash.throttle'
 import Image from 'next/image'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { CART_REMOVE, CART_UPDATE, MODAL_SHOW, PRODUCT_MODAL_SHOW } from '../../redux/types'
+import { overrideModal, showModal } from '../../redux/actions'
+import { CART_REMOVE, PRODUCT_MODAL_SHOW } from '../../redux/types'
+import ProductOption from '../Product/ProductOption'
 
 const CartItem = ({ product }) => {
   const dispatch = useDispatch()
   const showProductModal = () => dispatch({ type: PRODUCT_MODAL_SHOW, payload: product.slug })
 
-  const updateProduct = (e, count) => {
-    throttle(() => {
-      if (e.target.name) {
-        dispatch({ type: CART_UPDATE, payload: { ...product, [e.target.name]: e.target.value } })
-      } else {
-        if (count > 0 && count <= 99) {
-          console.log(count)
-          dispatch({ type: CART_UPDATE, payload: { ...product, count } })
-        }
-      }
-    }, 2000)
-  }
-
   const removeProduct = () => {
     dispatch({ type: CART_REMOVE, payload: product })
-    dispatch({ type: MODAL_SHOW, payload: 'Product was removed from the basket.' })
+    dispatch(showModal('Product was removed from the basket.')).then(() => dispatch(overrideModal()))
   }
 
   return (
@@ -36,43 +24,28 @@ const CartItem = ({ product }) => {
             </svg>
           </div>
           <div className='product-image' onClick={showProductModal}>
-            <Image src={`${process.env.NEXT_PUBLIC_API_URL}${product.image}`} width={150} height={150} alt='' />
+            <Image
+              src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+              width={150}
+              height={150}
+              alt=''
+              quality={65}
+            />
             <div className='product-image-mask'></div>
           </div>
         </div>
       </div>
       <div className='cart-right'>
-        <div className='product-cart-price'>{(product.count * product.price).toFixed(2)} USD</div>
+        <div className='product-cart-price'>
+          {(product.count * (product.price + product.optionPrice)).toFixed(2)} USD
+        </div>
         <div className='product-title' onClick={showProductModal}>
           {product.name}
         </div>
         <div className='product-options'>
-          {product?.Custom_Field.map(fld => {
-            const select = fld.options.split('|')
-            return (
-              <div key={fld.id} className='product-info-sizes'>
-                <div style={{ color: '#818d92', fontWeight: '400', fontSize: '1.5rem' }}>Size: </div>
-                <div className='product-info-sizes-inner'>
-                  {select.map(s => {
-                    const option = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
-                    /// value = option
-
-                    return (
-                      <input
-                        type='button'
-                        key={s}
-                        className='product-info-sizes-input'
-                        active={product.options === option ? 'true' : 'false'}
-                        value={option}
-                        onClick={updateProduct}
-                        name='options'
-                      />
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+          {product?.Custom_Field.map(fld => (
+            <ProductOption key={fld} fld={fld} cart={true} optionSelected={product.selected} id={product.id} />
+          ))}
         </div>
         <div className='product-count'>
           <div className='count-title'>Count: </div>
@@ -82,46 +55,13 @@ const CartItem = ({ product }) => {
                 <path d='M9 4v1H0V4z'></path>
               </svg>
             </button>
-            <input type='number' className='product-info-count-input' value={product.count} />
+            <input type='number' className='product-info-count-input' value={product.count} onChange={() => {}} />
             <button type='button' className='product-info-count-counter-plus button-counter'>
               <svg className='counter-icon' xmlns='http://www.w3.org/2000/svg'>
                 <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
               </svg>
             </button>
           </div>
-          {/*<div className='counter'>
-            <input
-              type='number'
-              className='counter-input'
-              value={product.count}
-              onChange={updateProduct}
-              name='count'
-            />
-            <div className='counter-control'>
-              <button
-                type='button'
-                className='modal__cart-product-count-plus'
-                onClick={e => updateProduct(e, product.count + 1)}
-              >
-                <div className='icon icon__animated'>
-                  <svg className='plus' xmlns='http://www.w3.org/2000/svg'>
-                    <path d='M9 4H5V0H4v4H0v1h4v4h1V5h4z'></path>
-                  </svg>
-                </div>
-              </button>
-              <button
-                type='button'
-                className='modal__cart-product-count-minus'
-                onClick={e => updateProduct(e, product.count - 1)}
-              >
-                <div className='icon icon__animated'>
-                  <svg className='minus' xmlns='http://www.w3.org/2000/svg'>
-                    <path d='M9 4v1H0V4z'></path>
-                  </svg>
-                </div>
-              </button>
-            </div>
-          </div>*/}
         </div>
       </div>
       <style jsx>{`
@@ -129,8 +69,8 @@ const CartItem = ({ product }) => {
           padding: 3rem 0 5rem;
           border-bottom: 1px solid #e0e3e6;
           display: flex;
-          flex-direction: column;
           user-select: none;
+          min-height: 300px;
         }
 
         .product-info-count-counter {
@@ -145,7 +85,6 @@ const CartItem = ({ product }) => {
           box-sizing: border-box;
           width: 5rem;
           text-align: center;
-
           outline: none;
           border: none;
           background: #e2e7ec;
@@ -167,8 +106,7 @@ const CartItem = ({ product }) => {
         }
         .cart-left {
           padding-bottom: 2rem;
-          flex: 0 0 100%;
-          height: 100%;
+          margin-right: 2rem;
         }
         button[type='button'] {
           background: none;
@@ -195,6 +133,8 @@ const CartItem = ({ product }) => {
           cursor: pointer;
           width: fit-content;
           padding-bottom: 1rem;
+          font-weight: 500;
+          word-break: break-all;
         }
         .product-title:hover {
           color: rgba(0, 0, 0, 0.6);
@@ -264,6 +204,8 @@ const CartItem = ({ product }) => {
           justify-content: center;
           align-items: center;
           border-radius: 10px;
+          width: 120px;
+          height: 144px;
           cursor: pointer;
         }
         .product-remove {
@@ -342,14 +284,31 @@ const CartItem = ({ product }) => {
           .product-info-sizes-inner {
             margin-bottom: 1rem;
           }
+
           .cart-item {
+            flex-direction: column;
             padding-bottom: 7rem;
+            align-items: center;
           }
+
+          .cart-left {
+            margin-right: 0;
+            width: 100%;
+          }
+
+          .product-image {
+            width: 100%;
+            height: 100%;
+          }
+
+          .cart-right {
+            align-items: center;
+            justify-content: center;
+          }
+
           .product-cart-price {
             bottom: -35px;
           }
-        }
-        @media (max-width: 320px) {
         }
       `}</style>
     </div>

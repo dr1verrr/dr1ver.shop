@@ -15,6 +15,12 @@ const Profile = props => {
       <div>Username: {user?.username}</div>
       <div>Email: {user?.email}</div>
       <button onClick={logout}>Logout</button>
+      <style jsx>{`
+        .profile {
+          min-height: 100vh;
+          background: #fff;
+        }
+      `}</style>
     </div>
   )
 }

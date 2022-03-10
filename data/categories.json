@@ -1,5 +1,10 @@
 [
   {
+    "id": 0,
+    "name": "All",
+    "slug": "all"
+  },
+  {
     "id": 1,
     "name": "Back",
     "slug": "back"

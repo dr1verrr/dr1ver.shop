@@ -12,7 +12,7 @@ store.subscribe(
     saveState({
       cart: store.getState().cart,
     })
-  }, 3000)
+  }, 1500)
 )
 
 export default store

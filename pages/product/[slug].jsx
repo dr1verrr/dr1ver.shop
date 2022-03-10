@@ -1,21 +1,19 @@
 /* eslint-disable react/display-name */
 /* eslint-disable import/no-anonymous-default-export */
 import React from 'react'
-import Product from '../../components/Product'
-import { getProduct } from '../api/product'
+import ProductPage from '../../components/Product'
 
-export default function ProductPage({ product, categories }) {
-  return <Product product={product} categories={categories} />
+const productPage = ({ slug }) => {
+  return <ProductPage slug={slug} />
 }
+
+export default productPage
 
 export async function getServerSideProps(context) {
   try {
-    const product = await getProduct(context)
-
     return {
       props: {
-        product: product.product,
-        categories: product.categories,
+        slug: context.params.slug,
       },
     }
   } catch (err) {

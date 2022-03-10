@@ -1,11 +1,11 @@
-import React from 'react'
-import Link from 'next/link'
+import React, { useEffect } from 'react'
 import { useState, useLayoutEffect } from 'react'
+import Link from 'next/link'
 
 export default function HeaderFirst() {
   const [animation, setAnimation] = useState(true)
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimation(false)
     }, 2500)
@@ -18,7 +18,7 @@ export default function HeaderFirst() {
   return (
     <div className='header-first'>
       <div className='leftStrip strip'></div>
-      <Link href='/' as='/' passHref>
+      <Link href='/' passHref>
         <div className='header-logo' animate={`${animation}`}>
           <div className='header-logo-first logo'>
             <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '112px', maxHeight: '72px' }}>
@@ -159,6 +159,14 @@ export default function HeaderFirst() {
           animation: logo-first-move 1s;
         }
 
+        .header-logo-first {
+          min-width: 112px;
+        }
+
+        .header-logo-second {
+          min-width: 72px;
+        }
+
         .logo {
           overflow: hidden;
           max-height: 72px;
@@ -169,9 +177,6 @@ export default function HeaderFirst() {
           transform: scale(1.05, 1.2) translateX(0);
           animation: logo-text 1s;
           letter-spacing: -1px;
-        }
-
-        svg rect {
         }
 
         .header-logo-second {
@@ -250,15 +255,15 @@ export default function HeaderFirst() {
 
         @keyframes init-mobile {
           0% {
-            transform: translate(100%, 650%) scale(0);
+            transform: translate(150%, 650%) scale(0);
           }
 
           25% {
-            transform: translate(100%, 650%) scale(2);
+            transform: translate(150%, 650%) scale(2);
           }
 
           50% {
-            transform: translate(100%, 650%) scale(2);
+            transform: translate(150%, 650%) scale(2);
           }
 
           100% {
@@ -268,15 +273,15 @@ export default function HeaderFirst() {
 
         @keyframes init-mobile-1 {
           0% {
-            transform: translate(50%, 650%) scale(0);
+            transform: translate(75%, 650%) scale(0);
           }
 
           25% {
-            transform: translate(50%, 650%) scale(1.5);
+            transform: translate(75%, 650%) scale(1.5);
           }
 
           50% {
-            transform: translate(50%, 650%) scale(1.5);
+            transform: translate(75%, 650%) scale(1.5);
           }
 
           100% {
@@ -285,11 +290,6 @@ export default function HeaderFirst() {
         }
 
         @media (max-width: 630px) {
-          .header-first {
-            padding: 0;
-            padding-left: 10px;
-          }
-
           .header-logo {
             animation: init-mobile 2.5s;
           }
@@ -297,6 +297,8 @@ export default function HeaderFirst() {
           .header-first {
             transform: scale(0.7);
             margin-left: -25px;
+            padding: 0;
+            padding-left: 10px;
           }
         }
 
@@ -310,6 +312,9 @@ export default function HeaderFirst() {
           .header-logo {
             font-size: 1.6rem;
           }
+        }
+
+        .logo {
         }
       `}</style>
     </div>

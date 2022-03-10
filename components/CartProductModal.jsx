@@ -1,17 +1,18 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { memo, useEffect, useRef, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import { CART_HIDE, PRODUCT_MODAL_HIDE } from '../redux/types'
+import Link from 'next/link'
+import Spinner from './Spinner'
 
-const ProductModal = memo(({ productModal }) => {
+const CartProductModal = memo(({ productModal }) => {
   const dispatch = useDispatch()
-  const hideProductModal = () => dispatch({ type: PRODUCT_MODAL_HIDE, payload: '' })
+  const hideProductModal = () => dispatch({ type: PRODUCT_MODAL_HIDE })
   const hideCart = () => dispatch({ type: CART_HIDE })
   const modalRef = useRef()
   const [product, setProduct] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const hideModals = () => {
     hideProductModal()
@@ -34,13 +35,14 @@ const ProductModal = memo(({ productModal }) => {
   }
 
   useEffect(() => {
-    if (productModal.visible && productModal.slug) getProduct(productModal.slug)
+    if (productModal.visible) getProduct(productModal.slug)
   }, [productModal])
 
   return (
     <div className='product-modal' visible={`${productModal.visible}`}>
       <div className='product-modal-inside'>
         <div className='modal-tile' ref={modalRef}>
+          <div className='spinner-wrapper'>{loading && <Spinner color='#000' size={85} />}</div>
           <div className='modal-content'>
             {!loading && (
               <div className='modal-content-inner'>
@@ -82,6 +84,7 @@ const ProductModal = memo(({ productModal }) => {
           </div>
         </div>
       </div>
+
       <style jsx>{`
         .product-modal {
           position: fixed;
@@ -140,11 +143,20 @@ const ProductModal = memo(({ productModal }) => {
         .modal-tile {
           overflow-y: auto;
           min-height: 500px;
+          position: relative;
+        }
+
+        .spinner-wrapper {
+          position: absolute;
+          top: 45%;
+          transform: translateY(-45%);
+          left: calc(50% - 42px);
+          z-index: 500;
         }
 
         .modal-content-inner {
           display: flex;
-          gap: 1rem;
+          grid-gap: 1rem;
         }
 
         .product-title {
@@ -185,9 +197,13 @@ const ProductModal = memo(({ productModal }) => {
           .modal-tile {
             padding: 3rem 1.5rem;
           }
+
+          .product-description {
+            font-size: calc(1.4rem + 0.35vw);
+          }
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 840px) {
           .modal-content-inner {
             flex-direction: column;
             align-items: center;
@@ -199,12 +215,12 @@ const ProductModal = memo(({ productModal }) => {
   )
 })
 
-const ProductModalWrapper = () => {
+const CartProductModalWrapper = () => {
   const selector = useSelector(state => state.ui.productModal)
 
   const productModal = useMemo(() => selector, [selector])
 
-  return <ProductModal productModal={productModal} />
+  return <CartProductModal productModal={productModal} />
 }
 
-export default ProductModalWrapper
+export default CartProductModalWrapper

@@ -1,37 +1,35 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PRODUCT_UPDATE } from '../../redux/types'
 
-function ProductCounter() {
+function ProductCounter({ count, type, actionType }) {
   const dispatch = useDispatch()
-  const count = useSelector(state => state.product?.count)
 
   const countHandler = useCallback(e => {
     const value = parseInt(e.target.value) || ''
     if (value > 20) {
-      dispatch({ type: PRODUCT_UPDATE, payload: { count: 20 } })
+      dispatch({ type: actionType, payload: { count: 20 } })
       return
     }
 
     if (value >= 1) {
-      dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
+      dispatch({ type: actionType, payload: { count: value } })
       return
     }
 
     if (value <= 0) {
-      dispatch({ type: PRODUCT_UPDATE, payload: { count: 1 } })
+      dispatch({ type: actionType, payload: { count: 1 } })
     }
   }, [])
 
   return (
     <div className='product-info-count'>
-      <div className='product-info-count-title'>Count:</div>
+      <div className='product-info-label'>Count:</div>
       <div className='product-info-count-counter'>
         <button
           className='product-info-count-counter-minus button-counter'
           type='button'
           onClick={() => {
-            dispatch({ type: PRODUCT_UPDATE, payload: { count: count - 1 > 0 ? count - 1 : count } })
+            dispatch({ type: actionType, payload: { count: count - 1 > 0 ? count - 1 : count } })
           }}
         >
           <svg xmlns='http://www.w3.org/2000/svg'>
@@ -46,15 +44,15 @@ function ProductCounter() {
             let value = count + 1
 
             if (value > 20) {
-              dispatch({ type: PRODUCT_UPDATE, payload: { count: 20 } })
+              dispatch({ type: actionType, payload: { count: 20 } })
               return
             }
 
             if (value <= 0 || value === '') {
-              dispatch({ type: PRODUCT_UPDATE, payload: { count: 1 } })
+              dispatch({ type: actionType, payload: { count: 1 } })
               return
             }
-            dispatch({ type: PRODUCT_UPDATE, payload: { count: value } })
+            dispatch({ type: actionType, payload: { count: value } })
           }}
         >
           <svg xmlns='http://www.w3.org/2000/svg'>
@@ -62,6 +60,13 @@ function ProductCounter() {
           </svg>
         </button>
       </div>
+      <style jsx global>{`
+        .product-info-label {
+          color: #636573;
+          padding: 0.5rem 0;
+          font-size: 1.7rem;
+        }
+      `}</style>
       <style jsx>{`
         .button-counter {
           border-radius: 3rem 0 0 3rem;
@@ -84,13 +89,6 @@ function ProductCounter() {
           margin-bottom: 1.5rem;
         }
 
-        .product-info-count-title {
-          color: #636573;
-          padding: 0.5rem 0;
-          font-size: 1.7rem;
-          font-weight: 500;
-        }
-
         .product-info-count {
           display: inline-block;
         }
@@ -105,7 +103,7 @@ function ProductCounter() {
           border-left: 2px solid #fff;
           border-right: 2px solid #fff;
           font-size: 1.6rem;
-          font-weight: 600;
+          font-weight: 500;
         }
 
         .product-info-count {

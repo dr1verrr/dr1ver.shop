@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ProductButton({ children, isDisabled }) {
+export default function ProductButton({ children, isDisabled, progress }) {
   return (
     <button type='submit' className='product-info-add-to-cart' disabled={isDisabled}>
       <span>{children}</span>
@@ -24,8 +24,12 @@ export default function ProductButton({ children, isDisabled }) {
           letter-spacing: 2px;
         }
 
+        .product-info-add-to-cart span {
+          font-size: 1.5rem;
+        }
+
         .product-info-add-to-cart:hover {
-          filter: brightness(80%);
+          opacity: 0.8;
         }
 
         @keyframes button-disabled {
@@ -67,6 +71,7 @@ export default function ProductButton({ children, isDisabled }) {
         .icon .arrow {
           width: 12px;
           height: 7px;
+          opacity: ${progress ? 0 : 1};
         }
 
         .product-info-add-to-cart-arrow {

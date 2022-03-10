@@ -11,12 +11,17 @@ import {
   PRODUCT_MODAL_HIDE,
   PRODUCT_MODAL_SHOW,
   PROGRESS_CHANGE,
+  PROGRESS_END,
+  PROGRESS_START,
+  RECOMMENDED_PRODUCT_MODAL_HIDE,
+  RECOMMENDED_PRODUCT_MODAL_SHOW,
 } from '../types'
 
 const initialState = {
   cart: false,
   modal: { visible: false, override: false, message: '' },
   productModal: { visible: false, slug: '' },
+  recommendedProductModal: { visible: false, slug: '' },
   authModal: {
     login: true,
     register: false,
@@ -25,6 +30,7 @@ const initialState = {
   progressBar: '',
   menu: false,
   video: false,
+  progress: { primary: false, modal: false },
 }
 
 const uiReducer = (state = initialState, action) => {
@@ -37,7 +43,7 @@ const uiReducer = (state = initialState, action) => {
     case CART_HIDE:
       return { ...state, cart: false }
 
-    case MODAL_SHOW:
+    case MODAL_SHOW: {
       if (!modal.visible) {
         return {
           ...state,
@@ -51,6 +57,7 @@ const uiReducer = (state = initialState, action) => {
           modal: { visible: false, override: true, message: action.payload || modal.message },
         }
       }
+    }
 
     case MODAL_OVERRIDE:
       return {
@@ -60,6 +67,18 @@ const uiReducer = (state = initialState, action) => {
           override: false,
           message: action.payload || modal.message,
         },
+      }
+
+    case RECOMMENDED_PRODUCT_MODAL_SHOW:
+      return {
+        ...state,
+        recommendedProductModal: { visible: true, slug: action.payload },
+      }
+
+    case RECOMMENDED_PRODUCT_MODAL_HIDE:
+      return {
+        ...state,
+        recommendedProductModal: { ...state.recommendedProductModal, visible: false },
       }
 
     //return {
@@ -87,13 +106,19 @@ const uiReducer = (state = initialState, action) => {
       return { ...state, productModal: { visible: true, slug: action.payload } }
 
     case PRODUCT_MODAL_HIDE:
-      return { ...state, productModal: { visible: false, slug: action.payload } }
+      return { ...state, productModal: { ...state.productModal, visible: false } }
 
     case MASK_HIDE:
       return { ...initialState, modal: { ...modal } }
 
     case PROGRESS_CHANGE:
       return { ...state, progressBar: action.payload || state.progressBar }
+
+    case PROGRESS_START:
+      return { ...state, progress: { ...state.progress, [action.payload.type]: true } }
+
+    case PROGRESS_END:
+      return { ...state, progress: { ...state.progress, [action.payload.type]: false } }
 
     default:
       return state

@@ -1,23 +1,16 @@
-import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import categories from '../../data/categories.json'
 import { MENU_HIDE } from '../../redux/types'
+import Link from 'next/link'
 
 export default function HeaderMenu() {
   const dispatch = useDispatch()
 
   return (
     <div className='header-menu'>
-      <div className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
-        <Link href='/all'>
-          <a className='header-menu-link'>
-            <span>All</span>
-          </a>
-        </Link>
-      </div>
       {categories?.map(category => (
         <div key={category.id} className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
-          <Link href='/category/[slug]' as={`/category/${category.slug}`}>
+          <Link href={`/category/${category.slug}`}>
             <a className='header-menu-link'>
               <span>{category.name}</span>
             </a>

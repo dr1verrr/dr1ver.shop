@@ -2,13 +2,13 @@ import React, { Fragment, memo, useEffect, useLayoutEffect, useState } from 'rea
 import { useDispatch, useSelector } from 'react-redux'
 import { MASK_HIDE } from '../redux/types'
 
-function GlobalStyles() {
+function Mask() {
   const ui = useSelector(state => state.ui)
-  const isMask = ui.authModal.visible || ui.cart || ui.menu
+  const isMask = ui.authModal.visible || ui.cart || ui.menu || ui.recommendedProductModal.visible
   const dispatch = useDispatch()
   const [animType, setAnimType] = useState('')
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setAnimType('init')
 
     const timeout = setTimeout(() => {
@@ -28,10 +28,6 @@ function GlobalStyles() {
     if (ui.cart) setAnimType('')
     if (ui.authModal.visible) setAnimType('auth')
   }, [ui])
-
-  useEffect(() => {
-    console.log(isMask)
-  }, [isMask])
 
   return (
     <Fragment>
@@ -130,4 +126,4 @@ function GlobalStyles() {
   )
 }
 
-export default GlobalStyles
+export default Mask

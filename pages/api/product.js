@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 
-export const getProduct = async context => {
-  const product = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${context.params.slug}`)
+export const getProduct = async slug => {
+  const product = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/products/${slug}`)
 
   const getCategories = async () => {
     const categoriesArr = []
@@ -12,7 +12,6 @@ export const getProduct = async context => {
       if (categoriesArr.length >= 3) {
         break
       }
-      console.log(categoriesArr.length)
       const categories = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/categories/${slugsArr[index].slug}`)
       categoriesArr.push(categories.data.products)
       if (categories.data.products.length >= 5) {
@@ -28,6 +27,8 @@ export const getProduct = async context => {
   return { product: product.data, categories }
 }
 
-export default (req, res) => {
+const product = (req, res) => {
   res.status(200).json(getProduct(req.params.slug))
 }
+
+export default product

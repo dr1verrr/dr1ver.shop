@@ -6,13 +6,11 @@ import Cart from '../components/Cart/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/Layout'
+import Mask from '../components/Mask'
 import Modal from '../components/Modal'
-import ProductModal from '../components/ProductModal'
 import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
 import '../styles/globals.css'
-import GlobalStyles from '../styles/GlobalStyles'
-import ProgressBar from '../components/ProgressBar'
 
 function MyApp({ Component, pageProps, router }) {
   return (
@@ -25,10 +23,8 @@ function MyApp({ Component, pageProps, router }) {
         <link rel='icon' type='image/png' sizes='16x16' href='/images/favicon-16x16.png' />
       </Head>
       <Provider store={store}>
-        <GlobalStyles />
-        <ProgressBar />
+        <Mask />
         <Modal />
-        <ProductModal />
         <Cart />
         <AuthProvider>
           <AuthModal />

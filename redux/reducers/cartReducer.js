@@ -9,8 +9,9 @@ const cartReducer = (state = initialState, action) => {
 
     case CART_REMOVE:
       return removeProduct(state, action.payload)
-    //case CART_UPDATE:
-    //  return updateProduct(state, action.payload)
+
+    case CART_UPDATE:
+      return editProduct(state, action.payload)
 
     default:
       return state
@@ -20,18 +21,59 @@ const cartReducer = (state = initialState, action) => {
 function removeProduct(state, product) {
   return {
     ...state,
-    cartData: state.cartData.filter(item => (product.id == item.id && product.options === item.options ? false : true)),
+    cartData: state.cartData.filter(item =>
+      product.id == item.id && product.selected === item.selected ? false : true
+    ),
   }
 }
 
-//const updateProduct = (state, newProduct) => {
-//  const cartData = state.cartData
-//  const isExist = index => cartData[index].id == newProduct.id && cartData[index].options === newProduct.options
+const editProduct = (state, newProduct) => {
+  const cartData = state.cartData
+  let modified = [...cartData]
+  let flag = false
+  let newProductIndex = 0
+  let existProductsSelected = []
+  const found = index => cartData[index].id == newProduct.id && cartData[index].selected === newProduct.oldSelected
 
-//  for (let index = 0; index < cartData.length; index++) {
-//    const element = cartData[index]
-//  }
-//}
+  if (!flag) {
+    for (let index = 0; index < cartData.length; index++) {
+      if (cartData[index].id == newProduct.id) {
+        existProductsSelected.push(cartData[index].selected)
+
+        if (found(index)) {
+          newProductIndex = index
+        }
+      }
+
+      if (index == cartData.length - 1) {
+        flag = true
+      }
+    }
+  }
+
+  if (flag) {
+    let isDuplicateExist = false
+
+    for (let index = 0; index < existProductsSelected.length; index++) {
+      if (existProductsSelected[index] === newProduct.selected) {
+        isDuplicateExist = true
+        flag = false
+      }
+
+      if (index == existProductsSelected.length - 1 && !isDuplicateExist) {
+        modified[newProductIndex] = {
+          ...modified[newProductIndex],
+          optionPrice: newProduct.optionPrice,
+          selected: newProduct.selected,
+        }
+      }
+    }
+  }
+
+  if (!flag) return { ...state, lastModified: { id: newProduct.id, selected: newProduct.selected } }
+
+  return { cartData: modified, lastModified: state.lastModified }
+}
 
 const findExist = (state, newProduct) => {
   const cartData = state.cartData
@@ -40,7 +82,7 @@ const findExist = (state, newProduct) => {
   let isOverValue = false
   let lastModified = {}
 
-  const isExist = index => cartData[index].id == newProduct.id && cartData[index].options === newProduct.options
+  const isExist = index => cartData[index].id == newProduct.id && cartData[index].selected === newProduct.selected
 
   if (cartData.length) {
     modified = [...cartData]
@@ -70,7 +112,7 @@ const findExist = (state, newProduct) => {
 
   if (!cartData.length) modified = null
 
-  lastModified = { id: newProduct.id, options: newProduct.options }
+  lastModified = { id: newProduct.id, selected: newProduct.selected }
 
   if (flag) {
     return { cartData: modified, lastModified }

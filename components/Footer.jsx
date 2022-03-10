@@ -1,10 +1,10 @@
 /* eslint-disable react/display-name */
 import React, { memo } from 'react'
 import mockCategories from '../data/categories.json'
-import Link from 'next/link'
 import FooterIcons from '../icons/social-icons'
 import MadeWithIcons from '../icons/made-with'
 import PaymentsIcons from '../icons/payments'
+import Link from 'next/link'
 
 export default function FooterWrapper() {
   return <Footer categories={mockCategories} />
@@ -18,7 +18,7 @@ const Footer = memo(({ categories }) => {
           <ul className='footer-menu'>
             {categories?.map(item => (
               <li key={item.id} className='footer-menu-item'>
-                <Link href='/category/[slug]' as={`/category/${item.slug}`} passHref>
+                <Link href={`/category/${item.slug}`}>
                   <a className='footer-menu-link'>
                     <span>{item.name}</span>
                   </a>
@@ -30,7 +30,7 @@ const Footer = memo(({ categories }) => {
             <div className='footer-content-left-links'>
               <div className='footer-socials'>
                 <Link href='/' passHref>
-                  <div className='header-logo footer-logo'>
+                  <div className='header-logo footer-logo' onClick={() => window.scrollTo({ top: 0 })}>
                     <div className='header-logo-first logo'>
                       <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '112px', maxHeight: '72px' }}>
                         <defs>
@@ -76,9 +76,7 @@ const Footer = memo(({ categories }) => {
                 <div className='footer-socials-logos'>
                   {FooterIcons.map(icon => (
                     <div key={icon.name} className='footer-socials-logo footer-logo'>
-                      <Link href={icon.href} passHref>
-                        {icon.svg}
-                      </Link>
+                      <Link href={icon.href}>{icon.svg}</Link>
                     </div>
                   ))}
                 </div>
@@ -131,6 +129,7 @@ const Footer = memo(({ categories }) => {
           display: flex;
           justify-content: space-between;
           font-weight: 300;
+          min-height: 348px;
         }
 
         svg #r {
