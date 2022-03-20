@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import axios from 'axios'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { PRODUCT_INCREMENT } from '../constants'
 import useDebouncedFunction from '../hooks/useDebouncedFunction'
-import Link from 'next/link'
 import ProductButton from './ProductButton'
-import axios from 'axios'
-import api from '../config/api'
 import Spinner from './Spinner'
 
 function Products({ slug }) {
@@ -16,20 +15,17 @@ function Products({ slug }) {
   const productPage = useRef()
   const [productsInfo, setProductsInfo] = useState({})
 
-  const getProducts = async url => {
-    const res = await axios.get(url)
+  const getProducts = async () => {
+    const res = await axios.get(`/api/category/${slug}`)
 
     return res.data
   }
 
-  const getAllProducts = async url => {
-    const response = await api.get(url).then(res => res.data)
-
-    return response
-  }
-
   const handleScroll = useDebouncedFunction(() => {
-    if (window.innerHeight + document.documentElement.scrollTop < productPage.current.offsetHeight || productsLoading) {
+    if (
+      window.innerHeight + document.documentElement.scrollTop < productPage.current.offsetHeight - 300 ||
+      productsLoading
+    ) {
       return false
     }
 
@@ -53,11 +49,7 @@ function Products({ slug }) {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
 
-    if (slug !== 'all') {
-      getProducts(`${process.env.NEXT_PUBLIC_API_URL}/categories/${slug}`).then(i => setProductsInfo(i))
-    } else {
-      getAllProducts('/products').then(ps => setProductsInfo({ products: ps }))
-    }
+    getProducts().then(data => setProductsInfo(slug === 'all' ? { products: data } : data))
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -69,10 +61,10 @@ function Products({ slug }) {
   }, [productsInfo])
 
   return (
-    <div className='product-page' ref={productPage}>
+    <section className='product-page' ref={productPage}>
       {loading && (
         <div className='spinner-wrapper spinner-top'>
-          <Spinner color='#000' size={85} borderWidth={8} />
+          <Spinner color='#000' size={50} borderWidth={8} />
         </div>
       )}
       {!loading && (
@@ -87,7 +79,7 @@ function Products({ slug }) {
               letterSpacing: '2px',
             }}
           >
-            {productsInfo.name || 'All cards'}
+            {productsInfo.name || 'All stickers'}
           </h2>
           <div className='container'>
             <div className='product-wrapper'>
@@ -114,7 +106,7 @@ function Products({ slug }) {
                           <ProductButton>Read more</ProductButton>
                         </div>
                       </div>
-                      <span className='product-button'>{product.title}</span>
+                      <button className='product-button'>{product.title}</button>
                     </div>
                   </Link>
                 )
@@ -125,7 +117,7 @@ function Products({ slug }) {
       )}
       <div className='spinner-bottom'>
         {productsLoading && count < productsInfo?.products?.length && (
-          <Spinner color='#000' size={85} borderWidth={8} />
+          <Spinner color='#000' size={50} borderWidth={8} />
         )}
       </div>
 
@@ -139,26 +131,27 @@ function Products({ slug }) {
         }
 
         .product-button {
+          position: relative;
           display: block;
           margin-top: 2rem;
-          max-width: 100%;
           text-align: center;
           border: 2px solid #f1f3f5;
           padding: 1.5rem;
           border-radius: 30px;
           transition: background-color 0.4s ease, color 0.4s ease;
           letter-spacing: 2px;
-          font-size: 1.8rem;
+          font-size: 2rem;
           cursor: pointer;
-          white-space: normal;
-          word-wrap: break-word;
+          white-space: nowrap;
+          text-overflow: ellipsis;
           overflow: hidden;
+          background: transparent;
         }
 
         .spinner-bottom {
           position: absolute;
           bottom: 150px;
-          left: calc(50% - 40px);
+          left: calc(50% - 10px);
           transform: translateX(-50%);
         }
 
@@ -167,7 +160,7 @@ function Products({ slug }) {
           height: 100%;
           width: 100%;
           top: 50px;
-          left: -30px;
+          left: -15px;
           display: flex;
           justify-content: center;
         }
@@ -192,8 +185,11 @@ function Products({ slug }) {
           white-space: nowrap;
           font-size: 1.5rem;
         }
+
         .product-inner {
           cursor: default;
+          display: flex;
+          flex-direction: column;
         }
 
         .product-inner:hover .product-button-wrapper {
@@ -222,6 +218,7 @@ function Products({ slug }) {
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;
         }
+
         .product-title {
           font-size: 2.1rem;
         }
@@ -236,13 +233,14 @@ function Products({ slug }) {
           padding: 2.5rem;
           text-align: left;
           height: 450px;
+          width: 100%;
         }
         .product-image {
           position: absolute;
           width: 70%;
           height: 60%;
           left: 15%;
-          top: 15%;
+          top: 20%;
         }
         .product-link {
           transition: opacity 0.4s ease, visibility 0.4s ease, background 0.4s ease;
@@ -269,17 +267,25 @@ function Products({ slug }) {
         }
 
         @media (max-width: 1600px) {
+          .product-inner * {
+            font-size: inherit;
+          }
+
           .container {
             max-width: 85vw;
           }
 
-          .product-price {
+          .product-inner {
             font-size: calc(1.5814vw - 1.30233px);
           }
         }
 
         @media (max-width: 1280px) {
-          .product-price {
+          .product-inner * {
+            font-size: inherit;
+          }
+
+          .product-inner {
             font-size: 2.4rem;
           }
         }
@@ -295,11 +301,15 @@ function Products({ slug }) {
             padding: 0 30px;
           }
 
+          .product-inner * {
+            font-size: inherit;
+          }
+
           .product {
             height: calc(45.78488vw - 18.31395px);
           }
 
-          .product-price {
+          .product-inner {
             font-size: calc(2.44186vw - 0.97674px);
           }
         }
@@ -309,7 +319,11 @@ function Products({ slug }) {
             grid-template-columns: 1fr;
           }
 
-          .product-price {
+          .product-inner * {
+            font-size: inherit;
+          }
+
+          .product-inner {
             font-size: 2.4rem;
           }
 
@@ -327,8 +341,12 @@ function Products({ slug }) {
         }
 
         @media (max-width: 480px) {
-          .product-price {
+          .product-inner {
             font-size: 5.1vw;
+          }
+
+          .product-inner * {
+            font-size: inherit;
           }
 
           .product-button-wrapper {
@@ -340,7 +358,7 @@ function Products({ slug }) {
           }
         }
       `}</style>
-    </div>
+    </section>
   )
 }
 

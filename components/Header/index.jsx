@@ -15,12 +15,12 @@ const Header = memo(({ categories }) => {
         .header {
           background: #000;
           color: #fff;
-          min-height: 75px;
           user-select: none;
           position: relative;
         }
 
         .header::after {
+          transition: background 200ms ease;
           display: none;
           content: '';
           position: absolute;
@@ -52,6 +52,7 @@ const Header = memo(({ categories }) => {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            height: 75px;
           }
 
           .header::after {

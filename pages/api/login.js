@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { setCookie } from 'nookies'
 
-export default async function handler(req, res) {
+export default async function login(req, res) {
   const { password, identifier } = req.body
 
   try {

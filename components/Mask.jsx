@@ -1,12 +1,26 @@
+import { useRouter } from 'next/router'
 import React, { Fragment, memo, useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { MASK_HIDE } from '../redux/types'
+import { CART_HIDE, MASK_HIDE, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../redux/types'
 
 function Mask() {
   const ui = useSelector(state => state.ui)
   const isMask = ui.authModal.visible || ui.cart || ui.menu || ui.recommendedProductModal.visible
   const dispatch = useDispatch()
   const [animType, setAnimType] = useState('')
+
+  const router = useRouter()
+
+  const onClick = () => {
+    dispatch({ type: MASK_HIDE })
+  }
+
+  const handleRouteChange = () => {
+    if (ui.cart) dispatch({ type: CART_HIDE })
+    if (ui.recommendedProductModal) dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
+  }
+
+  useEffect(handleRouteChange, [router.asPath])
 
   useEffect(() => {
     setAnimType('init')
@@ -31,12 +45,7 @@ function Mask() {
 
   return (
     <Fragment>
-      <div
-        className='mask'
-        onClick={() => dispatch({ type: MASK_HIDE })}
-        active={`${isMask}`}
-        anim-type={animType}
-      ></div>
+      <div className='mask' onClick={onClick} active={`${isMask}`} anim-type={animType}></div>
       <style jsx global>
         {`
           body {

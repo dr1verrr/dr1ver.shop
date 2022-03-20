@@ -5,34 +5,16 @@ import ProductButton from '../ProductButton'
 import Spinner from '../Spinner'
 
 export default function AddToCartBtn({ type }) {
-  const cartUi = useSelector(state => state.ui.cart)
   const progress = useSelector(state => state.ui.progress[type])
-  const [isButtonDisabled, setButtonDisabled] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    let timeout
-    if (!mounted) setMounted(true)
-    if (mounted && !cartUi) {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => setButtonDisabled(false), 1000)
-
-      setButtonDisabled(true)
-    }
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [cartUi])
 
   return (
     <div className='product-button-wrapper'>
-      <ProductButton isDisabled={isButtonDisabled} progress={progress}>
+      <ProductButton progress={progress}>
         <span>Add to cart</span>
 
         {progress && (
           <div className='spinner-wrapper'>
-            <Spinner color='#000' borderWidth={5} />
+            <Spinner color='#000' borderWidth={5} size={34} />
           </div>
         )}
       </ProductButton>
@@ -48,10 +30,6 @@ export default function AddToCartBtn({ type }) {
         .product-button-wrapper span {
           opacity: ${progress ? 0 : 1};
           font-size: inherit;
-        }
-
-        .product-button-wrapper[disabled='true'] {
-          pointer-events: none;
         }
 
         .spinner-wrapper {

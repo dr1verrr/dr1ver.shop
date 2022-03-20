@@ -72,12 +72,26 @@ export default function HeaderFirst() {
         }
 
         svg #r {
-          fill: white;
+          fill: #fff;
           mask: url(#mask);
         }
 
         svg #overlay {
-          fill: white;
+          fill: #fff;
+        }
+
+        @keyframes header-logo-strip {
+          0% {
+            opacity: 0;
+          }
+
+          50% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
         }
 
         @keyframes init {
@@ -194,6 +208,7 @@ export default function HeaderFirst() {
           width: 85%;
           height: 2px;
           background: #fff;
+          animation: header-logo-strip 1s ease;
         }
 
         .header-logo-second::before {
@@ -220,15 +235,11 @@ export default function HeaderFirst() {
           background-color: #fff;
           transform-origin: bottom left;
           transform: scaleX(1);
-        }
-
-        .leftStrip {
           animation: strip 4s ease;
         }
 
         .rightStrip {
           transform-origin: bottom right;
-          animation: strip 4s ease;
         }
 
         .header-logo {

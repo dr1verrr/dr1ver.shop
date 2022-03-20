@@ -129,7 +129,6 @@ const Footer = memo(({ categories }) => {
           display: flex;
           justify-content: space-between;
           font-weight: 300;
-          min-height: 348px;
         }
 
         svg #r {

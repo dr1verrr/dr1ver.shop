@@ -78,7 +78,7 @@ export default function HeaderMenuWrapper({ children }) {
             display: flex;
             align-items: center;
             justify-content: center;
-            border-bottom: 2px solid #ebeef1;
+            border-bottom: 1px solid #ebeef1;
             border-top: 0;
             text-transform: uppercase;
             padding: 1.5rem;

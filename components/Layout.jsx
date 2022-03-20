@@ -7,17 +7,13 @@ export default function Layout({ children }) {
     <div className='layout'>
       <main className='main'>
         <ScrollRestorer />
-        <PageTransition timeout={350} classNames='page-transition'>
+        <PageTransition timeout={300} classNames='page-transition'>
           {children}
         </PageTransition>
       </main>
       <style jsx>{`
         .main {
           margin-top: 0;
-        }
-
-        .layout {
-          min-height: 100vh;
         }
       `}</style>
       <style jsx global>{`
@@ -26,11 +22,11 @@ export default function Layout({ children }) {
         }
         .page-transition-enter-active {
           opacity: 1;
-          transition: opacity 300ms;
+          transition: opacity 500ms;
         }
 
         .page-transition-enter-done {
-          transition: opacity 300ms;
+          transition: opacity 500ms;
           opacity: 1;
         }
 
@@ -39,7 +35,7 @@ export default function Layout({ children }) {
         }
         .page-transition-exit-active {
           opacity: 0;
-          transition: opacity 350ms ease-in-out;
+          transition: opacity 300ms ease-in-out;
         }
       `}</style>
     </div>

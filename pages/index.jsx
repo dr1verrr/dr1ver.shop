@@ -6,22 +6,24 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='home-page-wrapper'>
-      <div className='home-page-video'>
-        <video className='video' loop playsInline muted autoPlay>
-          <source src='videos/NYC.mp4' type='video/mp4' />
-        </video>
-      </div>
-      <div className='home-page'>
-        <div className='home-page-title'>
-          <div className='home-page-title-inner'>
-            <div className='first-part'>
-              <span>Welcome.</span>
-              <span>please</span>
-              <span className='accent-word'>enjoy</span>
-            </div>
-            <div className='second-part'>
-              <span>new york city!</span>
+    <section className='home-page'>
+      <div className='home-page-wrapper'>
+        <div className='home-page-video'>
+          <video className='video' loop playsInline muted autoPlay>
+            <source src='videos/NYC.mp4' type='video/mp4' />
+          </video>
+        </div>
+        <div className='home-page-inner'>
+          <div className='home-page-title'>
+            <div className='home-page-title-inner'>
+              <div className='first-part'>
+                <span>Welcome.</span>
+                <span>please</span>
+                <span className='accent-word'>enjoy</span>
+              </div>
+              <div className='second-part'>
+                <span>new york city!</span>
+              </div>
             </div>
           </div>
         </div>
@@ -39,12 +41,10 @@ export default function Home() {
         .home-page-wrapper {
           position: static;
         }
-
-        .home-page {
+        .home-page-inner {
           position: relative;
           height: calc(100vh - 182.5px);
         }
-
         .home-page-video::after {
           content: '';
           display: block;
@@ -57,7 +57,6 @@ export default function Home() {
           background: #000;
           opacity: 0.3;
         }
-
         .home-page-title {
           background: red;
           text-transform: uppercase;
@@ -75,22 +74,18 @@ export default function Home() {
           font-weight: 500;
           letter-spacing: 1.5px;
         }
-
         .home-page-title span {
           padding-right: 20px;
         }
-
         .first-part {
           padding-left: 20px;
         }
-
         .accent-word {
           padding: 10px 20px;
           background: #000;
           color: #fff;
           font-weight: 700;
         }
-
         .home-page-title-inner {
           display: flex;
           align-items: center;
@@ -105,25 +100,21 @@ export default function Home() {
           object-fit: cover;
           z-index: -100;
         }
-
         @media (min-width: 1040px) {
           .video {
             object-fit: fill;
           }
         }
-
         @media (max-width: 1170px) {
-          .home-page {
+          .home-page-inner {
             height: calc(100vh - 232.5px);
           }
         }
-
         @media (max-width: 630px) {
-          .home-page {
+          .home-page-inner {
             height: calc(100vh - 75px);
           }
         }
-
         @media (max-width: 440px) {
           .home-page-title {
             font-size: 4vw;
@@ -134,9 +125,7 @@ export default function Home() {
         .header {
           background: transparent !important;
         }
-        .header-logo-first {
-        }
       `}</style>
-    </div>
+    </section>
   )
 }

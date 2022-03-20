@@ -12,6 +12,8 @@ import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
 import '../styles/globals.css'
 
+//Fix window.scrollTo (in firefox it's not working)
+
 function MyApp({ Component, pageProps, router }) {
   return (
     <Fragment>
@@ -29,8 +31,8 @@ function MyApp({ Component, pageProps, router }) {
         <AuthProvider>
           <AuthModal />
           <Header />
-          <Layout router={router}>
-            <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} key={router.asPath} />
           </Layout>
         </AuthProvider>
       </Provider>

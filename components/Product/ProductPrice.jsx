@@ -1,15 +1,14 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 export default function ProductPrice({ price, isDuplicated, optionPrice, type }) {
   return (
-    <button type='button' className='product-info-price'>
+    <button type='button' className='product-price'>
       <span className='wrapper'>
         <span className='price'>{isDuplicated ? price : price + optionPrice}</span>{' '}
         <span className='currency'>USD</span>
       </span>
       <style jsx>{`
-        .product-info-price {
+        .product-price {
           background-color: #fff;
           color: #1d1f21;
           padding: 1rem 2rem;
@@ -19,8 +18,7 @@ export default function ProductPrice({ price, isDuplicated, optionPrice, type })
           white-space: nowrap;
           border-radius: 3rem;
           border: none;
-          white-space: nowrap;
-          cursor: default;
+          cursor: unset;
         }
       `}</style>
     </button>

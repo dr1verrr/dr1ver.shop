@@ -42,7 +42,7 @@ const CartProductModal = memo(({ productModal }) => {
     <div className='product-modal' visible={`${productModal.visible}`}>
       <div className='product-modal-inside'>
         <div className='modal-tile' ref={modalRef}>
-          <div className='spinner-wrapper'>{loading && <Spinner color='#000' size={85} />}</div>
+          <div className='spinner-wrapper'>{loading && <Spinner color='#000' size={50} />}</div>
           <div className='modal-content'>
             {!loading && (
               <div className='modal-content-inner'>
@@ -137,7 +137,7 @@ const CartProductModal = memo(({ productModal }) => {
           color: #484450;
           font-size: 1.8rem;
           color: #484450;
-          word-break: break-word;
+          text-align: left;
         }
 
         .modal-tile {
@@ -150,7 +150,7 @@ const CartProductModal = memo(({ productModal }) => {
           position: absolute;
           top: 45%;
           transform: translateY(-45%);
-          left: calc(50% - 42px);
+          left: calc(50% - 25px);
           z-index: 500;
         }
 
@@ -178,7 +178,7 @@ const CartProductModal = memo(({ productModal }) => {
         }
 
         .modal-tile {
-          width: 900px;
+          width: 920px;
           padding: 50px;
           position: relative;
           margin: 5vw 3rem;
@@ -188,8 +188,9 @@ const CartProductModal = memo(({ productModal }) => {
 
         .modal-close {
           position: absolute;
-          right: 15px;
-          top: 15px;
+          padding: 30px;
+          right: -15px;
+          top: -15px;
           cursor: pointer;
         }
 
@@ -208,6 +209,13 @@ const CartProductModal = memo(({ productModal }) => {
             flex-direction: column;
             align-items: center;
             text-align: center;
+          }
+
+          .product-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           }
         }
       `}</style>

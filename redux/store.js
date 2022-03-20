@@ -10,7 +10,7 @@ const store = createStore(rootReducer, persistedState, applyMiddleware(thunk))
 store.subscribe(
   throttle(() => {
     saveState({
-      cart: store.getState().cart,
+      cart: { cartData: store.getState().cart.cartData },
     })
   }, 1500)
 )

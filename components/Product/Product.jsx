@@ -1,11 +1,14 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useAuth } from '../../contexts/auth'
+import addToCart from '../../services/Cart/addToCart'
+import throttle from '../../helpers/throttle'
 import { useProductInfo } from '../../providers/ProductProvider'
-import { addToCart, overrideModal, showCart, showModal } from '../../redux/actions'
-import { PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
+import { showCart, showModal } from '../../redux/actions'
+import store from '../../redux/store'
+import { CART_ADD, PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
 import Spinner from '../Spinner'
 import ProductInfo from './ProductInfo'
 
@@ -13,6 +16,7 @@ export default function Product({ product, loading }) {
   const dispatch = useDispatch()
   const router = useRouter()
   const { type, actionType, productInfo } = useProductInfo()
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     if (!loading) {
@@ -20,18 +24,13 @@ export default function Product({ product, loading }) {
     }
   }, [loading])
 
-  const submitHandler = e => {
-    e.preventDefault()
-
-    dispatch({ type: PROGRESS_START, payload: { type } })
-
+  const submitHandler = throttle(e => {
     const { count, price, optionPrice, selected } = productInfo
 
     if (count === '' || count == undefined) {
       dispatch({ type: actionType, payload: { count: 1 } })
     }
 
-    //if (isCartVisible) return
     const totalPrice = price + optionPrice
 
     if (selected) {
@@ -48,35 +47,42 @@ export default function Product({ product, loading }) {
       }
 
       if (data) {
-        setTimeout(() => {
-          dispatch({ type: PROGRESS_END, payload: { type } })
-          if (type === 'recommendedModalProduct') {
-            dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
-          }
-          dispatch(addToCart(data))
-            .then(() => dispatch(showCart()))
-            .then(() => dispatch(showModal('Product was added to the shopping cart.')))
-            .then(() => dispatch(overrideModal()))
-        }, 300)
+        dispatch({ type: PROGRESS_START, payload: { type } })
+        const cartData = store.getState().cart.cartData
+        const updated = addToCart(cartData, { product: data })
+
+        if (updated) {
+          dispatch({ type: CART_ADD, payload: updated })
+
+          setTimeout(() => {
+            if (type === 'productModal') {
+              dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
+            }
+
+            dispatch({ type: PROGRESS_END, payload: { type } })
+            dispatch(showCart())
+            dispatch(showModal(updated.lastModified.message))
+          }, 150)
+        }
       }
     }
-  }
+  }, 1500)
 
   return (
-    <div className='product' type={type}>
+    <section className='product' type={type}>
       {loading && (
         <div className='spinner-wrapper'>
-          <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} borderWidth={8} size={85} />
+          <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} borderWidth={8} size={50} />
         </div>
       )}
-      {type !== 'recommendedModalProduct' && (
+      {type !== 'productModal' && (
         <div className='product-background'>
-          {!loading && (
+          {product && (
             <Image
               src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
               layout='fill'
               objectFit='contain'
-              quality={1}
+              quality={20}
               alt=''
             />
           )}
@@ -84,8 +90,14 @@ export default function Product({ product, loading }) {
       )}
       {!loading && (
         <div className='container'>
-          <form action='' onSubmit={submitHandler}>
-            {type !== 'recommendedModalProduct' && (
+          <form
+            action=''
+            onSubmit={e => {
+              e.preventDefault()
+              submitHandler(e)
+            }}
+          >
+            {type !== 'productModal' && (
               <div className='product-header'>
                 <div onClick={router.back} className='product-redirect'>
                   <span>Go back</span>
@@ -96,20 +108,21 @@ export default function Product({ product, loading }) {
 
             <div className='product-inner'>
               <div className='product-image'>
-                {type === 'recommendedModalProduct' ? (
+                {type === 'productModal' ? (
                   <div
                     className='product-image-link'
-                    onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}
+                    onClick={() => {
+                      dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
+                      router.push(`/product/${product.slug}`)
+                    }}
                   >
-                    <Link href={`/product/${product.slug}`} passHref>
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                        alt=''
-                        width={product.image.width}
-                        height={product.image.height}
-                        quality={100}
-                      />
-                    </Link>
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                      alt=''
+                      width={product.image.width}
+                      height={product.image.height}
+                      quality={100}
+                    />
                   </div>
                 ) : (
                   <Image
@@ -128,6 +141,8 @@ export default function Product({ product, loading }) {
                   description: product.description,
                   categories: product.categories,
                   id: product.id,
+                  title: product.title,
+                  slug: product.slug,
                 }}
               />
             </div>
@@ -135,32 +150,34 @@ export default function Product({ product, loading }) {
         </div>
       )}
       <style jsx global>{`
-        .product[type='recommendedModalProduct'] .product-info-price {
+        .product[type='productModal'] .product-price {
           border: 1px solid #797b8c;
           background: #fff;
-          color: #797b8c;
+          color: #111113;
+          font-weight: 400;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-description {
+        .product[type='productModal'] .product-description {
           color: #000;
           font-weight: 400;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-label {
-          font-size: 1.5rem;
-        }
-
-        .product[type='recommendedModalProduct'] .product-info-sizes-input {
+        .product[type='productModal'] .product-option {
           background: #e2e7ec;
-          border: none;
+          border: 1px solid transparent;
+          color: #797b8c;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-sizes-input[active='false']:hover {
+        .product[type='productModal'] .product-option {
+          margin: 0;
+        }
+
+        .product[type='productModal'] .product-option[active='false']:hover {
           filter: none;
           opacity: 0.7;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-sizes-input[active='true'] {
+        .product[type='productModal'] .product-option[active='true'] {
           color: #111113;
           background-color: #fff;
           border: 1px solid #797b8c;
@@ -168,37 +185,77 @@ export default function Product({ product, loading }) {
             0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
         }
 
-        .product[type='recommendedModalProduct'] .product-info-add-to-cart {
+        .product[type='productModal'] .product-add {
           color: #797b8c;
           border: 2px solid #e2e7ec;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-count-counter {
+        .product[type='productModal'] .product-count-counter {
+          border: 2px solid #e2e7ec;
+        }
+
+        .product[type='productModal'] .product-count-counter-input {
           border-color: #e2e7ec;
+          color: #333;
         }
 
-        .product[type='recommendedModalProduct'] .product-info-count-input {
-          background: #e2e7ec;
-          color: #797b8c;
+        .product[type='productModal'] .button-counter {
+          background: #fff;
+          transition: opacity 0.25s ease;
         }
 
-        .product[type='recommendedModalProduct'] .spinner .lds-ring div {
-          border-color: #797b8c transparent transparent transparent;
-        }
-
-        .product[type='recommendedModalProduct'] svg {
-          fill: #797b8c;
-        }
-
-        @media (max-width: 920px) {
-          .product[type='recommendedModalProduct'] .product-info-label {
-            font-size: calc(1.3rem + 0.35vw);
+        .product[type='productModal'] .button-counter:hover {
+           {
+            /*background: #000;
+          opacity: 0.7;*/
           }
         }
 
-        @media (max-width: 460px) {
-          .product[type='recommendedModalProduct'] .product-info-label {
-            font-size: calc(1.3rem + 0.35vw);
+        .product[type='productModal'] .spinner .lds-ring div {
+          border-color: #797b8c transparent transparent transparent;
+        }
+
+        .product[type='productModal'] svg {
+          fill: #797b8c;
+        }
+
+        .product[type='productModal'] .arrow {
+          fill: #797b8c;
+        }
+
+        @media (max-width: 1040px) {
+          .product[type='productModal'] .product-inner {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+
+          .product[type='productModal'] .product-description {
+            min-width: 0;
+            max-width: fit-content;
+          }
+          .product[type='productModal'] .product-categories,
+          .product[type='productModal'] .input-wrapper {
+            justify-content: center;
+          }
+          .product[type='productModal'] .product-image {
+            max-width: 300px;
+          }
+
+          .product[type='productModal'] .product-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .product[type='productModal'] .product-count {
+            margin-right: 0;
+          }
+        }
+
+        @media (max-width: 920px) {
+          .label {
+            font-size: calc(1.4rem + 0.35vw) !important;
           }
         }
       `}</style>
@@ -224,17 +281,17 @@ export default function Product({ product, loading }) {
           height: 100%;
           width: 100%;
           top: 50px;
-          left: -30px;
+          left: -15px;
           z-index: 50;
           display: flex;
           justify-content: center;
         }
 
-        .product[type='recommendedModalProduct'] {
+        .product[type='productModal'] {
           min-height: auto;
         }
 
-        .product[type='recommendedModalProduct'] .product-image {
+        .product[type='productModal'] .product-image {
           min-width: 150px;
         }
 
@@ -252,7 +309,7 @@ export default function Product({ product, loading }) {
           z-index: -1;
           opacity: 0.15;
           user-select: none;
-          filter: blur(2rem);
+          filter: blur(20px);
         }
 
         input::-webkit-outer-spin-button,
@@ -311,10 +368,8 @@ export default function Product({ product, loading }) {
           border-radius: 50%;
           filter: blur(100px);
           opacity: 0.25;
-          box-shadow: inset 0 0 50px #fff, /* inner white */ inset 20px 0 80px #fff,
-            /* inner left magenta short */ inset -20px 0 80px #fff, /* inner right cyan short */ inset 20px 0 300px #fff,
-            /* inner left magenta broad */ inset -20px 0 300px #fff, /* inner right cyan broad */ 0 0 50px #fff,
-            /* outer white */ -10px 0 80px #fff, /* outer left magenta */ 10px 0 80px #fff; /* outer right cyan */
+          box-shadow: inset 0 0 50px #fff, inset 20px 0 80px #fff, inset -20px 0 80px #fff, inset 20px 0 300px #fff,
+            inset -20px 0 300px #fff, 0 0 50px #fff, -10px 0 80px #fff, 10px 0 80px #fff;
         }
 
         .product-redirect:hover {
@@ -373,6 +428,6 @@ export default function Product({ product, loading }) {
           }
         }
       `}</style>
-    </div>
+    </section>
   )
 }

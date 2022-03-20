@@ -4,7 +4,6 @@ import { memo, useEffect, useState } from 'react'
 import { getProduct } from '../../pages/api/product'
 import ProductProvider from '../../providers/ProductProvider'
 import ProductRecommended from '../ProductRecommended'
-import Spinner from '../Spinner'
 import Product from './Product'
 
 function ProductPage({ slug }) {
@@ -26,6 +25,13 @@ function ProductPage({ slug }) {
         <Product product={product.product} loading={loading} />
       </ProductProvider>
       {!loading && <ProductRecommended categories={product.categories} productSlug={product.product.slug} />}
+      <style jsx>{`
+        .product-wrapper {
+          position: relative;
+          min-height: 100vh;
+        }
+      `}</style>
+
       <style jsx global>
         {`
           .header {
@@ -38,11 +44,6 @@ function ProductPage({ slug }) {
           }
         `}
       </style>
-      <style jsx>{`
-        .product-wrapper {
-          position: relative;
-        }
-      `}</style>
     </div>
   )
 }

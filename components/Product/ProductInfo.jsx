@@ -5,11 +5,11 @@ import { useDispatch } from 'react-redux'
 import { useProductInfo } from '../../providers/ProductProvider'
 import { RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
 import AddToCartBtn from './AddToCartBtn'
-import ProductCounter from './ProductCounter'
+import ProductCounter from './ProductCount'
 import ProductOption from './ProductOption'
 import ProductPrice from './ProductPrice'
 
-const ProductInfo = memo(({ info: { Custom_field, description, categories, id } }) => {
+const ProductInfo = memo(({ info: { Custom_field, description, categories, id, title, slug } }) => {
   const {
     productInfo: { price, optionPrice, selected, count },
     type,
@@ -20,19 +20,28 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id } 
 
   return (
     <div className='product-info'>
+      {type === 'productModal' && (
+        <h2
+          className='product-title'
+          style={{ color: '#000', padding: '1rem 0' }}
+          onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}
+        >
+          <Link href={`/product/${slug}`}>{title}</Link>
+        </h2>
+      )}
       <ProductPrice price={price} optionPrice={optionPrice} type={type} />
-      <div className='product-info-categories'>
+      <div className='product-categories'>
         {categories?.map(item => (
           <Link key={item.slug} href={`/category/${item.slug}`} passHref>
-            <a className='product-info-category' onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}>
+            <a className='product-category' onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}>
               {item.name}
             </a>
           </Link>
         ))}
       </div>
-      <p className='product-info-description'>{description}</p>
+      <p className='product-description'>{description}</p>
       {Custom_field?.map(fld => (
-        <ProductOption key={fld} fld={fld} optionSelected={selected} type={type} id={id} actionType={actionType} />
+        <ProductOption key={fld} fld={fld} option={{ selected }} type={type} id={id} actionType={actionType} />
       ))}
 
       <ProductCounter count={count} type={type} actionType={actionType} />
@@ -40,17 +49,18 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id } 
 
       <style jsx>{`
         .product-info {
+          width: 100%;
           flex: 1;
         }
 
-        .product-info-description {
+        .product-description {
           min-width: 225px;
-          word-break: break-word;
           font-size: 1.8rem;
           font-weight: 300;
+          text-align: left;
         }
 
-        .product-info-categories {
+        .product-categories {
           display: flex;
           align-items: center;
           gap: 1rem;
@@ -59,7 +69,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id } 
           flex-wrap: wrap;
           width: 100%;
         }
-        .product-info-category {
+        .product-category {
           cursor: pointer;
           font-weight: 500;
           padding: 0.2rem 1rem;
@@ -83,7 +93,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id } 
           height: 7px;
         }
 
-        .product-info-add-to-cart-arrow {
+        .product-add-arrow {
           margin-left: 12px;
         }
 
@@ -95,32 +105,31 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id } 
             text-align: center;
           }
 
-          .product-info-description {
+          .product-description {
             margin-top: 3rem;
+            min-width: 0;
+            max-width: fit-content;
           }
 
-          .product-info-categories {
+          .product-categories {
             justify-content: center;
           }
         }
 
         @media (max-width: 920px) {
-          .product-info-description {
-            font-size: calc(1.3rem + 0.35vw);
+          .product-description {
+            font-size: calc(1.4rem + 0.35vw);
+            line-height: 1.75em;
           }
         }
 
         @media (max-width: 460px) {
-          .product-info-description {
-            line-height: 1.5;
-          }
-
           .container {
             padding: 0.6rem;
           }
 
-          .product-info-description {
-            font-size: calc(1.4rem + 0.35vw);
+          .product-description {
+            font-size: calc(1.5rem + 0.3vw);
           }
         }
       `}</style>

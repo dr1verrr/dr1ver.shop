@@ -9,7 +9,8 @@ import CartTotal from './CartTotal'
 function Cart({ isCartVisible }) {
   const [mounted, setMounted] = useState(false)
   const dispatch = useDispatch()
-  const { cartData } = useSelector(state => state.cart)
+  const { cartData, lastModified } = useSelector(state => state.cart)
+  const hideCart = () => dispatch({ type: CART_HIDE })
 
   useEffect(() => {
     if (!mounted) setMounted(true)
@@ -18,12 +19,8 @@ function Cart({ isCartVisible }) {
   return mounted ? (
     <div className='cart-wrapper'>
       <CartProductModal />
-      <div
-        className={`cart ${isCartVisible ? 'enter-done' : 'exit-active'}`}
-        visible={`${isCartVisible}`}
-        onTransitionEnd={() => {}}
-      >
-        <div className='cart-vision-switcher' onClick={() => dispatch({ type: CART_HIDE })}>
+      <div className={`cart ${isCartVisible ? 'enter-done' : 'exit-active'}`} visible={`${isCartVisible}`}>
+        <div className='cart-vision-switcher' onClick={hideCart}>
           <div className='icon modal__cart-continue-shopping-arrow icon__animated'>
             <svg className='arrow4' xmlns='http://www.w3.org/2000/svg'>
               <path d='M2.2 16L16.7 1.5c.4-.4.4-.9 0-1.3s-.9-.4-1.3 0L.3 15.4c-.4.4-.4.9 0 1.3l15.2 15.1c.2.2.4.3.6.3.2 0 .5-.1.6-.3.4-.4.4-.9 0-1.3L2.2 16z'></path>
@@ -35,7 +32,7 @@ function Cart({ isCartVisible }) {
           <div className='my-purchases'>
             <div className='my-purchases-title'>My purchases</div>
             <div className='my-purchases-list'>
-              <CartItems cartData={cartData} />
+              <CartItems cartData={cartData} lastModified={lastModified} />
             </div>
           </div>
           <div className='cart-footer'>
@@ -65,6 +62,7 @@ function Cart({ isCartVisible }) {
           .enter-done {
             transition: transform 750ms cubic-bezier(0.29, 0.58, 0.05, 1);
           }
+
           .cart-footer {
             padding: 30px 30px 0;
           }

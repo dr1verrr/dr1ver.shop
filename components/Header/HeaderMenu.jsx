@@ -7,15 +7,15 @@ export default function HeaderMenu() {
   const dispatch = useDispatch()
 
   return (
-    <div className='header-menu'>
+    <ul className='header-menu'>
       {categories?.map(category => (
-        <div key={category.id} className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
+        <li key={category.id} className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
           <Link href={`/category/${category.slug}`}>
             <a className='header-menu-link'>
               <span>{category.name}</span>
             </a>
           </Link>
-        </div>
+        </li>
       ))}
       <style jsx>{`
         .header-menu {
@@ -90,6 +90,6 @@ export default function HeaderMenu() {
           }
         }
       `}</style>
-    </div>
+    </ul>
   )
 }

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 
-function ProductCounter({ count, type, actionType }) {
+function ProductCounter({ count, actionType }) {
   const dispatch = useDispatch()
 
   const countHandler = useCallback(e => {
@@ -22,11 +22,11 @@ function ProductCounter({ count, type, actionType }) {
   }, [])
 
   return (
-    <div className='product-info-count'>
-      <div className='product-info-label'>Count:</div>
-      <div className='product-info-count-counter'>
+    <div className='product-count'>
+      <div className='product-label label'>Count:</div>
+      <div className='product-count-counter'>
         <button
-          className='product-info-count-counter-minus button-counter'
+          className='product-count-counter-decrement button-counter'
           type='button'
           onClick={() => {
             dispatch({ type: actionType, payload: { count: count - 1 > 0 ? count - 1 : count } })
@@ -36,9 +36,9 @@ function ProductCounter({ count, type, actionType }) {
             <path d='M9 4v1H0V4z'></path>
           </svg>
         </button>
-        <input type='number' value={count} className='product-info-count-input' onChange={countHandler} />
+        <input type='number' value={count} className='product-count-counter-input' onChange={countHandler} />
         <button
-          className='product-info-count-counter-plus button-counter'
+          className='product-count-counter-increment button-counter'
           type='button'
           onClick={() => {
             let value = count + 1
@@ -61,7 +61,7 @@ function ProductCounter({ count, type, actionType }) {
         </button>
       </div>
       <style jsx global>{`
-        .product-info-label {
+        .product-label {
           color: #636573;
           padding: 0.5rem 0;
           font-size: 1.7rem;
@@ -71,6 +71,7 @@ function ProductCounter({ count, type, actionType }) {
         .button-counter {
           border-radius: 3rem 0 0 3rem;
           transition: 0.1s background ease;
+          overflow: hidden;
         }
 
         .button-counter:last-child {
@@ -81,7 +82,7 @@ function ProductCounter({ count, type, actionType }) {
           background: rgba(255, 255, 255, 0.1);
         }
 
-        .product-info-count-counter {
+        .product-count-counter {
           display: flex;
           max-width: fit-content;
           border-radius: 3rem;
@@ -89,11 +90,7 @@ function ProductCounter({ count, type, actionType }) {
           margin-bottom: 1.5rem;
         }
 
-        .product-info-count {
-          display: inline-block;
-        }
-
-        .product-info-count-input {
+        .product-count-counter-input {
           width: 5rem;
           text-align: center;
           outline: none;
@@ -106,7 +103,9 @@ function ProductCounter({ count, type, actionType }) {
           font-weight: 500;
         }
 
-        .product-info-count {
+        .product-count {
+          display: inline-block;
+          max-width: fit-content;
           margin: 1rem 1rem 1rem 0;
         }
 
@@ -122,6 +121,12 @@ function ProductCounter({ count, type, actionType }) {
           padding: 1.5rem 2rem;
           border: none;
           cursor: pointer;
+        }
+
+        @media (max-width: 630px) {
+          .product-count {
+            margin-right: 0;
+          }
         }
 
         input[type='number'] {

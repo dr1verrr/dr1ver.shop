@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RECOMMENDED_PRODUCT_MODAL_SHOW } from '../redux/types'
 import ProductPrice from './Product/ProductPrice'
-import RecommendedProductModal from './Product/RecommendedProductModal'
+import ProductModal from './Product/ProductModal'
 
 export default function ProductRecommended({ categories, productSlug }) {
   const [toTranslate, setTranslate] = useState(0)
@@ -38,8 +38,12 @@ export default function ProductRecommended({ categories, productSlug }) {
   }
 
   return (
-    <div className='recommended'>
-      {productModal.visible && <RecommendedProductModal slug={productModal.slug} />}
+    <div className='recommended' visible={`${productModal.visible}`}>
+      {productModal.visible && (
+        <div className='recommended-product-modal'>
+          <ProductModal slug={productModal.slug} />
+        </div>
+      )}
       <div className='recommended-title'>
         <span>recommended to</span> <span>purchase</span>
       </div>
@@ -91,8 +95,23 @@ export default function ProductRecommended({ categories, productSlug }) {
           align-items: center;
           justify-content: center;
           user-select: none;
-          padding-bottom: 10rem;
+          padding: 0 2.5rem 10rem;
           min-height: 455.5px;
+        }
+
+        @keyframes modal {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: 1;
+          }
+        }
+
+        .recommended-product-modal {
+          z-index: 1000;
+          animation: modal 0.4s ease;
         }
 
         .recommended span:nth-child(2) {
@@ -215,6 +234,12 @@ export default function ProductRecommended({ categories, productSlug }) {
             max-width: 300px;
           }
         }
+
+        @media (max-width: 590px) {
+          .recommended-title {
+          }
+        }
+
         @media (max-width: 420px) {
           .recommended-product-list {
             max-width: 150px;

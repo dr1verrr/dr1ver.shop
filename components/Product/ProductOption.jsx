@@ -1,49 +1,59 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { CART_UPDATE, PRODUCT_UPDATE } from '../../redux/types'
+import { useAuth } from '../../contexts/auth'
 
-function ProductOption({ fld, cart, optionSelected, type, actionType, id }) {
-  const options = fld.options.split('|')
+function ProductOption({ fld, cart, actionType, option, setOption }) {
+  const options = fld.options.split('|').map(opt => {
+    const optionPrice = parseFloat(opt.match(/\[*(\d+.\d+)\]/)[1])
+    const optionName = opt.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
+
+    return { optionPrice, optionName }
+  })
+
   const dispatch = useDispatch()
+  const { isAuthenticated } = useAuth()
 
-  const optionHandler = useCallback((value, price) => {
+  const optionHandler = useCallback((optName, optPrice) => {
     if (cart) {
-      return dispatch({
-        type: CART_UPDATE,
-        payload: { id, optionPrice: price, selected: value, oldSelected: optionSelected },
+      return setOption({
+        ...option,
+        selected: optName,
+        price: optPrice,
+        changed: option.old !== optName ? true : false,
       })
     }
-    dispatch({ type: actionType, payload: { selected: value, optionPrice: price } })
+    dispatch({ type: actionType, payload: { selected: optName, optionPrice: optPrice } })
   }, [])
 
   return (
-    <div key={fld.id} className={`product-info-sizes ${cart ? 'cart' : ''}`}>
-      <div className='product-info-label'>{cart ? 'Size' : fld.title}:</div>
+    <div key={fld.id} className={`product-options ${cart ? 'cart' : ''}`}>
+      <div className='product-label label'>{cart ? 'Size' : fld.title}:</div>
       <div className='input-wrapper'>
-        {options.map(s => {
-          const price = parseFloat(s.match(/\[*(\d+.\d+)\]/)[1])
-          const value = s.replace(/ *\[[^\]]*]/, '').replace(/\[|\]/g, '')
-          const option = value.charAt(0)
+        {options.map(opt => {
+          const optName = opt.optionName
+          const optPrice = opt.optionPrice
+          const value = optName.charAt(0)
 
           return (
             <input
               type='button'
-              key={s}
-              className='product-info-sizes-input'
-              active={optionSelected === value ? 'true' : 'false'}
-              value={option}
-              onClick={e => optionHandler(value, price)}
+              key={optName}
+              className='product-option'
+              active={`${option?.selected === optName}`}
+              changed={`${option.changed && option?.selected === optName}`}
+              value={value}
+              onClick={() => optionHandler(optName, optPrice)}
             />
           )
         })}
       </div>
       <style jsx>{`
-        .product-info-sizes-input {
+        input {
           display: block;
           color: #797b8c;
           position: relative;
           transition-duration: 0.3s;
-          transition-property: color, background-color, transform, border, filter, opacity;
+          transition-property: color, background-color, transform, border-color, filter, opacity, font-weight;
           cursor: pointer;
           border: 2px solid #797b8c;
           background: transparent;
@@ -53,54 +63,57 @@ function ProductOption({ fld, cart, optionSelected, type, actionType, id }) {
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;
-          font-weight: 700;
         }
 
-        .product-info-sizes-input[active='true'] {
+        .product-option[active='true'] {
           background-color: #fff;
           color: #000;
           border: 2px solid #fff;
+          font-weight: 700;
         }
 
-        .cart .product-info-label {
-          font-size: 1.5rem;
-          color: #929da1;
-        }
-
-        .cart .product-info-sizes-input {
+        .cart .product-option {
           background: #e2e7ec;
           border: none;
         }
 
-        .cart .product-info-sizes-input[active='true'] {
+        .cart .product-label {
+          font-size: 1.5rem;
+          color: #929da1;
+        }
+
+        .cart .product-option[active='true'] {
           color: #000;
           background-color: #fff;
-          border: 1px solid #797b8c;
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07),
             0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
         }
 
-        input[active='true']:hover {
+        .cart .product-option[changed='true'] {
+          border: 1px solid #797b8c;
+        }
+
+        .product-option[active='true']:hover {
           filter: none;
           color: #999;
         }
 
-        .product-info-sizes-input:hover {
+        .product-option:hover {
           filter: brightness(0.9);
         }
 
-        .product-info-sizes {
+        .product-options {
           padding: 0.75rem 0;
         }
 
-        .product-info-sizes-input[active='false']:hover {
+        .product-option[active='false']:hover {
           filter: brightness(1.5);
         }
 
-        .cart .product-info-sizes-input[active='false']:hover {
+        .cart .product-option[active='false']:hover {
           filter: brightness(0.9);
         }
-        .product-info-sizes-input:last-child {
+        .product-option:last-child {
           margin-right: 0;
         }
 
@@ -112,7 +125,7 @@ function ProductOption({ fld, cart, optionSelected, type, actionType, id }) {
         }
 
         .cart .input-wrapper {
-          gap: 0rem;
+          gap: 0;
         }
 
         @media (max-width: 630px) {

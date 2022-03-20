@@ -22,18 +22,11 @@ export const showModal = payload => {
   return dispatch => {
     return new Promise((resolve, reject) => {
       dispatch({ type: MODAL_SHOW, payload })
-      resolve()
-    })
-  }
-}
-
-export const overrideModal = () => {
-  return dispatch => {
-    return new Promise((resolve, reject) => {
       setTimeout(() => {
         dispatch({ type: MODAL_OVERRIDE })
         resolve()
       }, 10)
+      resolve()
     })
   }
 }
