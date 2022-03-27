@@ -4,6 +4,6 @@ module.exports = {
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
   },
   images: {
-    domains: ['localhost', process.env.NEXT_PUBLIC_API_URL, 'via.placeholder.com'],
+    domains: [process.env.NEXT_PUBLIC_API_DOMAIN, process.env.NEXT_PUBLIC_API_URL, 'via.placeholder.com'],
   },
 }
