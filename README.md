@@ -8,7 +8,7 @@ This is an ecommerce project that uses Next.js, React.js, Redux.js
 * User data management - Update/Remove/Add products to cart
 * Session support with secure HTTP Only cookies
 
-You can see a live demo at **https://nextjs-starter.now.sh**
+You can see a live demo at **https://dr1ver-shop.vercel.app/**
 
 ## About 
 
