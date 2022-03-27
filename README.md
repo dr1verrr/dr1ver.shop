@@ -1,6 +1,20 @@
 This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Published: in progress...
+# Next.js ecommerce project
+
+This is an ecommerce project that uses Next.js, React.js, Redux.js
+
+* Authentication via Email (uses JWT)
+* User data management - Update/Remove/Add products to cart
+* Session support with secure HTTP Only cookies
+
+You can see a live demo at **https://nextjs-starter.now.sh**
+
+## About 
+
+This is an ecommerce pet-project that provides an example of how to use Next.js, make authenticated requests, jwt authentication and how to build an ecommerce wep-application with this React framework.
+
+This project exists to make it be refactored in the future. 
 
 ## Getting Started
 
