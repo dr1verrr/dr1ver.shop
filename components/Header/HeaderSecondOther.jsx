@@ -7,7 +7,6 @@ import TotalPrice from '../TotalPrice'
 
 export default function HeaderSecondOther() {
   const dispatch = useDispatch()
-  const { cartData = [] } = useSelector(state => state.cart)
   const { isAuthenticated } = useAuth()
   const router = useRouter()
 

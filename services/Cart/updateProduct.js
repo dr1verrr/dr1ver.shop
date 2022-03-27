@@ -1,8 +1,9 @@
-const findDuplicateProduct = (cartData, updated, params) => {
+const updateProduct = (cartData, changedParams, params) => {
   let modified = [...cartData],
     flag = false,
     newProductIndex = 0,
-    existProductsSelected = []
+    existProductsSelected = [],
+    updatedProduct = {}
 
   const found = index => cartData[index].id == params.id && cartData[index].selected === params.option.old
 
@@ -26,25 +27,32 @@ const findDuplicateProduct = (cartData, updated, params) => {
     let isDuplicateExist = false
 
     for (let index = 0; index < existProductsSelected.length; index++) {
-      if (existProductsSelected[index] === updated.option.selected && params.option.old !== updated.option.selected) {
+      if (
+        existProductsSelected[index] === changedParams.option.selected &&
+        params.option.old !== changedParams.option.selected
+      ) {
         isDuplicateExist = true
         flag = false
       }
 
       if (index == existProductsSelected.length - 1 && !isDuplicateExist) {
-        modified[newProductIndex] = {
+        modified[newProductIndex] = updatedProduct = {
           ...modified[newProductIndex],
-          count: updated.count,
-          optionPrice: updated.option.price,
-          selected: updated.option.selected,
+          count: changedParams.count,
+          optionPrice: changedParams.option.price,
+          selected: changedParams.option.selected,
         }
       }
     }
   }
 
-  if (!flag) return { lastModified: { id: params.id, selected: updated.option.selected } }
+  if (!flag) return { lastModified: { id: params.id, selected: changedParams.option.selected } }
 
-  return { cartData: modified, lastModified: { id: params.id, selected: updated.option.selected } }
+  return {
+    cartData: modified,
+    lastModified: { id: params.id, selected: changedParams.option.selected },
+    product: updatedProduct,
+  }
 }
 
-export default findDuplicateProduct
+export default updateProduct

@@ -39,6 +39,24 @@ body {
   letter-spacing: 0.5px;
 }
 
+a:focus-visible {
+  outline: none;
+}
+
+a:focus-visible span {
+  border-radius: 15px;
+}
+
+input:focus-visible,
+button:focus-visible,
+a:focus-visible span {
+  outline: 2px solid #1e90ff;
+}
+
+input:focus-visible {
+  border-radius: initial;
+}
+
 button {
   cursor: pointer;
 }

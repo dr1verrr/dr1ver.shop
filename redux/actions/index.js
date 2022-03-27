@@ -1,9 +1,9 @@
-import { CART_ADD, CART_SHOW, MODAL_OVERRIDE, MODAL_SHOW } from '../types'
+import { CART_UPDATE, CART_SHOW, MODAL_OVERRIDE, MODAL_SHOW } from '../types'
 
 export const addToCart = payload => {
   return dispatch => {
     return new Promise((resolve, reject) => {
-      dispatch({ type: CART_ADD, payload })
+      dispatch({ type: CART_UPDATE, payload })
       resolve()
     })
   }

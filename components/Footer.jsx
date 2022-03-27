@@ -110,9 +110,9 @@ const Footer = memo(({ categories }) => {
         </div>
         <div className='payment-content'>
           <div className='payment-label label'>We accept:</div>
-          <div className='payment-methods'>
+          <div className='payment-partners'>
             {PaymentsIcons.map(icon => (
-              <div key={icon.id} className='payment-method footer-logo'>
+              <div key={icon.id} className='payment-partner footer-logo'>
                 {icon.svg}
               </div>
             ))}
@@ -156,7 +156,7 @@ const Footer = memo(({ categories }) => {
           text-decoration: underline;
         }
 
-        .payment-methods {
+        .payment-partners {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           grid-gap: 1rem;

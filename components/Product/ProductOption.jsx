@@ -11,7 +11,6 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
   })
 
   const dispatch = useDispatch()
-  const { isAuthenticated } = useAuth()
 
   const optionHandler = useCallback((optName, optPrice) => {
     if (cart) {
@@ -90,7 +89,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
         }
 
         .cart .product-option[changed='true'] {
-          border: 1px solid #797b8c;
+          border: 2px solid #1e90ff;
         }
 
         .product-option[active='true']:hover {

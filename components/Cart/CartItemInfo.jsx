@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../../contexts/auth'
-import findDuplicateProduct from '../../services/Cart/findDuplicateProduct'
+import updateProduct from '../../services/Cart/updateProduct'
 import { showModal } from '../../redux/actions'
 import store from '../../redux/store'
 import { CART_UPDATE } from '../../redux/types'
 import CartOption from '../Product/ProductOption'
 import CartButton from '../ProductButton'
 import CartCount from './CartCount'
+import saveChanges from '../../services/Cart/saveChanges'
 
 export default function CartItemInfo({ product, showProductModal }) {
   const price = product.price
@@ -19,6 +20,7 @@ export default function CartItemInfo({ product, showProductModal }) {
     changed: false,
   })
   const isChanged = option.changed || count.changed
+  const totalPrice = (count.value * (price + option.price)).toFixed(2)
 
   const dispatch = useDispatch()
   const { isAuthenticated } = useAuth()
@@ -28,10 +30,10 @@ export default function CartItemInfo({ product, showProductModal }) {
     setOption({ old: product.selected, selected: product.selected, price: product.optionPrice, changed: false })
   }
 
-  const saveChanges = () => {
-    const getUpdatedProduct = findDuplicateProduct
+  const applyChanges = () => {
+    const getUpdatedProduct = updateProduct
 
-    const updated = {
+    const changedData = {
       option: { selected: option.selected, price: option.price },
       count: count.value,
     }
@@ -40,19 +42,26 @@ export default function CartItemInfo({ product, showProductModal }) {
       option: { old: option.old },
       count: { old: count.old },
       id: product.id,
-      isAuthenticated,
     }
 
     const cartData = store.getState().cart.cartData
 
-    const updatedProduct = getUpdatedProduct(cartData, updated, params)
+    const updated = getUpdatedProduct(cartData, changedData, params)
 
-    if (updatedProduct.cartData) {
-      dispatch({ type: CART_UPDATE, payload: updatedProduct })
-      dispatch(showModal(`Product ${option.changed && count.changed ? 'options were changed' : 'option was changed'}.`))
+    if (updated.cartData) {
+      saveChanges(
+        updated,
+        () => {
+          dispatch({ type: CART_UPDATE, payload: updated })
+          dispatch(
+            showModal(`Product ${option.changed && count.changed ? 'options were changed' : 'option was changed'}.`)
+          )
+        },
+        isAuthenticated
+      )
     } else {
       resetChanges()
-      dispatch({ type: CART_UPDATE, payload: { lastModified: updatedProduct.lastModified } })
+      dispatch({ type: CART_UPDATE, payload: { lastModified: updated.lastModified } })
       dispatch(showModal('Product is already exist.'))
     }
   }
@@ -62,7 +71,7 @@ export default function CartItemInfo({ product, showProductModal }) {
   return (
     <div className='cartItem-options'>
       <div className='cart-right'>
-        <div className='item-cart-price'>{(count.value * (price + option.price)).toFixed(2)} USD</div>
+        <div className='item-cart-price'>{totalPrice} USD</div>
         <div className='item-title' onClick={showProductModal}>
           {product.name}
         </div>
@@ -78,19 +87,19 @@ export default function CartItemInfo({ product, showProductModal }) {
             setCount={setCount}
             isChanged={isChanged}
             resetChanges={resetChanges}
-            saveChanges={saveChanges}
+            applyChanges={applyChanges}
           />
         </div>
         {isChanged && (
-          <div className='save-changes-wrapper'>
-            {count.value !== 0 && (
-              <div className='btn-save' onClick={saveChanges}>
-                <CartButton btnType='cart-changes-save' cart={true}>
-                  Save changes
+          <div className='apply-changes-wrapper'>
+            {count.value && (
+              <div className='btn-apply changes-btn' onClick={applyChanges}>
+                <CartButton btnType='cart-changes-apply' cart={true}>
+                  Apply changes
                 </CartButton>
               </div>
             )}
-            <div className='btn-reset-changes' onClick={resetChanges}>
+            <div className='btn-reset-changes changes-btn' onClick={resetChanges}>
               <CartButton btnType='cart-changes-reset' cart={true}>
                 Reset
               </CartButton>
@@ -157,15 +166,19 @@ export default function CartItemInfo({ product, showProductModal }) {
           }
         }
 
-        .save-changes-wrapper {
+        .apply-changes-wrapper {
           display: flex;
           grid-gap: 0.5rem;
-          width: 120px;
           flex-direction: column;
           position: absolute;
           bottom: 60px;
           left: 0;
           animation: btnChange 0.3s ease;
+        }
+
+        .changes-btn {
+          max-width: 120px;
+          min-width: 120px;
         }
 
         @media (max-width: 420px) {
@@ -175,7 +188,7 @@ export default function CartItemInfo({ product, showProductModal }) {
         }
 
         @media (max-width: 340px) {
-          .save-changes-wrapper {
+          .apply-changes-wrapper {
             position: static;
             margin-top: 2rem;
             flex-direction: row;
@@ -183,7 +196,7 @@ export default function CartItemInfo({ product, showProductModal }) {
             justify-content: center;
           }
 
-          .btn-save,
+          .btn-apply,
           .btn-reset-changes {
             width: 100%;
           }

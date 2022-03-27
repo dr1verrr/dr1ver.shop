@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import CartItem from './CartItem'
 
 const CartItems = ({ cartData, lastModified }) => {
@@ -7,7 +7,7 @@ const CartItems = ({ cartData, lastModified }) => {
       {cartData?.map(item => {
         return (
           <CartItem
-            key={item.id + item.selected}
+            key={item.id + item.selected?.charAt(0)}
             product={item}
             lastModified={
               lastModified && item.id == lastModified.id && item.selected === lastModified.selected

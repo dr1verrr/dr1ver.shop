@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import api from '../config/api'
 import useRequest from '../hooks/useRequest'
+import { CART_UPDATE } from '../redux/types'
 
 const AuthContext = createContext({})
 
@@ -12,6 +14,7 @@ const AuthProvider = ({ children }) => {
   const privateRoutes = ['/profile']
   const isPrivate = privateRoutes.includes(router.pathname)
   const getToken = useRequest()
+  const dispatch = useDispatch()
 
   function checkRoute() {
     if (isPrivate && !loading && !user) {
@@ -21,14 +24,19 @@ const AuthProvider = ({ children }) => {
 
   useEffect(checkRoute, [router.pathname, user, loading])
 
-  async function loadUserFromCookies() {
+  async function loadUserFromCookies(authType) {
     try {
       const token = await getToken('/api/token', { method: 'GET' }).then(res => res.data)
 
       if (token) {
         api.defaults.headers.Authorization = `Bearer ${token}`
         const { data: user } = await api.get('/users/me')
-        if (user) setUser(user)
+
+        if (user) {
+          setUser(user)
+          if (authType === 'login') dispatch({ type: CART_UPDATE, payload: { cartData: user.cartdata || [] } })
+          return user
+        }
       }
     } catch (err) {
       console.error(err)

@@ -27,8 +27,8 @@ function MyApp({ Component, pageProps, router }) {
       <Provider store={store}>
         <Mask />
         <Modal />
-        <Cart />
         <AuthProvider>
+          <Cart />
           <AuthModal />
           <Header />
           <Layout>

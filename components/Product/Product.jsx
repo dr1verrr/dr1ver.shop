@@ -8,9 +8,10 @@ import throttle from '../../helpers/throttle'
 import { useProductInfo } from '../../providers/ProductProvider'
 import { showCart, showModal } from '../../redux/actions'
 import store from '../../redux/store'
-import { CART_ADD, PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
+import { CART_UPDATE, PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
 import Spinner from '../Spinner'
 import ProductInfo from './ProductInfo'
+import saveChanges from '../../services/Cart/saveChanges'
 
 export default function Product({ product, loading }) {
   const dispatch = useDispatch()
@@ -31,14 +32,12 @@ export default function Product({ product, loading }) {
       dispatch({ type: actionType, payload: { count: 1 } })
     }
 
-    const totalPrice = price + optionPrice
-
     if (selected) {
       const data = {
         id: product.id,
         name: product.title,
         slug: product.slug,
-        price: totalPrice,
+        price,
         selected,
         optionPrice,
         count: count ? parseInt(count) : 1,
@@ -52,17 +51,22 @@ export default function Product({ product, loading }) {
         const updated = addToCart(cartData, { product: data })
 
         if (updated) {
-          dispatch({ type: CART_ADD, payload: updated })
+          saveChanges(
+            updated,
+            () => {
+              dispatch({ type: CART_UPDATE, payload: updated })
+              setTimeout(() => {
+                if (type === 'productModal') {
+                  dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
+                }
 
-          setTimeout(() => {
-            if (type === 'productModal') {
-              dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
-            }
-
-            dispatch({ type: PROGRESS_END, payload: { type } })
-            dispatch(showCart())
-            dispatch(showModal(updated.lastModified.message))
-          }, 150)
+                dispatch({ type: PROGRESS_END, payload: { type } })
+                dispatch(showCart())
+                dispatch(showModal(updated.lastModified.message))
+              }, 150)
+            },
+            isAuthenticated
+          )
         }
       }
     }
@@ -196,7 +200,7 @@ export default function Product({ product, loading }) {
 
         .product[type='productModal'] .product-count-counter-input {
           border-color: #e2e7ec;
-          color: #333;
+          color: #797b8c;
         }
 
         .product[type='productModal'] .button-counter {

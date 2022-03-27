@@ -23,7 +23,7 @@ function Products({ slug }) {
 
   const handleScroll = useDebouncedFunction(() => {
     if (
-      window.innerHeight + document.documentElement.scrollTop < productPage.current.offsetHeight - 300 ||
+      window.innerHeight + document.documentElement.scrollTop + 400 < productPage.current.offsetHeight ||
       productsLoading
     ) {
       return false
@@ -43,7 +43,7 @@ function Products({ slug }) {
       }
 
       setProductsLoading(false)
-    }, 250)
+    }, 150)
   }, [productsLoading])
 
   useEffect(() => {
@@ -88,7 +88,10 @@ function Products({ slug }) {
                   <Link key={product.id} href={`/product/${product.slug}`} passHref>
                     <div className='product-inner'>
                       <div className='product'>
-                        <div className='product-price'>{product.price + ' USD'}</div>
+                        <div className='product-price'>
+                          <span>{product.price}</span>
+                          <span>USD</span>
+                        </div>
                         <div className='product-image'>
                           {product.image ? (
                             <Image
@@ -142,10 +145,9 @@ function Products({ slug }) {
           letter-spacing: 2px;
           font-size: 2rem;
           cursor: pointer;
-          white-space: nowrap;
-          text-overflow: ellipsis;
           overflow: hidden;
           background: transparent;
+          word-break: break-all;
         }
 
         .spinner-bottom {
@@ -210,11 +212,18 @@ function Products({ slug }) {
           left: 0;
           top: 0;
           z-index: 5;
+          display: flex;
+          flex-wrap: wrap-reverse;
+          align-items: center;
+          justify-content: center;
           padding: 0.75rem 2.5rem 0.75rem;
+          grid-gap: 0.4rem;
+          max-width: 85%;
           color: #fff;
+          word-break: break-all;
           font-size: 2.4rem;
           font-weight: 500;
-          background-color: #1d1f21;
+          background-color: #000;
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;
         }

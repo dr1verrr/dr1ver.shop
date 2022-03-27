@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
 import useOnClickOutside from '../hooks/useOnClickOutside'
 import useRequest from '../hooks/useRequest'
-import { AUTH_MODAL_UPDATE } from '../redux/types'
+import store from '../redux/store'
+import { AUTH_MODAL_UPDATE, CART_UPDATE } from '../redux/types'
+import saveChanges from '../services/Cart/saveChanges'
 
 const AuthModal = memo(({ authModal }) => {
-  const { loadUserFromCookies } = useAuth()
+  const { user, loadUserFromCookies } = useAuth()
   const popupRef = useRef()
   const router = useRouter()
   const sendAuthData = useRequest()
@@ -27,12 +29,27 @@ const AuthModal = memo(({ authModal }) => {
   async function handleSubmit(e, guest) {
     e.preventDefault()
 
-    sendAuthData(authModal.login || guest ? '/api/login' : '/api/register', { method: 'post', data: guest || userData })
-      .then(() => loadUserFromCookies())
-      .then(() => {
+    const cartData = store.getState().cart.cartData
+
+    console.log(cartData)
+
+    const authenticated = await sendAuthData(authModal.login || guest ? '/api/login' : '/api/register', {
+      method: 'post',
+      data: guest || userData,
+    })
+
+    if (authenticated.status == 200) {
+      const cb = type => {
+        if (type === 'register') dispatch({ type: CART_UPDATE, payload: { cartData } })
         dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
         router.push('/profile')
+      }
+
+      loadUserFromCookies(authModal.register ? 'register' : 'login').then(isAuthenticated => {
+        if (authModal.register) return saveChanges({ cartData }, () => cb('register'), isAuthenticated)
+        return cb('login')
       })
+    }
   }
 
   function signAsGuest(e) {
@@ -112,15 +129,12 @@ const AuthModal = memo(({ authModal }) => {
             required
           />
           <div className='btn-group'>
-            <input className='btn-submit' type='submit' value={authModal.login ? 'Sign in' : 'Sign up'} />
-            <input
-              className='btn-submit btn-guest'
-              type='submit'
-              signas='guest'
-              value='Sign in as guest'
-              onClick={signAsGuest}
-              readOnly
-            />
+            <div className='btn-group-inner'>
+              <button className='btn-submit'>{authModal.login ? 'Sign in' : 'Sign up'}</button>
+            </div>
+            <button className='btn-submit btn-guest' type='button' signas='guest' onClick={signAsGuest}>
+              {authModal.login ? 'Sign in as guest' : 'Sign up as guest'}
+            </button>
           </div>
           <div
             style={{ fontSize: '1.8rem' }}
@@ -138,6 +152,7 @@ const AuthModal = memo(({ authModal }) => {
           display: flex;
           flex-direction: column;
         }
+
         input {
           border: none;
           background-image: none;
@@ -161,11 +176,24 @@ const AuthModal = memo(({ authModal }) => {
           flex-wrap: wrap;
         }
 
-        input[type='submit'] {
-          height: auto;
+        .btn-google {
+          white-space: nowrap;
+          display: flex;
+        }
+
+        .btn-group-inner {
+          display: flex;
+          width: 100%;
+          grid-gap: 1rem;
+          max-height: 39px;
+        }
+
+        button {
           min-width: fit-content;
+          font-size: 1.6rem;
           padding: 1rem 2rem;
           border: none;
+          border-radius: 3rem;
           background: #111113;
           color: #fff;
           text-transform: uppercase;
@@ -175,10 +203,18 @@ const AuthModal = memo(({ authModal }) => {
           letter-spacing: 0.5px;
         }
 
-        input[type='submit'][signas='guest'] {
+        button[signas='guest'] {
           background: transparent;
           border: 1px solid #ccc;
           color: #000;
+        }
+
+        button[signas='google'] {
+          background: transparent;
+          border: none;
+          display: flex;
+          width: fit-content;
+          align-items: center;
         }
 
         .auth-modal {

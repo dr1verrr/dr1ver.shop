@@ -76,7 +76,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           border-radius: 30px;
           background: #ccc;
           color: #000;
-          min-width: 15%;
+          max-width: fit-content;
           text-align: center;
         }
 

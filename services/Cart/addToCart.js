@@ -1,32 +1,31 @@
 const addToCart = (cartData, data) => {
-  const newProduct = data.product
+  const product = data.product
 
   let modified = []
   let flag = false
   let isOverValue = false
+  let updatedProduct = {}
   let lastModified = {
-    id: newProduct.id,
-    selected: newProduct.selected,
+    id: product.id,
+    selected: product.selected,
     message: 'Product was added to the shopping cart.',
   }
 
-  const isExist = index => cartData[index].id == newProduct.id && cartData[index].selected === newProduct.selected
+  const isExist = index => cartData[index].id == product.id && cartData[index].selected === product.selected
 
   if (cartData.length) {
     modified = [...cartData]
 
     for (let index = 0; index < cartData.length; index++) {
       if (isExist(index)) {
-        if (cartData[index].count == 99) {
+        if (cartData[index].count == 90) {
           isOverValue = true
           break
         }
 
-        modified[index] = {
-          ...newProduct,
-          count: parseInt(
-            cartData[index].count + newProduct.count > 99 ? 99 : cartData[index].count + newProduct.count
-          ),
+        modified[index] = updatedProduct = {
+          ...product,
+          count: parseInt(cartData[index].count + product.count > 90 ? 90 : cartData[index].count + product.count),
         }
         flag = true
         break
@@ -37,16 +36,26 @@ const addToCart = (cartData, data) => {
   }
 
   if (isOverValue) {
-    return { cartData, lastModified: { ...lastModified, message: 'Max count is already set.' } }
+    return {
+      lastModified: { ...lastModified, message: 'Max count is already set.' },
+    }
   }
 
   if (!cartData.length) modified = null
 
   if (flag) {
-    return { cartData: modified, lastModified: { ...lastModified, message: 'Product was updated.' } }
+    return {
+      cartData: modified,
+      lastModified: { ...lastModified, message: 'Product was updated.' },
+      product: updatedProduct,
+    }
   }
 
-  return { cartData: [...cartData, newProduct], lastModified }
+  return {
+    cartData: [...cartData, product],
+    lastModified,
+    product: { id: product.id, selected: product.selected, count: product.count },
+  }
 }
 
 export default addToCart

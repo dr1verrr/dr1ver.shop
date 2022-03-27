@@ -136,13 +136,12 @@ export default function ProductRecommended({ categories, productSlug }) {
 
         .product-recs-arrow-right {
           right: 0;
-          transform: rotate(360deg);
           display: ${isLastPage ? 'none' : 'block'};
         }
 
         .product-recs-arrow-left {
           left: 0;
-          transform: rotate(-180deg);
+          transform: rotate(-180deg) translateY(5px);
           display: ${toTranslate == 0 ? 'none' : 'block'};
         }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CartCount({ count, setCount, resetChanges, saveChanges, isChanged }) {
+export default function CartCount({ count, setCount, applyChanges, isChanged }) {
   const resetCount = () => {
     setCount({ ...count, value: count.old, changed: false })
   }
@@ -12,9 +12,13 @@ export default function CartCount({ count, setCount, resetChanges, saveChanges, 
         e.target.blur()
       }
 
-      if (e.key === 'Enter' && count.value !== 0) {
-        saveChanges()
-        e.target.blur()
+      if (e.key === 'Enter') {
+        if (count.value) {
+          e.target.blur()
+          applyChanges()
+        } else {
+          resetCount()
+        }
       }
     }
   }
@@ -26,7 +30,7 @@ export default function CartCount({ count, setCount, resetChanges, saveChanges, 
     let updatedCount = 0
 
     const updateCount = () => {
-      setCount(cnt => ({ ...cnt, value: updatedCount, changed: updatedCount !== cnt.old }))
+      setCount(cnt => ({ ...cnt, value: updatedCount || '', changed: updatedCount !== cnt.old }))
     }
 
     if (btnValue) {
@@ -50,7 +54,7 @@ export default function CartCount({ count, setCount, resetChanges, saveChanges, 
         updatedCount = 90
       }
 
-      if (value >= 0 && value < 90 && !updatedCount) {
+      if (value > 0 && value < 90 && !updatedCount) {
         updatedCount = value
       }
 
@@ -85,63 +89,43 @@ export default function CartCount({ count, setCount, resetChanges, saveChanges, 
       <style jsx>{`
         .counter-wrapper {
           display: flex;
-          max-width: fit-content;
+          width: fit-content;
           border-radius: 1.5rem;
           border: 2px solid #e2e7ec;
           overflow: hidden;
-        }
-
-        button[type='button'] {
-          background: none;
-          border: none;
         }
 
         button {
           transition: 0.25s background ease, 0.25s filter ease;
           box-sizing: border-box;
           outline: none;
-          background-color: transparent;
+          background: #fff;
           padding: 1rem 2rem;
           border: none;
           cursor: pointer;
         }
 
-        button[btntype='plus'] {
-          border: none;
-        }
-
-        .button-counter:hover {
-          background-color: #f2f3f4;
-        }
-
         input {
           transition: background 0.3s ease;
           box-sizing: border-box;
+          background: #fff;
           width: 5rem;
           text-align: center;
           outline: none;
           border: none;
-          background: #e2e7ec;
+          border-left: 1px solid #e2e7ec;
+          border-right: 1px solid #e2e7ec;
           color: #555;
           font-size: 1.6rem;
-          border-right: 2px solid #e2e7ec;
-          border-left: 2px solid #e2e7ec;
+        }
+
+        .counter-wrapper[changed='true'] {
+          border-color: #1e90ff;
         }
 
         .counter-wrapper[changed='true'] input {
-          background: transparent;
-          color: #333;
-        }
-
-        .counter-wrapper[changed='true'] button {
-          background: #333;
-        }
-
-        .counter-wrapper[changed='true'] button svg {
-          fill: #fff;
-        }
-        .counter-wrapper[changed='true'] {
-          border: 2px solid #797b8c;
+          background: #f2f2f2;
+          color: #000;
         }
 
         svg {

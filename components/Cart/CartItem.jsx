@@ -3,7 +3,10 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAuth } from '../../contexts/auth'
 import { showModal } from '../../redux/actions'
-import { CART_REMOVE, PRODUCT_MODAL_SHOW } from '../../redux/types'
+import store from '../../redux/store'
+import { CART_UPDATE, PRODUCT_MODAL_SHOW } from '../../redux/types'
+import filterCartData from '../../services/Cart/filterCartData'
+import saveChanges from '../../services/Cart/saveChanges'
 import CartItemInfo from './CartItemInfo'
 
 const CartItem = ({ product, lastModified }) => {
@@ -12,7 +15,6 @@ const CartItem = ({ product, lastModified }) => {
   const { isAuthenticated } = useAuth()
   const itemRef = useRef()
   const [isFocused, setFocused] = useState(false)
-
   function isInViewport(el) {
     const rect = el.getBoundingClientRect()
     return (
@@ -34,8 +36,19 @@ const CartItem = ({ product, lastModified }) => {
   }, [lastModified])
 
   const removeProduct = () => {
-    dispatch({ type: CART_REMOVE, payload: { product, isAuthenticated } })
-    dispatch(showModal('Product was removed from the basket.'))
+    const cartData = store.getState().cart.cartData
+    const filteredData = filterCartData(cartData, product)
+
+    if (filteredData.cartData) {
+      saveChanges(
+        filteredData,
+        () => {
+          dispatch({ type: CART_UPDATE, payload: { cartData: filteredData.cartData } })
+          dispatch(showModal('Product was removed from the basket.'))
+        },
+        isAuthenticated
+      )
+    }
   }
 
   return (
@@ -73,7 +86,7 @@ const CartItem = ({ product, lastModified }) => {
 
         @keyframes modified {
           0% {
-            background: #87cefa;
+            background: #1e90ff;
           }
 
           100% {
@@ -97,10 +110,6 @@ const CartItem = ({ product, lastModified }) => {
           z-index: -1;
           animation: modified 1s ease;
           animation-delay: 250ms;
-        }
-
-        .cart-item:first-child {
-          padding-top: 0;
         }
 
         .cart-left {
@@ -158,7 +167,7 @@ const CartItem = ({ product, lastModified }) => {
           right: 0;
           left: 0;
           bottom: 0;
-          background: #333;
+          background: #000;
           opacity: 0;
           width: 100%;
           height: 100%;

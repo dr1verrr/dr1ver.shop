@@ -1,13 +1,19 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { useAuth } from '../contexts/auth'
 import useRequest from '../hooks/useRequest'
+import { CART_UPDATE } from '../redux/types'
 
 const Profile = props => {
   const { user, setUser } = useAuth()
   const logoutRequest = useRequest()
+  const dispatch = useDispatch()
 
-  async function logout() {
-    logoutRequest('/api/logout', { method: 'get' }).then(() => setUser(null))
+  const logout = async () => {
+    await logoutRequest('/api/logout', { method: 'get' }).then(() => {
+      dispatch({ type: CART_UPDATE, payload: { cartData: [] } })
+      setUser(null)
+    })
   }
 
   return (

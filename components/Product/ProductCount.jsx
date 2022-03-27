@@ -68,26 +68,13 @@ function ProductCounter({ count, actionType }) {
         }
       `}</style>
       <style jsx>{`
-        .button-counter {
-          border-radius: 3rem 0 0 3rem;
-          transition: 0.1s background ease;
-          overflow: hidden;
-        }
-
-        .button-counter:last-child {
-          border-radius: 0 3rem 3rem 0;
-        }
-
-        .button-counter:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-
         .product-count-counter {
           display: flex;
           max-width: fit-content;
           border-radius: 3rem;
           border: 2px solid #fff;
           margin-bottom: 1.5rem;
+          height: 48px;
         }
 
         .product-count-counter-input {
@@ -118,9 +105,21 @@ function ProductCounter({ count, actionType }) {
         button {
           outline: none;
           background-color: transparent;
-          padding: 1.5rem 2rem;
+          height: 100%;
+          padding: 0 2.5rem;
           border: none;
           cursor: pointer;
+          border-radius: 3rem 0 0 3rem;
+          transition: 0.1s background ease;
+          overflow: hidden;
+        }
+
+        button:last-child {
+          border-radius: 0 3rem 3rem 0;
+        }
+
+        button:hover {
+          background: rgba(255, 255, 255, 0.1);
         }
 
         @media (max-width: 630px) {

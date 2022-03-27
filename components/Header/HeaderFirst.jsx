@@ -96,15 +96,15 @@ export default function HeaderFirst() {
 
         @keyframes init {
           0% {
-            transform: translateY(500%) scale(0);
+            transform: translateY(calc(50vh - 108px)) scale(0);
           }
 
           20% {
-            transform: translateY(500%) scale(3);
+            transform: translateY(calc(50vh - 108px)) scale(3);
           }
 
           45% {
-            transform: translateY(500%) scale(3);
+            transform: translateY(calc(50vh - 108px)) scale(3);
           }
 
           100% {
@@ -128,10 +128,12 @@ export default function HeaderFirst() {
 
         @keyframes logo-first-move {
           0% {
+            opacity: 0;
             transform: translateX(50%);
           }
 
           50% {
+            opacity: 1;
             transform: translateX(50%);
           }
 
@@ -142,11 +144,17 @@ export default function HeaderFirst() {
 
         @keyframes logo-second-move {
           0% {
+            opacity: 0;
             transform: translateX(-50%);
           }
 
           50% {
+            opacity: 0;
             transform: translateX(-50%);
+          }
+
+          75% {
+            opacity: 1;
           }
 
           100% {
@@ -266,15 +274,15 @@ export default function HeaderFirst() {
 
         @keyframes init-mobile {
           0% {
-            transform: translate(150%, 650%) scale(0);
+            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(0);
           }
 
           25% {
-            transform: translate(150%, 650%) scale(2);
+            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(2.2);
           }
 
           50% {
-            transform: translate(150%, 650%) scale(2);
+            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(2.2);
           }
 
           100% {
@@ -284,15 +292,15 @@ export default function HeaderFirst() {
 
         @keyframes init-mobile-1 {
           0% {
-            transform: translate(75%, 650%) scale(0);
+            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(0);
           }
 
           25% {
-            transform: translate(75%, 650%) scale(1.5);
+            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(2);
           }
 
           50% {
-            transform: translate(75%, 650%) scale(1.5);
+            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(2);
           }
 
           100% {
@@ -313,7 +321,7 @@ export default function HeaderFirst() {
           }
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 400px) {
           .header-logo {
             animation: init-mobile-1 2.5s;
           }

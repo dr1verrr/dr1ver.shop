@@ -19,14 +19,13 @@ export default function ProductButton({ children, isDisabled, progress, btnType,
           text-transform: uppercase;
           border-radius: 3rem;
           padding: 1.5rem 5rem;
-          min-width: fit-content;
           letter-spacing: 2px;
         }
 
         .product-add[cart='true'] {
           text-transform: none;
           color: #fff;
-          background: #333;
+          background: #1e90ff;
           white-space: nowrap;
           border-radius: 7px;
           padding: 1rem;
@@ -43,8 +42,8 @@ export default function ProductButton({ children, isDisabled, progress, btnType,
 
         .product-add[btntype='cart-changes-reset'] {
           background: transparent;
-          border: 1px solid #333;
-          color: #333;
+          border: 1px solid #1e90ff;
+          color: #1e90ff;
         }
 
         .product-add span {
