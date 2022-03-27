@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-
 
 This is an ecommerce project that uses Next.js, React.js, Redux.js
 
-* Authentication via Email(JWT authentication)
+* Authentication via Email (uses JWT)
 * User data management - Update/Remove/Add products to cart
 * Session support with secure HTTP Only cookies
 
