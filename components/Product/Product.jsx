@@ -18,6 +18,7 @@ export default function Product({ product, loading }) {
   const router = useRouter()
   const { type, actionType, productInfo } = useProductInfo()
   const { isAuthenticated } = useAuth()
+  console.log(product)
 
   useEffect(() => {
     if (!loading) {
