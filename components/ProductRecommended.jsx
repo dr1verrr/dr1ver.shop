@@ -18,10 +18,8 @@ export default function ProductRecommended({ categories, productSlug }) {
   }
 
   useEffect(() => {
-    setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
-  }, [])
+    if (!categsFiltered) setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
 
-  useEffect(() => {
     if (categsFiltered) {
       const catsLength = categsFiltered[0].length
 
@@ -34,10 +32,6 @@ export default function ProductRecommended({ categories, productSlug }) {
       }
     }
   }, [categsFiltered])
-
-  useEffect(() => {
-    if (categsFiltered) console.log('page:', page, 'length:', categsFiltered[0].length, 'isLastPage:', isLastPage)
-  }, [page])
 
   const arrowHandler = side => {
     if (side === 'left' && page - 1 > 0) {
