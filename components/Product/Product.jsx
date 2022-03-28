@@ -82,15 +82,7 @@ export default function Product({ product, loading }) {
       )}
       {type !== 'productModal' && (
         <div className='product-background'>
-          {product && (
-            <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-              layout='fill'
-              objectFit='contain'
-              quality={20}
-              alt=''
-            />
-          )}
+          {product && <Image src={product.image.url} layout='fill' objectFit='contain' quality={20} alt='' />}
         </div>
       )}
       {!loading && (
@@ -122,7 +114,7 @@ export default function Product({ product, loading }) {
                     }}
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                      src={product.image.url}
                       alt=''
                       width={product.image.width}
                       height={product.image.height}
@@ -131,7 +123,7 @@ export default function Product({ product, loading }) {
                   </div>
                 ) : (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
+                    src={product.image.url}
                     alt=''
                     width={product.image.width}
                     height={product.image.height}

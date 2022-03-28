@@ -61,13 +61,7 @@ const CartItem = ({ product, lastModified }) => {
             </svg>
           </div>
           <div className='item-image' onClick={showProductModal}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-              width={150}
-              height={150}
-              alt=''
-              quality={75}
-            />
+            <Image src={product.image.url} width={150} height={150} alt='' quality={75} />
             <div className='item-image-mask'></div>
           </div>
         </div>

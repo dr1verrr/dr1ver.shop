@@ -67,13 +67,7 @@ export default function ProductRecommended({ categories, productSlug }) {
                 .map(product => (
                   <div key={product.id} className='recommended-product' onClick={() => showProductModal(product.slug)}>
                     <div className='product-image'>
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                        width={120}
-                        height={120}
-                        quality={65}
-                        alt=''
-                      />
+                      <Image src={product.image.url} width={120} height={120} quality={65} alt='' />
                     </div>
                     <div className='product-price'>
                       <div className='product-price-inner'>

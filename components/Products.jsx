@@ -94,12 +94,7 @@ function Products({ slug }) {
                         </div>
                         <div className='product-image'>
                           {product.image ? (
-                            <Image
-                              src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                              layout='fill'
-                              objectFit='contain'
-                              alt=''
-                            />
+                            <Image src={product.image.url} layout='fill' objectFit='contain' alt='' />
                           ) : (
                             <Image src='https://via.placeholder.com/200' alt='' layout='fill' />
                           )}

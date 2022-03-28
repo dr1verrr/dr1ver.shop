@@ -49,12 +49,7 @@ const CartProductModal = memo(({ productModal }) => {
                 {product.image && (
                   <Link href={`/product/${product.slug}`} passHref>
                     <div className='product-image link-hover' onClick={hideModals}>
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_API_URL}${product.image.url}`}
-                        alt=''
-                        width={300}
-                        height={300}
-                      />
+                      <Image src={product.image.url} alt='' width={300} height={300} />
                     </div>
                   </Link>
                 )}
