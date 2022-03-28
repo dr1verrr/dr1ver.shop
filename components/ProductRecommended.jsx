@@ -8,23 +8,36 @@ import ProductModal from './Product/ProductModal'
 export default function ProductRecommended({ categories, productSlug }) {
   const [toTranslate, setTranslate] = useState(0)
   const [page, setPage] = useState(1)
-  const isLastPage = categories[0].length - 1 == page
   const dispatch = useDispatch()
   const productModal = useSelector(state => state.ui.recommendedProductModal)
+  const [categsFiltered, setCategsFiltered] = useState(null)
+  const isLastPage = categsFiltered && categsFiltered[0].length - 1 == page
 
   const showProductModal = slug => {
     dispatch({ type: RECOMMENDED_PRODUCT_MODAL_SHOW, payload: slug })
   }
 
   useEffect(() => {
-    if (categories[0].length >= 5) {
-      setPage(5)
-    }
-
-    if (categories[0].length < 5) {
-      setPage(categories[0].length - 1)
-    }
+    setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
   }, [])
+
+  useEffect(() => {
+    if (categsFiltered) {
+      const catsLength = categsFiltered[0].length
+
+      if (catsLength >= 5) {
+        setPage(5)
+      }
+
+      if (catsLength < 5) {
+        setPage(catsLength - 1)
+      }
+    }
+  }, [categsFiltered])
+
+  useEffect(() => {
+    if (categsFiltered) console.log('page:', page, 'length:', categsFiltered[0].length, 'isLastPage:', isLastPage)
+  }, [page])
 
   const arrowHandler = side => {
     if (side === 'left' && page - 1 > 0) {
@@ -61,22 +74,20 @@ export default function ProductRecommended({ categories, productSlug }) {
         </div>
         <div className='recommended-product-list-wrapper'>
           <div className='recommended-product-list'>
-            {categories?.map(cat =>
-              cat
-                .filter(p => productSlug !== p.slug)
-                .map(product => (
-                  <div key={product.id} className='recommended-product' onClick={() => showProductModal(product.slug)}>
-                    <div className='product-image'>
-                      <Image src={product.image.url} width={120} height={120} quality={65} alt='' />
-                    </div>
-                    <div className='product-price'>
-                      <div className='product-price-inner'>
-                        <ProductPrice price={product.price} isDuplicated={true} />
-                      </div>
-                    </div>
-                    <div className='product-title'>{product.title}</div>
+            {categsFiltered?.map(cat =>
+              cat.map(product => (
+                <div key={product.id} className='recommended-product' onClick={() => showProductModal(product.slug)}>
+                  <div className='product-image'>
+                    <Image src={product.image.url} width={120} height={120} quality={65} alt='' />
                   </div>
-                ))
+                  <div className='product-price'>
+                    <div className='product-price-inner'>
+                      <ProductPrice price={product.price} isDuplicated={true} />
+                    </div>
+                  </div>
+                  <div className='product-title'>{product.title}</div>
+                </div>
+              ))
             )}
           </div>
         </div>
