@@ -1,12 +1,10 @@
 import { PageTransition } from 'next-page-transitions'
 import React from 'react'
-import ScrollRestorer from '../providers/ScrollRestorer'
 
 export default function Layout({ children }) {
   return (
     <div className='layout'>
       <main className='main'>
-        <ScrollRestorer />
         <PageTransition timeout={300} classNames='page-transition'>
           {children}
         </PageTransition>
