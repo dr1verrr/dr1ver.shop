@@ -11,15 +11,17 @@ export default function ProductRecommended({ categories, productSlug }) {
   const dispatch = useDispatch()
   const productModal = useSelector(state => state.ui.recommendedProductModal)
   const [categsFiltered, setCategsFiltered] = useState(null)
-  const isLastPage = categsFiltered && categsFiltered[0].length - 1 == page
+  const isLastPage = categsFiltered?.length && categsFiltered[0].length - 1 == page
 
   const showProductModal = slug => {
     dispatch({ type: RECOMMENDED_PRODUCT_MODAL_SHOW, payload: slug })
   }
 
   useEffect(() => {
-    if (!categsFiltered) setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
+    setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
+  }, [])
 
+  useEffect(() => {
     if (categsFiltered) {
       const catsLength = categsFiltered[0].length
 
