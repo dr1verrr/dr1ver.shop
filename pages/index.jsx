@@ -10,7 +10,7 @@ export default function Home() {
       <div className='home-page-wrapper'>
         <div className='home-page-video'>
           <video className='video' loop playsInline muted autoPlay>
-            <source src='https://res.cloudinary.com/daith9h4b/video/upload/v1648405949/NYC_qcvjez.mp4' type='video/mp4' />
+            <source src='https://res.cloudinary.com/daith9h4b/video/upload/v1648584883/NYC_r3mv9j.mp4' type='video/mp4' />
           </video>
         </div>
         <div className='home-page-inner'>
