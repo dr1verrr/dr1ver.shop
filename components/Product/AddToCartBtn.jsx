@@ -34,7 +34,7 @@ export default function AddToCartBtn({ type }) {
 
         .spinner-wrapper {
           position: absolute;
-          right: 19px;
+          right: 3px;
           left: 0;
           top: 0;
         }
