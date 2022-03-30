@@ -23,7 +23,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
       {type === 'productModal' && (
         <h2
           className='product-title'
-          style={{ color: '#000', padding: '1rem 0' }}
+          style={{ color: '#000', padding: '1rem 0', fontSize: '2rem' }}
           onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}
         >
           <Link href={`/product/${slug}`}>{title}</Link>
