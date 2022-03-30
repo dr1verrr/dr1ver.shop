@@ -92,11 +92,6 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           border: 2px solid #1e90ff;
         }
 
-        .product-option[active='true']:hover {
-          filter: none;
-          color: #999;
-        }
-
         .product-option:hover {
           filter: brightness(0.9);
         }
