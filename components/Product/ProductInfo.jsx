@@ -107,7 +107,6 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           }
 
           .product-description {
-            margin-top: 3rem;
             min-width: 0;
             max-width: fit-content;
           }
