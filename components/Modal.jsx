@@ -116,7 +116,7 @@ const Modal = memo(({ modal }) => {
           text-align: center;
           border-radius: 20px;
           overflow: hidden;
-          font-size: 1.5rem;
+          font-size: 1.3rem;
           pointer-events: stroke;
           cursor: default;
           margin: 0 1rem;
