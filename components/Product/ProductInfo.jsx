@@ -58,6 +58,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           font-size: 1.8rem;
           font-weight: 300;
           text-align: left;
+          margin-top: 1.5rem;
         }
 
         .product-categories {
