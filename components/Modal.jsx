@@ -149,7 +149,7 @@ const Modal = memo(({ modal }) => {
         }
 
         .modal-content {
-          padding: 1.5rem;
+          padding: 2rem;
           width: 100%;
         }
 
