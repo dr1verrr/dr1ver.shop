@@ -10,6 +10,8 @@ This is an ecommerce project that uses Next.js, React.js, Redux.js
 
 You can see a live demo at **https://dr1ver-shop.vercel.app/**
 
+### At the first time can take a long time to connect to database. Then will be without like this
+
 ## About 
 
 This is an ecommerce pet-project that provides an example of how to use Next.js, make authenticated requests, jwt authentication and how to build an ecommerce wep-application with this React framework.
