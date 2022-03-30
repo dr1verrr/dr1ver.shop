@@ -16,9 +16,11 @@ function Products({ slug }) {
   const [productsInfo, setProductsInfo] = useState({})
 
   const getProducts = async () => {
-    const res = await axios.get(`/api/category/${slug}`)
+    const res = await axios
+      .get(`/api/category/${slug}`)
+      .then(({ data }) => setProductsInfo(slug === 'all' ? { products: data } : data))
 
-    return res.data
+    if (res.status == 504) getProducts()
   }
 
   const handleScroll = useDebouncedFunction(() => {
@@ -49,7 +51,7 @@ function Products({ slug }) {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
 
-    getProducts().then(data => setProductsInfo(slug === 'all' ? { products: data } : data))
+    getProducts()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
