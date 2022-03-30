@@ -2,6 +2,7 @@ This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-
 
 # Next.js ecommerce project
 ![Logo](https://repository-images.githubusercontent.com/417917436/78e8908f-759f-4902-8634-c36644977d64)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/67706933/160890594-55b69493-c31c-4b5b-bda7-5d35ce0ddb05.gif)
 
 This is an ecommerce project that uses Next.js, React.js, Redux.js
 
