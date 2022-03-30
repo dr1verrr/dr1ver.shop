@@ -1,6 +1,7 @@
 This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 # Next.js ecommerce project
+[[https://github.com/dr1verrr/dr1ver.shop/blob/main/public/images/photo_2022-03-30_18-27-47.jpg]]
 
 This is an ecommerce project that uses Next.js, React.js, Redux.js
 
