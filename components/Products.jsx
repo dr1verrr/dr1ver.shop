@@ -22,7 +22,7 @@ function Products({ slug }) {
 
       setProductsInfo(slug === 'all' ? { products: data } : data)
     } catch (err) {
-      console.error(error)
+      console.error(err)
       console.log('Fetching again...')
       getProducts()
     }
