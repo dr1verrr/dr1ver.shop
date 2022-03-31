@@ -6,12 +6,12 @@
   },
   {
     "id": 1,
-    "name": "Back",
+    "name": "Backend",
     "slug": "back"
   },
   {
     "id": 2,
-    "name": "Front",
+    "name": "Frontend",
     "slug": "front"
   },
   {
