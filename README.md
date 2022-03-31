@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-# Next.js ecommerce project
+# Next.js ecommerce pet-project
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/67706933/160891572-c78b6959-7eee-4b10-86f0-3f38606954b8.gif) 
 
 
