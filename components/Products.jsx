@@ -30,7 +30,7 @@ function Products({ slug }) {
 
   const handleScroll = useThrottle(() => {
     if (
-      window.innerHeight + document.documentElement.scrollTop + 400 < productPage.current.offsetHeight ||
+      window.innerHeight + document.documentElement.scrollTop + 250 < productPage.current.offsetHeight ||
       productsLoading
     ) {
       return false
