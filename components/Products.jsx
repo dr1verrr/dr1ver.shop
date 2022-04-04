@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { PRODUCT_INCREMENT } from '../constants'
-import useDebouncedFunction from '../hooks/useDebouncedFunction'
+import useThrottle from '../hooks/useThrottle'
 import ProductButton from './ProductButton'
 import Spinner from './Spinner'
 
@@ -28,7 +28,7 @@ function Products({ slug }) {
     }
   }
 
-  const handleScroll = useDebouncedFunction(() => {
+  const handleScroll = useThrottle(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 400 < productPage.current.offsetHeight ||
       productsLoading
