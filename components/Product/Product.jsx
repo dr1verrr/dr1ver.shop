@@ -19,11 +19,7 @@ export default function Product({ product, loading }) {
   const { type, actionType, productInfo } = useProductInfo()
   const { isAuthenticated } = useAuth()
 
-  useEffect(() => {
-    if (!loading) {
-      dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
-    }
-  }, [loading])
+  useEffect(() => dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } }), [])
 
   const submitHandler = throttle(e => {
     const { count, price, optionPrice, selected } = productInfo
