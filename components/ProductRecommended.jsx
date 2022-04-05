@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RECOMMENDED_PRODUCT_MODAL_SHOW } from '../redux/types'
 import ProductPrice from './Product/ProductPrice'
 import ProductModal from './Product/ProductModal'
+import { shuffle } from '../helpers/shuffle'
 
 export default function ProductRecommended({ categories, productSlug }) {
   const [toTranslate, setTranslate] = useState(0)
@@ -18,7 +19,7 @@ export default function ProductRecommended({ categories, productSlug }) {
   }
 
   useEffect(() => {
-    setCategsFiltered(categories.map(cat => cat.filter(p => productSlug !== p.slug)))
+    setCategsFiltered(categories.map(cat => shuffle(cat.filter(p => productSlug !== p.slug))))
   }, [])
 
   useEffect(() => {
