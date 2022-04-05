@@ -33,5 +33,10 @@
     "id": 6,
     "name": "Other",
     "slug": "other"
+  },
+  {
+    "id": 7,
+    "name": "Hosting",
+    "slug": "hosting"
   }
 ]
