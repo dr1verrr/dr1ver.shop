@@ -40,13 +40,13 @@ export default function HeaderSecond() {
           }
         }
 
-        @media (max-width: 1170px) {
+        @media (max-width: 1230px) {
           .header-second {
             padding-bottom: 5rem;
           }
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .header-second {
             position: static;
             padding: 0;

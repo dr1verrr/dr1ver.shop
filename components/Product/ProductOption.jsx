@@ -121,7 +121,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           gap: 0;
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .input-wrapper {
             justify-content: center;
           }

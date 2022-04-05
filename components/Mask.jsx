@@ -67,7 +67,7 @@ function Mask() {
             animation: ${isMask ? 'none' : 'fade-header 0.5s ease'};
           }
 
-          @media (max-width: 630px) {
+          @media (max-width: 720px) {
             .header-menu-wrapper {
               z-index: ${isMask ? 1500 : 'auto'} !important;
             }

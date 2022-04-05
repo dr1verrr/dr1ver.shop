@@ -152,7 +152,7 @@ function Cart({ isCartVisible }) {
             font-size: 4vw;
           }
         }
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .cart-vision-switcher {
             max-height: 75px;
             border-bottom: 1px solid #e0e3e6;

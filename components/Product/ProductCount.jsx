@@ -122,7 +122,7 @@ function ProductCounter({ count, actionType }) {
           background: rgba(255, 255, 255, 0.1);
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .product-count {
             margin-right: 0;
           }

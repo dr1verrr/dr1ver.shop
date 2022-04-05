@@ -308,7 +308,7 @@ export default function HeaderFirst() {
           }
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .header-logo {
             animation: init-mobile 2.5s;
           }

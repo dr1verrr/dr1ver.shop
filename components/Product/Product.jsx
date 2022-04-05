@@ -403,7 +403,7 @@ export default function Product({ product, loading }) {
           flex-direction: column;
         }
 
-        @media (max-width: 1170px) {
+        @media (max-width: 1230px) {
           .product {
             min-height: calc(100vh - 232.5px - 25px);
           }
@@ -414,7 +414,7 @@ export default function Product({ product, loading }) {
             padding: 0;
           }
         }
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .product-inner {
             flex-direction: column;
           }

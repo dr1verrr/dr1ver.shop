@@ -98,7 +98,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           margin-left: 12px;
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .product-info {
             display: flex;
             flex-direction: column;

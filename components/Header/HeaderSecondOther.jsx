@@ -75,14 +75,14 @@ export default function HeaderSecondOther() {
           fill: none;
         }
 
-        @media (max-width: 1170px) {
+        @media (max-width: 1230px) {
           .header-second-other {
             bottom: 0;
             right: 0;
           }
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .header-cart-total-cost {
             display: none;
           }

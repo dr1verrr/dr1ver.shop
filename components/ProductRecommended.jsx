@@ -223,7 +223,7 @@ export default function ProductRecommended({ categories, productSlug }) {
           }
         }
 
-        @media (max-width: 630px) {
+        @media (max-width: 720px) {
           .recommended {
             padding-top: 5rem;
           }
