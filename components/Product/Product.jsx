@@ -26,7 +26,9 @@ export default function Product({ product, loading }) {
     }
   }, [loading])
 
-  useEffect(() => window.scrollTo({ top: 0, left: 0 }), [])
+  useEffect(() => {
+    if (type !== 'recommendedProductModal') window.scrollTo({ top: 0, left: 0 })
+  }, [])
 
   const submitHandler = throttle(e => {
     const { count, price, optionPrice, selected } = productInfo
