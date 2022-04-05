@@ -20,10 +20,12 @@ export default function Product({ product, loading }) {
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
-    if (!loading) dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
-
-    return () => {
+    if (!loading) {
       dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
+
+      return () => {
+        dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
+      }
     }
   }, [loading])
 
