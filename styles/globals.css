@@ -164,6 +164,10 @@ body {
   letter-spacing: 0.5px;
 }
 
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 a:focus-visible {
   outline: none;
 }

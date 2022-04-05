@@ -35,7 +35,6 @@ export default function HeaderMenu() {
         .header-menu-link {
           padding: 2.25rem 0.5rem;
           display: block;
-
           text-transform: uppercase;
         }
 
@@ -57,6 +56,13 @@ export default function HeaderMenu() {
 
         .header-menu-link span::before {
           left: 0%;
+        }
+
+        @media (max-width: 920px) {
+          .header-menu-link:hover span::before {
+            transition: none;
+            transform: scaleX(0);
+          }
         }
 
         @media (max-width: 1230px) {

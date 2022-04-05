@@ -56,8 +56,8 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           border: 2px solid #797b8c;
           background: transparent;
           border-radius: 50%;
-          min-width: 38px;
-          min-height: 38px;
+          width: 38px;
+          height: 38px;
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;
@@ -124,9 +124,6 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
 
           .cart .input-wrapper {
             justify-content: normal;
-          }
-
-          input {
           }
         }
       `}</style>

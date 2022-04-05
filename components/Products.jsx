@@ -372,6 +372,13 @@ function Products({ slug }) {
             height: 94.18605vw;
           }
         }
+
+        @media (max-width: 920px) {
+          .product-inner:hover .product-button-wrapper {
+            visibility: hidden;
+            opacity: 0;
+          }
+        }
       `}</style>
     </section>
   )
