@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from 'axios'
+import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -69,6 +70,9 @@ function Products({ slug }) {
 
   return (
     <section className='product-page' ref={productPage}>
+      <Head>
+        <title>{slug === 'all' ? 'All stickers' : productsInfo.name || 'Loading...'} - dr1ver.shop</title>
+      </Head>
       {loading && (
         <div className='spinner-wrapper spinner-top'>
           <Spinner color='#000' size={50} borderWidth={8} />

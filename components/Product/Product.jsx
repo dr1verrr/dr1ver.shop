@@ -12,6 +12,7 @@ import { CART_UPDATE, PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HI
 import Spinner from '../Spinner'
 import ProductInfo from './ProductInfo'
 import saveChanges from '../../services/Cart/saveChanges'
+import Head from 'next/head'
 
 export default function Product({ product, loading }) {
   const dispatch = useDispatch()
@@ -74,6 +75,9 @@ export default function Product({ product, loading }) {
 
   return (
     <section className='product' type={type}>
+      <Head>
+        <title>{product?.title || 'Loading...'} - dr1ver.shop</title>
+      </Head>
       {loading && (
         <div className='spinner-wrapper'>
           <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} borderWidth={8} size={50} />
