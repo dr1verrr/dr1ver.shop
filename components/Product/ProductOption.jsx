@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { useAuth } from '../../contexts/auth'
 
 function ProductOption({ fld, cart, actionType, option, setOption }) {
   const options = fld.options.split('|').map(opt => {

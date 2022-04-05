@@ -21,11 +21,7 @@ export default function Product({ product, loading }) {
 
   useEffect(() => {
     if (!loading) {
-      dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
-
-      return () => {
-        dispatch({ type: actionType, payload: { price: product.price, count: 1, selected: 'Small' } })
-      }
+      dispatch({ type: actionType, payload: { price: product.price, optionPrice: 0, count: 1, selected: 'Small' } })
     }
   }, [loading])
 
