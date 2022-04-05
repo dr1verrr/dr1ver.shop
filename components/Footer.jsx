@@ -253,7 +253,7 @@ const Footer = memo(({ categories }) => {
           position: absolute;
           bottom: -0.25rem;
           height: 1px;
-          background-color: #fff;
+          background: #fff;
         }
 
         .footer-menu-link:hover span::before {

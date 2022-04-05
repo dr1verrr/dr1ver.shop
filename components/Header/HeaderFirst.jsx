@@ -240,7 +240,7 @@ export default function HeaderFirst() {
         .strip {
           width: 100%;
           height: 2px;
-          background-color: #fff;
+          background: #fff;
           transform-origin: bottom left;
           transform: scaleX(1);
           animation: strip 4s ease;

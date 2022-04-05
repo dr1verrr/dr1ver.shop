@@ -104,7 +104,7 @@ function ProductCounter({ count, actionType }) {
 
         button {
           outline: none;
-          background-color: transparent;
+          background: transparent;
           height: 100%;
           padding: 0 2.5rem;
           border: none;
@@ -125,6 +125,10 @@ function ProductCounter({ count, actionType }) {
         @media (max-width: 720px) {
           .product-count {
             margin-right: 0;
+          }
+
+          button:hover {
+            background: transparent;
           }
         }
 

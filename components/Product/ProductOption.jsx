@@ -51,7 +51,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           color: #797b8c;
           position: relative;
           transition-duration: 0.3s;
-          transition-property: color, background-color, transform, border-color, filter, opacity, font-weight;
+          transition-property: color, background, transform, border-color, filter, opacity, font-weight;
           cursor: pointer;
           border: 2px solid #797b8c;
           background: transparent;
@@ -64,7 +64,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
         }
 
         .product-option[active='true'] {
-          background-color: #fff;
+          background: #fff;
           color: #000;
           border: 2px solid #fff;
           font-weight: 700;
@@ -82,17 +82,13 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
 
         .cart .product-option[active='true'] {
           color: #000;
-          background-color: #fff;
+          background: #fff;
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07),
             0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
         }
 
         .cart .product-option[changed='true'] {
           border: 2px solid #1e90ff;
-        }
-
-        .product-option:hover {
-          filter: brightness(0.9);
         }
 
         .product-options {
@@ -128,6 +124,9 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
 
           .cart .input-wrapper {
             justify-content: normal;
+          }
+
+          input {
           }
         }
       `}</style>

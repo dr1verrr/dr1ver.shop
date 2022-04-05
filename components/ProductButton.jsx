@@ -15,7 +15,7 @@ export default function ProductButton({ children, isDisabled, progress, btnType,
           justify-content: center;
           align-items: center;
           transition: filter 0.2s ease, transform 0.2s ease, opacity 0.25s ease;
-          background-color: #fff;
+          background: #fff;
           text-transform: uppercase;
           border-radius: 3rem;
           padding: 1.5rem 5rem;

@@ -47,7 +47,7 @@ export default function HeaderMenu() {
           position: absolute;
           bottom: -0.25rem;
           height: 1px;
-          background-color: #fff;
+          background: #fff;
         }
 
         .header-menu-link:hover span::before {

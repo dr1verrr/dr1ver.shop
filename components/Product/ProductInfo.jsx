@@ -83,7 +83,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
 
         button {
           outline: none;
-          background-color: transparent;
+          background: transparent;
           padding: 2rem;
           border: none;
           cursor: pointer;

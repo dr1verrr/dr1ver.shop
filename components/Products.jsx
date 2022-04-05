@@ -143,7 +143,7 @@ function Products({ slug }) {
           border: 2px solid #f1f3f5;
           padding: 1.5rem;
           border-radius: 30px;
-          transition: background-color 0.4s ease, color 0.4s ease;
+          transition: background 0.4s ease, color 0.4s ease;
           letter-spacing: 2px;
           font-size: 2rem;
           cursor: pointer;
@@ -225,7 +225,7 @@ function Products({ slug }) {
           word-break: break-all;
           font-size: 2.4rem;
           font-weight: 500;
-          background-color: #000;
+          background: #000;
           border-top-left-radius: 25px;
           border-bottom-right-radius: 25px;
         }
@@ -238,7 +238,7 @@ function Products({ slug }) {
           display: flex;
           flex-direction: column;
           border-radius: 3rem;
-          background-color: #fff;
+          background: #fff;
           position: relative;
           filter: drop-shadow(0 0 20px rgba(0, 60, 120, 0.06));
           padding: 2.5rem;
@@ -273,7 +273,7 @@ function Products({ slug }) {
           opacity: 0.5;
         }
         .product-inner:hover .product-button {
-          background-color: #000;
+          background: #000;
           color: #fff;
         }
 

@@ -175,7 +175,7 @@ export default function Product({ product, loading }) {
 
         .product[type='productModal'] .product-option[active='true'] {
           color: #111113;
-          background-color: #fff;
+          background: #fff;
           border: 1px solid #797b8c;
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.07), 0 4px 8px rgba(0, 0, 0, 0.07),
             0 8px 16px rgba(0, 0, 0, 0.07), 0 16px 32px rgba(0, 0, 0, 0.07), 0 32px 64px rgba(0, 0, 0, 0.07);
@@ -316,7 +316,7 @@ export default function Product({ product, loading }) {
 
         button {
           outline: none;
-          background-color: transparent;
+          background: transparent;
           padding: 2rem;
           border: none;
           cursor: pointer;
@@ -324,7 +324,6 @@ export default function Product({ product, loading }) {
 
         .product-inner {
           display: flex;
-          gap: 2rem;
         }
 
         .product-title {
@@ -351,6 +350,7 @@ export default function Product({ product, loading }) {
           flex: 1;
           min-width: 250px;
           z-index: 10;
+          padding: 1rem 0 2.5rem;
         }
 
         .product-image::before {
@@ -380,7 +380,7 @@ export default function Product({ product, loading }) {
           width: 1.2rem;
           height: 1px;
           top: 50%;
-          background-color: #fff;
+          background: #fff;
         }
         .product-redirect::after {
           transform: rotate(45deg);
@@ -391,7 +391,7 @@ export default function Product({ product, loading }) {
         }
 
         .product-header {
-          padding: 1rem 0;
+          padding: 0.5rem 0 0;
           white-space: nowrap;
         }
 

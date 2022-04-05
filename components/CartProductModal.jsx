@@ -115,7 +115,7 @@ const CartProductModal = memo(({ productModal }) => {
         }
 
         .product-price {
-          background-color: #000;
+          background: #000;
           color: #fff;
           padding: 1rem 2.5rem;
           font-size: 2.2rem;

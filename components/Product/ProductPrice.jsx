@@ -10,7 +10,7 @@ export default function ProductPrice({ price, isDuplicated, optionPrice, type })
       <style jsx>{`
         .product-price {
           display: inline-block;
-          background-color: #fff;
+          background: #fff;
           color: #1d1f21;
           padding: 0.5rem 2rem;
           font-size: 2.5rem;
