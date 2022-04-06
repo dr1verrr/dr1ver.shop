@@ -1,17 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
+import { useRouter } from 'next/dist/client/router'
 import Products from '../../components/Products'
 
-function Category({ slug }) {
-  return <Products slug={slug} />
-}
+const Category = () => {
+  const { query } = useRouter()
 
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      slug: context.params.slug,
-    },
-  }
+  return <Products slug={query.slug} />
 }
 
 export default Category

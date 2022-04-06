@@ -10,5 +10,6 @@ module.exports = {
       'via.placeholder.com',
       'res.cloudinary.com',
     ],
+    formats: ['image/avif', 'image/webp'],
   },
 }
