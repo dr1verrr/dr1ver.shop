@@ -12,7 +12,7 @@ This is an ecommerce project that uses Next.js, React.js, Redux.js
 
 You can see a live demo at **https://dr1ver-shop.vercel.app/**
 
-### !!! At the first time can take a long time to connect to database. Then will be without like this
+### !!! At the first time can take a long time to connect to database. Then will be without delay
 
 ## About 
 
