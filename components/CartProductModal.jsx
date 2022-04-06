@@ -62,11 +62,11 @@ const CartProductModal = memo(({ productModal }) => {
                       </a>
                     </Link>
                   </div>
-                  <button type='button' className='product-price'>
+                  <div className='product-price'>
                     <span className='wrapper'>
                       <span className='price'>{product.price}</span> <span className='currency'>USD</span>
                     </span>
-                  </button>
+                  </div>
                   <div className='product-description'>{product.description}</div>
                 </div>
               </div>
@@ -96,7 +96,6 @@ const CartProductModal = memo(({ productModal }) => {
           left: 0;
           top: 0;
           pointer-events: none;
-          user-select: none;
         }
 
         .product-image {
@@ -120,12 +119,12 @@ const CartProductModal = memo(({ productModal }) => {
           padding: 1rem 2.5rem;
           font-size: 2.2rem;
           min-width: fit-content;
-          margin: 2rem 0;
+          margin: 1.5rem 0;
           white-space: nowrap;
           border-radius: 3rem;
           border: none;
           white-space: nowrap;
-          cursor: default;
+          max-width: fit-content;
         }
 
         .product-description {
@@ -151,7 +150,7 @@ const CartProductModal = memo(({ productModal }) => {
 
         .modal-content-inner {
           display: flex;
-          grid-gap: 1rem;
+          grid-gap: 2rem;
         }
 
         .product-title {

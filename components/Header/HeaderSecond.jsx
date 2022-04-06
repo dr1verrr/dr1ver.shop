@@ -21,7 +21,6 @@ export default function HeaderSecond() {
           align-items: center;
           justify-content: center;
           animation: header-second 2.5s ease;
-          font-size: 1.7rem;
           font-weight: 300;
           margin: 0 auto;
         }

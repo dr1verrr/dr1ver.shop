@@ -117,10 +117,7 @@ const Modal = memo(({ modal }) => {
           border-radius: 20px;
           overflow: hidden;
           font-size: 1.3rem;
-          pointer-events: stroke;
-          cursor: default;
           margin: 0 1rem;
-          user-select: none;
           font-weight: 300;
         }
 
@@ -149,7 +146,7 @@ const Modal = memo(({ modal }) => {
         }
 
         .modal-content {
-          padding: 2rem;
+          padding: 2.5rem;
           width: 100%;
         }
 

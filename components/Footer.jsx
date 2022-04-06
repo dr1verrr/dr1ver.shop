@@ -314,6 +314,10 @@ const Footer = memo(({ categories }) => {
             align-items: center;
           }
 
+          .footer-menu-link:hover span::before {
+            transition: none;
+            transform: scaleX(0);
+          }
           .footer-socials {
             padding-right: 0;
             flex-direction: row;

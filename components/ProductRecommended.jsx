@@ -96,7 +96,6 @@ export default function ProductRecommended({ categories, productSlug }) {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          user-select: none;
           padding: 0 2.5rem 10rem;
           min-height: 455.5px;
         }
@@ -209,7 +208,6 @@ export default function ProductRecommended({ categories, productSlug }) {
           text-align: center;
           font-size: 2.5rem;
           font-weight: 500;
-          cursor: default;
         }
 
         @media (max-width: 920px) {
