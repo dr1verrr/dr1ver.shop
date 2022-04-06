@@ -78,7 +78,7 @@ export default function ProductModal({ slug }) {
 
         .modal-content {
           width: 960px;
-          min-height: 575.5px;
+          min-height: 300px;
           max-height: 85vh;
           overflow-y: scroll;
           padding: 3rem;
