@@ -7,8 +7,6 @@ import ProductPage from '../../components/Product'
 const ProductPageWrapper = () => {
   const { query } = useRouter()
 
-  console.log(query)
-
   return <ProductPage slug={query.slug} pdctName={query.name} />
 }
 

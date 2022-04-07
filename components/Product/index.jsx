@@ -14,10 +14,12 @@ function ProductPage({ slug, pdctName }) {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 })
 
-    getProduct(slug).then(data => {
-      setProductData(filterFields(data))
-      setLoading(false)
-    })
+    if (slug) {
+      getProduct(slug).then(data => {
+        setProductData(filterFields(data))
+        setLoading(false)
+      })
+    }
   }, [])
 
   return (

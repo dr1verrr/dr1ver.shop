@@ -57,7 +57,7 @@ function Products({ slug, ctgName }) {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
 
-    getProducts()
+    if (slug) getProducts()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
