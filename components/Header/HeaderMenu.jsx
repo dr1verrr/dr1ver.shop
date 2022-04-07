@@ -10,7 +10,7 @@ export default function HeaderMenu() {
     <ul className='header-menu'>
       {categories?.map(category => (
         <li key={category.id} className='header-menu-category' onClick={() => dispatch({ type: MENU_HIDE })}>
-          <Link href={`/category/${category.slug}`}>
+          <Link href={{ pathname: `/category/[slug]`, query: { slug: category.slug, name: category.name } }}>
             <a className='header-menu-link'>
               <span>{category.name}</span>
             </a>

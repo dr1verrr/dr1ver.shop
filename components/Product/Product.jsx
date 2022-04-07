@@ -14,7 +14,7 @@ import ProductInfo from './ProductInfo'
 import saveChanges from '../../services/Cart/saveChanges'
 import Head from 'next/head'
 
-export default function Product({ product, loading }) {
+export default function Product({ product, loading, pdctName }) {
   const dispatch = useDispatch()
   const router = useRouter()
   const { type, actionType, productInfo } = useProductInfo()
@@ -75,9 +75,12 @@ export default function Product({ product, loading }) {
 
   return (
     <section className='product' type={type}>
-      <Head>
-        <title>{product?.title || 'Loading...'} - dr1ver.shop</title>
-      </Head>
+      {pdctName && (
+        <Head>
+          <title>{pdctName || 'dr1ver.shop - stickers shop by dr1verrr'} - dr1ver.shop</title>
+        </Head>
+      )}
+
       {loading && (
         <div className='spinner-wrapper'>
           <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} size={42} borderWidth={7} />

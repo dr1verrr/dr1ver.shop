@@ -9,7 +9,7 @@ import useThrottle from '../hooks/useThrottle'
 import ProductButton from './ProductButton'
 import Spinner from './Spinner'
 
-function Products({ slug }) {
+function Products({ slug, ctgName }) {
   const [productsLoading, setProductsLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [count, setCount] = useState(PRODUCT_INCREMENT)
@@ -71,7 +71,7 @@ function Products({ slug }) {
   return (
     <section className='product-page' ref={productPage}>
       <Head>
-        <title>{slug === 'all' ? 'All stickers' : productsInfo.name || 'Loading...'} - dr1ver.shop</title>
+        <title>{slug === 'all' ? 'All stickers' : ctgName} - dr1ver.shop</title>
       </Head>
       {loading && (
         <div className='spinner-wrapper spinner-top'>
@@ -96,7 +96,11 @@ function Products({ slug }) {
             <div className='product-wrapper'>
               {productsInfo?.products.slice(0, count)?.map(product => {
                 return (
-                  <Link key={product.id} href={`/product/${product.slug}`} passHref>
+                  <Link
+                    key={product.id}
+                    href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
+                    passHref
+                  >
                     <div className='product-inner'>
                       <div className='product'>
                         <div className='product-price'>

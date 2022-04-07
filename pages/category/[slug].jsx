@@ -5,7 +5,7 @@ import Products from '../../components/Products'
 const Category = () => {
   const { query } = useRouter()
 
-  return <Products slug={query.slug} />
+  return <Products slug={query.slug} ctgName={query.name} />
 }
 
 export default Category

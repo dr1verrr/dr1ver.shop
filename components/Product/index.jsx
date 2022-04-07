@@ -7,7 +7,7 @@ import ProductProvider from '../../providers/ProductProvider'
 import ProductRecommended from '../ProductRecommended'
 import Product from './Product'
 
-function ProductPage({ slug }) {
+function ProductPage({ slug, pdctName }) {
   const [productData, setProductData] = useState({})
   const [loading, setLoading] = useState(true)
 
@@ -23,7 +23,7 @@ function ProductPage({ slug }) {
   return (
     <div className='product-wrapper'>
       <ProductProvider type={'product'}>
-        <Product product={productData.product} loading={loading} />
+        <Product product={productData.product} loading={loading} pdctName={pdctName} />
       </ProductProvider>
       {!loading && <ProductRecommended categories={productData.categories} productSlug={productData.product.slug} />}
       <style jsx>{`
