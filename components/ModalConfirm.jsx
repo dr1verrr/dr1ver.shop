@@ -38,6 +38,7 @@ const ModalConfirm = ({ register, close }) => {
       </p>
       <div className='btn-group'>
         <button
+          disabled={isLoading}
           onClick={() =>
             register(
               () => setLoading(true),

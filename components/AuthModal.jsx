@@ -31,7 +31,6 @@ const AuthModal = memo(({ authModal }) => {
   })
 
   useEffect(() => {
-    console.log(error)
     if (error) debounceError()
   }, [error])
 
@@ -95,6 +94,7 @@ const AuthModal = memo(({ authModal }) => {
         displayModal('You are logged in as Guest.')
 
         loadUserFromCookies('login').then(() => {
+          dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
           router.push('/')
         })
       }
@@ -111,13 +111,12 @@ const AuthModal = memo(({ authModal }) => {
         method: 'post',
       })
 
-      console.log(response)
-
       if (response.status == 200) {
         endProgress()
         displayModal('Guest account is registered now.')
 
         loadUserFromCookies().then(() => {
+          dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
           router.push('/')
         })
       }
@@ -200,8 +199,16 @@ const AuthModal = memo(({ authModal }) => {
           />
           <div className='btn-group'>
             <div className='btn-group-inner'>
-              <button className='btn-submit'>{authModal.login ? 'Sign in' : 'Sign up'}</button>
-              <button className='btn-submit btn-guest' type='button' signas='guest' onClick={guestHandler}>
+              <button disabled={isLoading} className='btn-submit'>
+                {authModal.login ? 'Log in' : 'Register'}
+              </button>
+              <button
+                disabled={isLoading}
+                className='btn-submit btn-guest'
+                type='button'
+                signas='guest'
+                onClick={guestHandler}
+              >
                 Guest mode
               </button>
             </div>
