@@ -20,7 +20,6 @@ export default async function handler(req, res) {
 
     res.status(200).end()
   } catch (e) {
-    console.error(e)
     res.status(400).send(e.response.data?.message[0]?.messages[0])
   }
 }

@@ -1,19 +1,27 @@
+import cookieCutter from 'cookie-cutter'
 import { useRouter } from 'next/router'
-import React, { memo, useMemo, useRef, useState } from 'react'
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useAuth } from '../contexts/auth'
-import useOnClickOutside from '../hooks/useOnClickOutside'
+import useDebouncedFunction from '../hooks/useDebouncedFunction'
 import useRequest from '../hooks/useRequest'
+import { showModal } from '../redux/actions'
 import store from '../redux/store'
 import { AUTH_MODAL_UPDATE, CART_UPDATE } from '../redux/types'
 import saveChanges from '../services/Cart/saveChanges'
+import ModalConfirm from './ModalConfirm'
+import Spinner from './Spinner'
 
 const AuthModal = memo(({ authModal }) => {
-  const { user, loadUserFromCookies } = useAuth()
+  const { loadUserFromCookies } = useAuth()
   const popupRef = useRef()
   const router = useRouter()
-  const sendAuthData = useRequest()
+  const request = useRequest()
   const dispatch = useDispatch()
+  const [alert, setAlert] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const debounceError = useDebouncedFunction(() => setError(null), 10000)
 
   const [userData, setUserData] = useState({
     identifier: '',
@@ -22,40 +30,101 @@ const AuthModal = memo(({ authModal }) => {
     email: '',
   })
 
-  useOnClickOutside(popupRef, () => {
-    if (authModal.visible) dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
-  })
+  useEffect(() => {
+    console.log(error)
+    if (error) debounceError()
+  }, [error])
 
-  async function handleSubmit(e, guest) {
+  const displayModal = msg => dispatch(showModal(msg))
+
+  const getTempUser = () => cookieCutter.get('user_temp')
+
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    const cartData = store.getState().cart.cartData
+    try {
+      const cartData = store.getState().cart.cartData
+      setLoading(true)
 
-    console.log(cartData)
+      const authenticated = await request(authModal.login ? '/api/login' : '/api/register', {
+        method: 'post',
+        data: userData,
+      })
 
-    const authenticated = await sendAuthData(authModal.login || guest ? '/api/login' : '/api/register', {
-      method: 'post',
-      data: guest || userData,
-    })
+      if (authenticated.status == 200) {
+        displayModal(authModal.register ? 'Account is registered now.' : 'You are logged in.')
+        setLoading(false)
 
-    if (authenticated.status == 200) {
-      const cb = type => {
-        if (type === 'register') dispatch({ type: CART_UPDATE, payload: { cartData } })
-        dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
-        router.push('/profile')
+        const cb = type => {
+          if (type === 'register') dispatch({ type: CART_UPDATE, payload: { cartData } })
+          dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
+          router.push('/profile')
+        }
+
+        loadUserFromCookies(authModal.register ? 'register' : 'login').then(isAuthenticated => {
+          if (authModal.register) return saveChanges({ cartData }, () => cb('register'), isAuthenticated)
+          return cb('login')
+        })
       }
 
-      loadUserFromCookies(authModal.register ? 'register' : 'login').then(isAuthenticated => {
-        if (authModal.register) return saveChanges({ cartData }, () => cb('register'), isAuthenticated)
-        return cb('login')
-      })
+      console.log(authenticated)
+    } catch (err) {
+      setLoading(false)
+      setError(err.response.data)
     }
   }
 
-  function signAsGuest(e) {
-    const guestData = { identifier: 'guestuserfortest@guest.com', password: 'guest' }
+  const guestHandler = () => {
+    const tempUser = getTempUser()
+    console.log(tempUser)
 
-    handleSubmit(e, guestData)
+    if (!tempUser) return setAlert(true)
+
+    loginGuest(tempUser)
+  }
+
+  const loginGuest = async tempUser => {
+    try {
+      const response = await request('/api/login', {
+        method: 'post',
+        data: { identifier: tempUser.identifier, password: tempUser.password },
+      })
+
+      if (response.status == 200) {
+        setLoading(false)
+        displayModal('You are logged in as Guest.')
+
+        loadUserFromCookies('login').then(() => {
+          router.push('/')
+        })
+      }
+    } catch (err) {
+      setLoading(false)
+      setError(err.response.data)
+    }
+  }
+
+  const registerGuest = async (startProgress, endProgress, setError) => {
+    try {
+      startProgress()
+      const response = await request(`${process.env.NEXT_PUBLIC_API_URL}/auth/local/register/temp`, {
+        method: 'post',
+      })
+
+      console.log(response)
+
+      if (response.status == 200) {
+        endProgress()
+        displayModal('Guest account is registered now.')
+
+        loadUserFromCookies().then(() => {
+          router.push('/')
+        })
+      }
+    } catch (err) {
+      endProgress()
+      setError(err.response.data)
+    }
   }
 
   function handleChange(e) {
@@ -65,6 +134,7 @@ const AuthModal = memo(({ authModal }) => {
 
   return (
     <div className='auth-modal-wrapper'>
+      {alert && <ModalConfirm register={registerGuest} close={() => setAlert(false)} />}
       <div className='auth-modal' ref={popupRef}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -131,11 +201,16 @@ const AuthModal = memo(({ authModal }) => {
           <div className='btn-group'>
             <div className='btn-group-inner'>
               <button className='btn-submit'>{authModal.login ? 'Sign in' : 'Sign up'}</button>
+              <button className='btn-submit btn-guest' type='button' signas='guest' onClick={guestHandler}>
+                Guest mode
+              </button>
             </div>
-            <button className='btn-submit btn-guest' type='button' signas='guest' onClick={signAsGuest}>
-              {authModal.login ? 'Sign in as guest' : 'Sign up as guest'}
-            </button>
           </div>
+
+          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+            {isLoading && <Spinner size={35} color='#000' borderWidth={5} />}
+          </div>
+          <div className='error'>{error && error.data ? error?.data[0]?.messages[0]?.message : error}</div>
           <div
             style={{ fontSize: '1.8rem' }}
             onClick={() =>
@@ -171,25 +246,18 @@ const AuthModal = memo(({ authModal }) => {
         .btn-group {
           display: flex;
           grid-gap: 1rem;
-          margin: 15px auto;
+          margin: 2rem 0;
           align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .btn-google {
-          white-space: nowrap;
-          display: flex;
         }
 
         .btn-group-inner {
           display: flex;
-          width: 100%;
           grid-gap: 1rem;
-          max-height: 39px;
+          flex-wrap: wrap;
+          justify-content: center;
         }
 
         button {
-          min-width: fit-content;
           font-size: 1.6rem;
           padding: 1rem 2rem;
           border: none;
@@ -199,7 +267,6 @@ const AuthModal = memo(({ authModal }) => {
           text-transform: uppercase;
           cursor: pointer;
           margin: 0;
-          width: 100%;
           letter-spacing: 0.5px;
         }
 
@@ -207,14 +274,6 @@ const AuthModal = memo(({ authModal }) => {
           background: transparent;
           border: 1px solid #ccc;
           color: #000;
-        }
-
-        button[signas='google'] {
-          background: transparent;
-          border: none;
-          display: flex;
-          width: fit-content;
-          align-items: center;
         }
 
         .auth-modal {
@@ -228,12 +287,19 @@ const AuthModal = memo(({ authModal }) => {
           min-width: 300px;
           margin: 2rem;
           position: relative;
+          pointer-events: all;
+        }
+
+        .error {
+          color: red;
+          margin-bottom: 1rem;
         }
 
         .auth-modal-wrapper {
+          z-index: 1001;
+          pointer-events: none;
           opacity: ${authModal.visible ? 1 : 0};
           visibility: ${authModal.visible ? 'visible' : 'hidden'};
-          z-index: 1200;
           position: fixed;
           display: flex;
           width: 100%;

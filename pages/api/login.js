@@ -21,6 +21,7 @@ export default async function login(req, res) {
 
     res.status(200).end()
   } catch (e) {
-    res.status(400).send(e.response.data?.message[0]?.messages[0])
+    res.status(400).send(e.response.data)
+    console.log(e.response.data)
   }
 }
