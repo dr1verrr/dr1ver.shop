@@ -86,8 +86,12 @@ function ProductCounter({ count, actionType }) {
           color: #000;
           border-left: 2px solid #fff;
           border-right: 2px solid #fff;
-          font-size: 1.6rem;
+          font-size: 1.5rem;
           font-weight: 500;
+        }
+
+        .label {
+          font-size: 1.5rem;
         }
 
         .product-count {

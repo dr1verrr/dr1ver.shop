@@ -51,7 +51,7 @@ const AuthModal = memo(({ authModal }) => {
       })
 
       if (authenticated.status == 200) {
-        displayModal(authModal.register ? 'Account is registered now.' : 'You are logged in.')
+        displayModal(authModal.register ? 'Account is registered now.' : 'Logged in.')
         setLoading(false)
 
         const cb = type => {
@@ -89,7 +89,7 @@ const AuthModal = memo(({ authModal }) => {
 
       if (response.status == 200) {
         setLoading(false)
-        displayModal('You are logged in as Guest.')
+        displayModal('Logged in as Guest.')
 
         loadUserFromCookies('login').then(() => {
           dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })

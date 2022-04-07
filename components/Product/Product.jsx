@@ -105,7 +105,7 @@ export default function Product({ product, loading, pdctName }) {
                 <div onClick={router.back} className='product-redirect'>
                   <span>Go back</span>
                 </div>
-                <div className='product-title'>{product.title}</div>
+                <h1 className='product-title'>{product.title}</h1>
               </div>
             )}
 
@@ -207,13 +207,6 @@ export default function Product({ product, loading, pdctName }) {
           transition: opacity 0.25s ease;
         }
 
-        .product[type='productModal'] .button-counter:hover {
-           {
-            /*background: #000;
-          opacity: 0.7;*/
-          }
-        }
-
         .product[type='productModal'] .spinner .lds-ring div {
           border-color: #797b8c transparent transparent transparent;
         }
@@ -303,7 +296,6 @@ export default function Product({ product, loading, pdctName }) {
         }
 
         .product-background {
-          content: '';
           position: absolute;
           top: 0;
           left: 0;
@@ -336,10 +328,12 @@ export default function Product({ product, loading, pdctName }) {
         }
 
         .product-title {
-          font-size: 3.5rem;
           text-align: center;
-          padding-bottom: 3rem;
           letter-spacing: 1px;
+          margin-bottom: 2rem;
+          word-wrap: break-word;
+          font-weight: 500;
+          font-size: 3.8rem;
         }
 
         .product-redirect {
@@ -359,7 +353,6 @@ export default function Product({ product, loading, pdctName }) {
           flex: 1;
           min-width: 250px;
           z-index: 10;
-          padding: 1rem 0 2.5rem;
         }
 
         .product-image::before {

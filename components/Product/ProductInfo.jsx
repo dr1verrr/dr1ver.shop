@@ -51,11 +51,11 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
         .product-info {
           width: 100%;
           flex: 1;
+          margin-top: 1.5rem;
         }
 
         .product-description {
           min-width: 225px;
-          font-size: 1.8rem;
           font-weight: 300;
           text-align: left;
           margin: 1.5rem 0;
@@ -71,6 +71,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           width: 100%;
         }
         .product-category {
+          transition: opacity 0.25s;
           cursor: pointer;
           font-weight: 500;
           padding: 0.2rem 1rem;
@@ -79,6 +80,10 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           color: #000;
           max-width: fit-content;
           text-align: center;
+        }
+
+        .product-category:hover {
+          opacity: 0.75;
         }
 
         button {

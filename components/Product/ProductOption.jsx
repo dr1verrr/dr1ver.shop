@@ -63,6 +63,10 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           font-size: 1.6rem;
         }
 
+        .label {
+          font-size: 1.5rem;
+        }
+
         .product-option[active='true'] {
           background: #fff;
           color: #000;

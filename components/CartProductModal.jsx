@@ -47,14 +47,14 @@ const CartProductModal = memo(({ productModal }) => {
             {!loading && (
               <div className='modal-content-inner'>
                 {product.image && (
-                  <Link
-                    href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
-                    passHref
-                  >
-                    <div className='product-image link-hover' onClick={hideModals}>
-                      <Image src={product.image.url} alt='' width={300} height={300} />
-                    </div>
-                  </Link>
+                  <div className='product-image link-hover' onClick={hideModals}>
+                    <Link
+                      href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
+                      passHref
+                    >
+                      <Image src={product.image.url} alt='' width={product.image.width} height={product.image.height} />
+                    </Link>
+                  </div>
                 )}
 
                 <div className='product-info'>
@@ -102,10 +102,12 @@ const CartProductModal = memo(({ productModal }) => {
         }
 
         .product-image {
-          min-width: 200px;
-          max-width: 300px;
+          min-width: 350px;
           width: 100%;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .link-hover {
@@ -119,8 +121,8 @@ const CartProductModal = memo(({ productModal }) => {
         .product-price {
           background: #000;
           color: #fff;
-          padding: 1rem 2.5rem;
-          font-size: 2.2rem;
+          padding: 0.5rem 2.5rem;
+          font-size: 2.4rem;
           min-width: fit-content;
           margin: 1.5rem 0;
           white-space: nowrap;
@@ -128,6 +130,7 @@ const CartProductModal = memo(({ productModal }) => {
           border: none;
           white-space: nowrap;
           max-width: fit-content;
+          font-weight: 500;
         }
 
         .product-description {
@@ -138,7 +141,6 @@ const CartProductModal = memo(({ productModal }) => {
         }
 
         .modal-tile {
-          overflow-y: auto;
           min-height: 500px;
           position: relative;
         }
@@ -154,10 +156,12 @@ const CartProductModal = memo(({ productModal }) => {
         .modal-content-inner {
           display: flex;
           grid-gap: 2rem;
+          align-items: flex-start;
         }
 
         .product-title {
           font-size: 2.5rem;
+          font-weight: 500;
         }
 
         .product-modal[visible='true'] {
@@ -176,24 +180,28 @@ const CartProductModal = memo(({ productModal }) => {
 
         .modal-tile {
           width: 920px;
-          padding: 50px;
+          padding: 50px 75px;
           position: relative;
-          margin: 5vw 3rem;
+          margin: 5vw 1.5rem;
           border-radius: 20px;
           background: #fff;
         }
 
         .modal-close {
-          position: absolute;
+          position: fixed;
           padding: 30px;
-          right: -15px;
-          top: -15px;
+          top: 35px;
+          right: 0;
           cursor: pointer;
         }
 
         @media (max-width: 500px) {
           .modal-tile {
             padding: 3rem 1.5rem;
+          }
+
+          .product-image {
+            min-width: 200px;
           }
 
           .product-description {
@@ -206,6 +214,11 @@ const CartProductModal = memo(({ productModal }) => {
             flex-direction: column;
             align-items: center;
             text-align: center;
+          }
+
+          .modal-tile {
+            max-height: 85vh;
+            overflow-y: auto;
           }
 
           .product-info {

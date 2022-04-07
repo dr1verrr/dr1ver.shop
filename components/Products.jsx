@@ -84,7 +84,6 @@ function Products({ slug, ctgName }) {
             className='product-title'
             style={{
               textAlign: 'center',
-              fontSize: '3.5rem',
               fontWeight: 500,
               padding: '5rem',
               letterSpacing: '2px',
@@ -239,7 +238,7 @@ function Products({ slug, ctgName }) {
         }
 
         .product-title {
-          font-size: 2.1rem;
+          font-size: 3.8rem;
         }
         .product {
           position: relative;

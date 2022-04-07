@@ -215,6 +215,7 @@ const Footer = memo(({ categories }) => {
           justify-content: space-between;
           padding: 2rem 0;
           flex-wrap: wrap;
+          user-select: none;
         }
 
         .header-logo {
@@ -232,7 +233,6 @@ const Footer = memo(({ categories }) => {
         }
 
         .header-logo-second {
-          line-height: 1.5;
           letter-spacing: 0.5px;
           font-size: 2.5rem;
           max-height: 72px;

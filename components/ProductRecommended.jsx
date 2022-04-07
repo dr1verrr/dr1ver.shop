@@ -149,7 +149,6 @@ export default function ProductRecommended({ categories, productSlug }) {
         .arrow3 {
           font-size: 15px;
           letter-spacing: 0.07em;
-          line-height: 1.5;
           color: #fff;
           cursor: pointer;
           width: 18px;
