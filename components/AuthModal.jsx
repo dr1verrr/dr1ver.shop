@@ -65,8 +65,6 @@ const AuthModal = memo(({ authModal }) => {
           return cb('login')
         })
       }
-
-      console.log(authenticated)
     } catch (err) {
       setLoading(false)
       setError(err.response.data)
@@ -218,14 +216,20 @@ const AuthModal = memo(({ authModal }) => {
             {isLoading && <Spinner size={35} color='#000' borderWidth={5} />}
           </div>
           <div className='error'>{error && error.data ? error?.data[0]?.messages[0]?.message : error}</div>
-          <div
-            style={{ fontSize: '1.8rem' }}
-            onClick={() =>
-              dispatch({ type: AUTH_MODAL_UPDATE, payload: { login: !authModal.login, register: !authModal.register } })
-            }
-          >
+          <div>
             {authModal.login ? 'Want to create an account ? ' : 'Already registered ? '}
-            <span style={{ cursor: 'pointer' }}>{authModal.login ? 'Register' : 'Login'}</span>
+            <span
+              className='toggle-auth'
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                dispatch({
+                  type: AUTH_MODAL_UPDATE,
+                  payload: { login: !authModal.login, register: !authModal.register },
+                })
+              }
+            >
+              {authModal.login ? 'Register' : 'Login'}
+            </span>
           </div>
         </form>
       </div>
@@ -237,17 +241,27 @@ const AuthModal = memo(({ authModal }) => {
 
         input {
           border: none;
-          background-image: none;
           background: transparent;
           -webkit-box-shadow: none;
           -moz-box-shadow: none;
           box-shadow: none;
           border-radius: 10px;
-          padding: 2rem 3rem;
+          padding: 1.5rem 3rem;
           margin: 10px 0;
           background: #f4f6f8;
           font-size: 1.6rem;
-          min-width: 0;
+        }
+
+        label {
+          font-size: 1.4rem;
+        }
+
+        .toggle-auth {
+          color: #0000cd;
+        }
+
+        .toggle-auth:hover {
+          text-decoration: underline;
         }
 
         .btn-group {
@@ -291,10 +305,14 @@ const AuthModal = memo(({ authModal }) => {
           color: #000;
           max-width: 500px;
           width: 100%;
-          min-width: 300px;
-          margin: 2rem;
           position: relative;
           pointer-events: all;
+        }
+
+        @media (max-width: 575px) {
+          .auth-modal {
+            max-width: 90vw;
+          }
         }
 
         .error {
@@ -313,12 +331,6 @@ const AuthModal = memo(({ authModal }) => {
           height: 100%;
           justify-content: center;
           align-items: center;
-        }
-
-        .login-modal-form {
-          min-width: 0;
-          display: flex;
-          justify-content: center;
         }
       `}</style>
     </div>
