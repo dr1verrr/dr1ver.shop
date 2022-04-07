@@ -15,6 +15,7 @@ const CartItem = ({ product, lastModified }) => {
   const { isAuthenticated } = useAuth()
   const itemRef = useRef()
   const [isFocused, setFocused] = useState(false)
+
   function isInViewport(el) {
     const rect = el.getBoundingClientRect()
     return (
@@ -75,7 +76,6 @@ const CartItem = ({ product, lastModified }) => {
           z-index: 7;
           border-bottom: 1px solid #e0e3e6;
           display: flex;
-          user-select: none;
         }
 
         @keyframes modified {

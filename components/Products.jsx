@@ -75,7 +75,7 @@ function Products({ slug }) {
       </Head>
       {loading && (
         <div className='spinner-wrapper spinner-top'>
-          <Spinner color='#000' size={50} borderWidth={8} />
+          <Spinner color='#000' size={42} borderWidth={7} />
         </div>
       )}
       {!loading && (
@@ -126,7 +126,7 @@ function Products({ slug }) {
       )}
       <div className='spinner-bottom'>
         {productsLoading && count < productsInfo?.products?.length && (
-          <Spinner color='#000' size={50} borderWidth={8} />
+          <Spinner color='#000' size={42} borderWidth={8} />
         )}
       </div>
 
@@ -168,7 +168,7 @@ function Products({ slug }) {
           height: 100%;
           width: 100%;
           top: 50px;
-          left: -15px;
+          left: 0;
           display: flex;
           justify-content: center;
         }

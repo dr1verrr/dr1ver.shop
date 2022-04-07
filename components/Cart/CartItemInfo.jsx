@@ -9,6 +9,7 @@ import CartOption from '../Product/ProductOption'
 import CartButton from '../ProductButton'
 import CartCount from './CartCount'
 import saveChanges from '../../services/Cart/saveChanges'
+import shortenNumber from '../../helpers/shortenNumber'
 
 export default function CartItemInfo({ product, showProductModal }) {
   const price = product.price
@@ -71,7 +72,7 @@ export default function CartItemInfo({ product, showProductModal }) {
   return (
     <div className='cartItem-options'>
       <div className='cart-right'>
-        <div className='item-cart-price'>{totalPrice} USD</div>
+        <div className='item-cart-price'>{shortenNumber(totalPrice, 2)} USD</div>
         <div className='item-title' onClick={showProductModal}>
           {product.name}
         </div>

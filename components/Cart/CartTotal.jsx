@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TotalPrice from '../TotalPrice'
 
 export default function CartTotal() {
+  const [isHovered, setHovered] = useState(false)
+
   return (
-    <div className='cart-total'>
+    <div className='cart-total' onMouseOver={() => setHovered(!isHovered)} onMouseOut={() => setHovered(!isHovered)}>
       <div className='cart-total-label'>TOTAL: </div>
       <div className='cart-total-price'>
-        <TotalPrice />
+        <TotalPrice onHover={isHovered} />
       </div>
       <style jsx>
         {`

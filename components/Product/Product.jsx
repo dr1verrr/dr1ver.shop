@@ -80,7 +80,7 @@ export default function Product({ product, loading }) {
       </Head>
       {loading && (
         <div className='spinner-wrapper'>
-          <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} borderWidth={8} size={50} />
+          <Spinner color={type === 'recommendedProductModal' ? '#000' : '#fff'} size={42} borderWidth={7} />
         </div>
       )}
       {type !== 'productModal' && (
@@ -281,7 +281,7 @@ export default function Product({ product, loading }) {
           height: 100%;
           width: 100%;
           top: 50px;
-          left: -15px;
+          left: 0;
           z-index: 50;
           display: flex;
           justify-content: center;
@@ -328,6 +328,8 @@ export default function Product({ product, loading }) {
 
         .product-inner {
           display: flex;
+          grid-gap: 1.5rem;
+          margin-bottom: 2.5rem;
         }
 
         .product-title {

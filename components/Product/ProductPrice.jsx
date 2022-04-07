@@ -1,10 +1,11 @@
 import React from 'react'
+import shortenNumber from '../../helpers/shortenNumber'
 
-export default function ProductPrice({ price, isDuplicated, optionPrice, type }) {
+export default function ProductPrice({ price, isDuplicated, optionPrice }) {
   return (
     <div className='product-price'>
       <span className='inner'>
-        <span className='price'>{isDuplicated ? price : price + optionPrice}</span>
+        <span className='price'>{shortenNumber(isDuplicated ? price : price + optionPrice, 2)}</span>
         <span className='currency'>USD</span>
       </span>
       <style jsx>{`

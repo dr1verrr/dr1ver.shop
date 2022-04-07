@@ -38,7 +38,6 @@ export default function HeaderSecondOther() {
       <style jsx>{`
         .header-cart-total-cost {
           cursor: pointer;
-          user-select: none;
         }
 
         .header-account {

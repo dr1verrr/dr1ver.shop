@@ -57,7 +57,6 @@ function Cart({ isCartVisible }) {
           color: #000;
           overflow-x: hidden;
           scrollbar-width: none;
-          user-select: none;
           scroll-behavior: smooth;
         }
 

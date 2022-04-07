@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import shortenNumber from '../helpers/shortenNumber'
 
-export default function TotalPrice() {
+export default function TotalPrice({ onHover }) {
   const { cartData } = useSelector(state => state.cart)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
+
+  useEffect(() => {
+    if (!!onHover) return getTotal(cartData)
+  }, [onHover])
 
   function getTotal(cartData) {
     let value = 0
@@ -13,7 +18,9 @@ export default function TotalPrice() {
       value += (cartData[index].price + cartData[index].optionPrice) * cartData[index].count
     }
 
-    return value.toFixed(2)
+    if (onHover) return value.toFixed(2)
+
+    return shortenNumber(value, 2)
   }
 
   return `${mounted ? getTotal(cartData) : Number(0).toFixed(2)} USD`
