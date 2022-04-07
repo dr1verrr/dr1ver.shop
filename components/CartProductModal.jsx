@@ -47,7 +47,10 @@ const CartProductModal = memo(({ productModal }) => {
             {!loading && (
               <div className='modal-content-inner'>
                 {product.image && (
-                  <Link href={`/product/${product.slug}`} passHref>
+                  <Link
+                    href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
+                    passHref
+                  >
                     <div className='product-image link-hover' onClick={hideModals}>
                       <Image src={product.image.url} alt='' width={300} height={300} />
                     </div>
