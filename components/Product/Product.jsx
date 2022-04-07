@@ -116,7 +116,7 @@ export default function Product({ product, loading, pdctName }) {
                     className='product-image-link'
                     onClick={() => {
                       dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })
-                      router.push(`/product/${product.slug}`)
+                      router.push(`/product/${product.slug}?name=${product.title}`)
                     }}
                   >
                     <Image
