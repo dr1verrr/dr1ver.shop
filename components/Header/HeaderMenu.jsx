@@ -20,7 +20,6 @@ export default function HeaderMenu() {
       <style jsx>{`
         .header-menu {
           display: flex;
-          height: 100%;
           align-items: center;
           justify-content: space-between;
           color: #fff;
@@ -79,10 +78,8 @@ export default function HeaderMenu() {
             color: #000;
             align-items: start;
             justify-content: start;
-          }
-
-          .header-menu-category {
-            overflow-x: auto;
+            flex-wrap: nowrap;
+            height: calc(100% - 75px);
           }
 
           .header-menu-link {
