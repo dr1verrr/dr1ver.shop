@@ -371,8 +371,8 @@ export default function Product({ product, loading, pdctName }) {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          width: 35%;
-          height: 35%;
+          width: 25%;
+          height: 25%;
           border-radius: 50%;
           filter: blur(85px);
           opacity: 0.25;
