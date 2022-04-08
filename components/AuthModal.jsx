@@ -1,4 +1,3 @@
-import cookieCutter from 'cookie-cutter'
 import { useRouter } from 'next/router'
 import React, { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,8 +8,10 @@ import { showModal } from '../redux/actions'
 import store from '../redux/store'
 import { AUTH_MODAL_UPDATE, CART_UPDATE } from '../redux/types'
 import { saveChanges } from '../services/Cart/saveChanges'
-import ModalConfirm from './ModalConfirm'
 import Spinner from './Spinner'
+import cookieCutter from 'cookie-cutter'
+import { genStr } from '../helpers/generateStr'
+import { genPassword } from '../helpers/generatePassword'
 
 const AuthModal = memo(({ authModal }) => {
   const { loadUserFromCookies } = useAuth()
@@ -18,10 +19,9 @@ const AuthModal = memo(({ authModal }) => {
   const router = useRouter()
   const request = useRequest()
   const dispatch = useDispatch()
-  const [alert, setAlert] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const debounceError = useDebouncedFunction(() => setError(null), 10000)
+  const debounceError = useDebouncedFunction(() => setError(null), 7500)
 
   const [userData, setUserData] = useState({
     identifier: '',
@@ -36,23 +36,53 @@ const AuthModal = memo(({ authModal }) => {
 
   const displayModal = msg => dispatch(showModal(msg))
 
-  const getTempUser = () => cookieCutter.get('user_temp')
+  const getOrCreateGuest = () => {
+    const user = cookieCutter.get('user_guest')
 
-  async function handleSubmit(e) {
+    if (user) return JSON.parse(user)
+
+    const baseStr = genStr()
+    const secStr = genStr()
+    const password = genPassword()
+
+    const generatedUser = {
+      identifier: baseStr,
+      username: baseStr,
+      password,
+      email: `${baseStr + secStr + password}` + `@${secStr}.io`,
+    }
+
+    return [generatedUser]
+  }
+
+  async function handleSubmit(e, guest) {
     e.preventDefault()
+
+    const getAuth = () => {
+      if ((authModal.register || authModal.login) && guest) {
+        if (Array.isArray(guest)) return 'register'
+        return 'login'
+      }
+
+      return authModal.login ? 'login' : 'register'
+    }
 
     try {
       const cartData = store.getState().cart.cartData
       setLoading(true)
 
-      const authenticated = await request(authModal.login ? '/api/login' : '/api/register', {
+      const authenticated = await request(getAuth() === 'register' ? '/api/register' : '/api/login', {
         method: 'post',
-        data: userData,
+        data: Array.isArray(guest) ? guest[0] : guest || userData,
       })
 
       if (authenticated.status == 200) {
-        displayModal(authModal.register ? 'Account is registered now.' : 'Logged in.')
+        displayModal(getAuth() === 'register' ? 'Account is registered now.' : 'Logged in.')
         setLoading(false)
+
+        if (getAuth() === 'register' && guest) {
+          cookieCutter.set('user_guest', JSON.stringify(guest[0]), { path: '/' })
+        }
 
         const cb = type => {
           if (type === 'register') dispatch({ type: CART_UPDATE, payload: { cartData } })
@@ -60,66 +90,13 @@ const AuthModal = memo(({ authModal }) => {
           router.push('/profile')
         }
 
-        loadUserFromCookies(authModal.register ? 'register' : 'login').then(isAuthenticated => {
-          if (authModal.register) return saveChanges({ cartData }, () => cb('register'), isAuthenticated)
+        loadUserFromCookies(getAuth()).then(isAuthenticated => {
+          if (getAuth() === 'register') return saveChanges({ cartData }, () => cb('register'), isAuthenticated)
           return cb('login')
         })
       }
     } catch (err) {
       setLoading(false)
-      setError(err.response.data)
-    }
-  }
-
-  const guestHandler = () => {
-    const tempUser = getTempUser()
-    console.log(tempUser)
-
-    if (!tempUser) return setAlert(true)
-
-    loginGuest(tempUser)
-  }
-
-  const loginGuest = async tempUser => {
-    try {
-      const response = await request('/api/login', {
-        method: 'post',
-        data: { identifier: tempUser.identifier, password: tempUser.password },
-      })
-
-      if (response.status == 200) {
-        setLoading(false)
-        displayModal('Logged in as Guest.')
-
-        loadUserFromCookies('login').then(() => {
-          dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
-          router.push('/')
-        })
-      }
-    } catch (err) {
-      setLoading(false)
-      setError(err.response.data)
-    }
-  }
-
-  const registerGuest = async (startProgress, endProgress, setError) => {
-    try {
-      startProgress()
-      const response = await request(`${process.env.NEXT_PUBLIC_API_URL}/auth/local/register/temp`, {
-        method: 'post',
-      })
-
-      if (response.status == 200) {
-        endProgress()
-        displayModal('Guest account is registered now.')
-
-        loadUserFromCookies().then(() => {
-          dispatch({ type: AUTH_MODAL_UPDATE, payload: { visible: false } })
-          router.push('/')
-        })
-      }
-    } catch (err) {
-      endProgress()
       setError(err.response.data)
     }
   }
@@ -131,7 +108,6 @@ const AuthModal = memo(({ authModal }) => {
 
   return (
     <div className='auth-modal-wrapper'>
-      {alert && <ModalConfirm register={registerGuest} close={() => setAlert(false)} />}
       <div className='auth-modal' ref={popupRef}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -205,7 +181,7 @@ const AuthModal = memo(({ authModal }) => {
                 className='btn-submit btn-guest'
                 type='button'
                 signas='guest'
-                onClick={guestHandler}
+                onClick={e => handleSubmit(e, getOrCreateGuest())}
               >
                 Guest mode
               </button>
