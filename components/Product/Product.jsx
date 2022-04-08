@@ -11,7 +11,7 @@ import store from '../../redux/store'
 import { CART_UPDATE, PROGRESS_END, PROGRESS_START, RECOMMENDED_PRODUCT_MODAL_HIDE } from '../../redux/types'
 import Spinner from '../Spinner'
 import ProductInfo from './ProductInfo'
-import saveChanges from '../../services/Cart/saveChanges'
+import { saveChanges } from '../../services/Cart/saveChanges'
 import Head from 'next/head'
 
 export default function Product({ product, loading, pdctName }) {

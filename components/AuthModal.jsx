@@ -8,7 +8,7 @@ import useRequest from '../hooks/useRequest'
 import { showModal } from '../redux/actions'
 import store from '../redux/store'
 import { AUTH_MODAL_UPDATE, CART_UPDATE } from '../redux/types'
-import saveChanges from '../services/Cart/saveChanges'
+import { saveChanges } from '../services/Cart/saveChanges'
 import ModalConfirm from './ModalConfirm'
 import Spinner from './Spinner'
 

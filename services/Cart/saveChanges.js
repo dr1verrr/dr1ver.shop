@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const saveChanges = async (data, cb, isAuthenticated) => {
+export const saveChanges = async (data, cb, isAuthenticated) => {
   if (isAuthenticated) {
     const response = await axios.put('/api/user/cart/update', data.cartData)
 
@@ -9,5 +9,3 @@ const saveChanges = async (data, cb, isAuthenticated) => {
 
   return cb()
 }
-
-export default saveChanges

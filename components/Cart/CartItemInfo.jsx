@@ -8,7 +8,7 @@ import { CART_UPDATE } from '../../redux/types'
 import CartOption from '../Product/ProductOption'
 import CartButton from '../ProductButton'
 import CartCount from './CartCount'
-import saveChanges from '../../services/Cart/saveChanges'
+import { saveChanges } from '../../services/Cart/saveChanges'
 import shortenNumber from '../../helpers/shortenNumber'
 
 export default function CartItemInfo({ product, showProductModal }) {

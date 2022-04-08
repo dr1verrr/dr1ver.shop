@@ -6,7 +6,7 @@ import { showModal } from '../../redux/actions'
 import store from '../../redux/store'
 import { CART_UPDATE, PRODUCT_MODAL_SHOW } from '../../redux/types'
 import { removeProduct } from '../../services/Cart/removeProduct'
-import saveChanges from '../../services/Cart/saveChanges'
+import { saveChanges } from '../../services/Cart/saveChanges'
 import CartItemInfo from './CartItemInfo'
 
 const CartItem = ({ product, lastModified }) => {
