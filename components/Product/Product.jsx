@@ -24,14 +24,14 @@ export default function Product({ product, loading, pdctName }) {
     if (!loading) {
       dispatch({ type: actionType, payload: { price: product.price, optionPrice: 0, count: 1, selected: 'Small' } })
     }
+
+    return () => dispatch({ type: actionType, payload: { optionPrice: 0, selected: 'Small' } })
   }, [loading])
 
   const submitHandler = throttle(e => {
     const { count, price, optionPrice, selected } = productInfo
 
-    if (count === '' || count == undefined) {
-      dispatch({ type: actionType, payload: { count: 1 } })
-    }
+    if (!count) dispatch({ type: actionType, payload: { count: 1 } })
 
     if (selected) {
       const data = {
@@ -110,7 +110,7 @@ export default function Product({ product, loading, pdctName }) {
             )}
 
             <div className='product-inner'>
-              <div className='product-image'>
+              <div className='product-image' style={{ maxHeight: product.image.height }}>
                 {type === 'productModal' ? (
                   <div
                     className='product-image-link'
@@ -158,6 +158,21 @@ export default function Product({ product, loading, pdctName }) {
           background: #fff;
           color: #111113;
           font-weight: 400;
+        }
+
+        .product[type='productModal'] .product-title {
+          text-align: left;
+        }
+
+        .product-title {
+          text-align: center;
+          letter-spacing: 1px;
+          margin-bottom: 2rem;
+          white-space: normal;
+          line-height: 1;
+          word-wrap: break-word;
+          font-weight: 500;
+          font-size: 3.8rem;
         }
 
         .product[type='productModal'] .product-description {
@@ -264,6 +279,10 @@ export default function Product({ product, loading, pdctName }) {
           min-height: calc(100vh - 153.75px - 57.5px);
         }
 
+        .product-title {
+          margin-bottom: 3rem;
+        }
+
         .product-image-link {
           cursor: pointer;
           transition: opacity 0.3s ease;
@@ -327,15 +346,6 @@ export default function Product({ product, loading, pdctName }) {
           margin-bottom: 2.5rem;
         }
 
-        .product-title {
-          text-align: center;
-          letter-spacing: 1px;
-          margin-bottom: 2rem;
-          word-wrap: break-word;
-          font-weight: 500;
-          font-size: 3.8rem;
-        }
-
         .product-redirect {
           display: inline-block;
           cursor: pointer;
@@ -361,10 +371,10 @@ export default function Product({ product, loading, pdctName }) {
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          width: 25%;
-          height: 25%;
+          width: 35%;
+          height: 35%;
           border-radius: 50%;
-          filter: blur(100px);
+          filter: blur(85px);
           opacity: 0.25;
           box-shadow: inset 0 0 50px #fff, inset 20px 0 80px #fff, inset -20px 0 80px #fff, inset 20px 0 300px #fff,
             inset -20px 0 300px #fff, 0 0 50px #fff, -10px 0 80px #fff, 10px 0 80px #fff;

@@ -9,9 +9,9 @@ import ProductCounter from './ProductCount'
 import ProductOption from './ProductOption'
 import ProductPrice from './ProductPrice'
 
-const ProductInfo = memo(({ info: { Custom_field, description, categories, id, title, slug } }) => {
+const ProductInfo = memo(({ info: { Custom_field, description, categories, id, title, slug, price } }) => {
   const {
-    productInfo: { price, optionPrice, selected, count },
+    productInfo: { optionPrice, selected, count },
     type,
     actionType,
   } = useProductInfo()
@@ -23,7 +23,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
       {type === 'productModal' && (
         <h2
           className='product-title'
-          style={{ color: '#000', padding: '1rem 0', fontSize: '2.4rem' }}
+          style={{ color: '#000', padding: '0 0 1rem', fontSize: '2.4rem' }}
           onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}
         >
           <Link href={`/product/${slug}`}>{title}</Link>
@@ -51,7 +51,6 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
         .product-info {
           width: 100%;
           flex: 1;
-          margin-top: 1.5rem;
         }
 
         .product-description {

@@ -25,14 +25,20 @@ const CartItem = ({ product, lastModified }) => {
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     )
   }
+  const isElVisible = () => isInViewport(itemRef.current)
+  const highlightEl = () => setFocused(true)
+
+  const scrollToEl = () => {
+    itemRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   useEffect(() => {
-    if (lastModified) {
-      if (!isInViewport(itemRef.current)) {
-        setFocused(true)
-
-        itemRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
+    if (!isElVisible() && lastModified) {
+      scrollToEl()
+      highlightEl()
     }
   }, [lastModified])
 
@@ -103,7 +109,7 @@ const CartItem = ({ product, lastModified }) => {
           opacity: 0.2;
           z-index: -1;
           animation: modified 1s ease;
-          animation-delay: 250ms;
+          animation-delay: 300ms;
         }
 
         .cart-left {

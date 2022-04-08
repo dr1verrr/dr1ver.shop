@@ -46,6 +46,7 @@ export default function ProductModal({ slug }) {
           justify-content: center;
           align-items: center;
           width: 100%;
+          overflow-x: hidden;
           z-index: 1000;
           pointer-events: none;
           height: 100%;
@@ -61,7 +62,7 @@ export default function ProductModal({ slug }) {
           padding: 30px;
           cursor: pointer;
           pointer-events: all;
-          z-index: 5000;
+          z-index: 2000;
           max-width: 15px;
           max-height: 15px;
         }
@@ -86,7 +87,7 @@ export default function ProductModal({ slug }) {
 
         @media (max-width: 470px) {
           .modal-content {
-            padding: 3rem 0;
+            padding: 3.5rem 0.75rem;
           }
         }
 

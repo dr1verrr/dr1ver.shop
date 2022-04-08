@@ -42,19 +42,24 @@ const CartProductModal = memo(({ productModal }) => {
     <div className='product-modal' visible={`${productModal.visible}`}>
       <div className='product-modal-inside'>
         <div className='modal-tile' ref={modalRef}>
+          <div className='icon modal-close' onClick={hideProductModal}>
+            <svg className='cross' xmlns='http://www.w3.org/2000/svg' width={15} height={15}>
+              <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
+            </svg>
+          </div>
           <div className='spinner-wrapper'>{loading && <Spinner color='#000' size={50} />}</div>
           <div className='modal-content'>
             {!loading && (
               <div className='modal-content-inner'>
                 {product.image && (
-                  <div className='product-image link-hover' onClick={hideModals}>
-                    <Link
-                      href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
-                      passHref
-                    >
+                  <Link
+                    href={{ pathname: `/product/[slug]`, query: { slug: product.slug, name: product.title } }}
+                    passHref
+                  >
+                    <div className='product-image link-hover' onClick={hideModals}>
                       <Image src={product.image.url} alt='' width={product.image.width} height={product.image.height} />
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                 )}
 
                 <div className='product-info'>
@@ -74,11 +79,6 @@ const CartProductModal = memo(({ productModal }) => {
                 </div>
               </div>
             )}
-          </div>
-          <div className='icon modal-close' onClick={hideProductModal}>
-            <svg className='cross' xmlns='http://www.w3.org/2000/svg' width={15} height={15}>
-              <polygon points='15,0.54 14.46,0 7.5,6.96 0.54,0 0,0.54 6.96,7.5 0,14.46 0.54,15 7.5,8.04 14.46,15 15,14.46 8.04,7.5'></polygon>
-            </svg>
           </div>
         </div>
       </div>
@@ -142,7 +142,6 @@ const CartProductModal = memo(({ productModal }) => {
 
         .modal-tile {
           min-height: 500px;
-          position: relative;
         }
 
         .spinner-wrapper {
@@ -153,15 +152,23 @@ const CartProductModal = memo(({ productModal }) => {
           z-index: 500;
         }
 
+        .modal-content {
+          overflow-y: auto;
+          max-height: inherit;
+          padding: 1.5rem 2.5rem 4rem;
+        }
+
         .modal-content-inner {
           display: flex;
           grid-gap: 2rem;
           align-items: flex-start;
+          margin-top: 3.5rem;
         }
 
         .product-title {
           font-size: 2.5rem;
           font-weight: 500;
+          text-align: left;
         }
 
         .product-modal[visible='true'] {
@@ -180,26 +187,23 @@ const CartProductModal = memo(({ productModal }) => {
 
         .modal-tile {
           width: 920px;
-          padding: 50px 75px;
           position: relative;
           margin: 5vw 1.5rem;
           border-radius: 20px;
           background: #fff;
+          overflow: hidden;
         }
 
         .modal-close {
-          position: fixed;
-          padding: 30px;
-          top: 35px;
+          position: absolute;
+          padding: 20px;
+          top: 0;
           right: 0;
           cursor: pointer;
+          z-index: 500;
         }
 
         @media (max-width: 500px) {
-          .modal-tile {
-            padding: 3rem 1.5rem;
-          }
-
           .product-image {
             min-width: 200px;
           }
@@ -218,7 +222,6 @@ const CartProductModal = memo(({ productModal }) => {
 
           .modal-tile {
             max-height: 85vh;
-            overflow-y: auto;
           }
 
           .product-info {

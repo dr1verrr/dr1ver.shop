@@ -167,7 +167,7 @@ body {
   h2,
   h3,
   h4 {
-    font-size: calc(3vw + 3vh) !important;
+    font-size: calc(3vw + 2.5vh) !important;
   }
 }
 

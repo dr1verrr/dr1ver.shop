@@ -38,7 +38,7 @@ export default function Home() {
           width: 100%;
           height: 85vh;
           overflow: hidden;
-          z-index: -100;
+          z-index: -1;
           filter: saturate(1.25);
         }
         .home-page-wrapper {
@@ -46,7 +46,7 @@ export default function Home() {
         }
         .home-page-inner {
           position: relative;
-          height: calc(100vh - 182.5px);
+          height: calc(100vh - 185px);
         }
         .home-page-video::after {
           content: '';
@@ -110,7 +110,7 @@ export default function Home() {
         }
         @media (max-width: 1230px) {
           .home-page-inner {
-            height: calc(100vh - 232.5px);
+            height: calc(100vh - 235px);
           }
         }
         @media (max-width: 720px) {
