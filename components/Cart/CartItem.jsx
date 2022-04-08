@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/auth'
 import { showModal } from '../../redux/actions'
 import store from '../../redux/store'
 import { CART_UPDATE, PRODUCT_MODAL_SHOW } from '../../redux/types'
-import filterCartData from '../../services/Cart/filterCartData'
+import { removeProduct } from '../../services/Cart/removeProduct'
 import saveChanges from '../../services/Cart/saveChanges'
 import CartItemInfo from './CartItemInfo'
 
@@ -42,15 +42,15 @@ const CartItem = ({ product, lastModified }) => {
     }
   }, [lastModified])
 
-  const removeProduct = () => {
+  const remove = () => {
     const cartData = store.getState().cart.cartData
-    const filteredData = filterCartData(cartData, product)
+    const changedData = removeProduct(cartData, product)
 
-    if (filteredData.cartData) {
+    if (changedData.cartData) {
       saveChanges(
-        filteredData,
+        changedData,
         () => {
-          dispatch({ type: CART_UPDATE, payload: { cartData: filteredData.cartData } })
+          dispatch({ type: CART_UPDATE, payload: { cartData: changedData.cartData } })
           dispatch(showModal('Product was removed from the basket.'))
         },
         isAuthenticated
@@ -62,7 +62,7 @@ const CartItem = ({ product, lastModified }) => {
     <div className={`cart-item ${isFocused ? 'focused' : ''}`} ref={itemRef} onAnimationEnd={() => setFocused(false)}>
       <div className='cart-left'>
         <div className='item-wrapper'>
-          <div className='item-remove' onClick={removeProduct}>
+          <div className='item-remove' onClick={remove}>
             <svg xmlns='http://www.w3.org/2000/svg'>
               <path d='M7 .6L6.4 0 3.5 2.9.6 0 0 .6l2.9 2.9L0 6.4l.6.6 2.9-2.9L6.4 7l.6-.6-2.9-2.9z'></path>
             </svg>

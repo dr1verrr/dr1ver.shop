@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAuth } from '../../contexts/auth'
-import addToCart from '../../services/Cart/addToCart'
+import { addProduct } from '../../services/Cart/addProduct'
 import throttle from '../../helpers/throttle'
 import { useProductInfo } from '../../providers/ProductProvider'
 import { showCart, showModal } from '../../redux/actions'
@@ -49,7 +49,7 @@ export default function Product({ product, loading, pdctName }) {
       if (data) {
         dispatch({ type: PROGRESS_START, payload: { type } })
         const cartData = store.getState().cart.cartData
-        const updated = addToCart(cartData, { product: data })
+        const updated = addProduct(cartData, { product: data })
 
         if (updated) {
           saveChanges(

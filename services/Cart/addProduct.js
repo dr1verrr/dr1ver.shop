@@ -1,4 +1,4 @@
-const addToCart = (cartData, data) => {
+export const addProduct = (cartData, data) => {
   const product = data.product
 
   let modified = []
@@ -57,5 +57,3 @@ const addToCart = (cartData, data) => {
     product: { id: product.id, selected: product.selected, count: product.count },
   }
 }
-
-export default addToCart
