@@ -276,7 +276,7 @@ export default function Product({ product, loading, pdctName }) {
           color: #fff;
           padding: 0 0.5rem 0;
           position: relative;
-          min-height: calc(100vh - 153.75px - 57.5px);
+          min-height: calc(100vh - 185px);
         }
 
         .product-title {
@@ -417,7 +417,7 @@ export default function Product({ product, loading, pdctName }) {
 
         @media (max-width: 1230px) {
           .product {
-            min-height: calc(100vh - 232.5px - 25px);
+            min-height: calc(100vh - 235px);
           }
         }
 
