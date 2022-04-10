@@ -4,14 +4,27 @@ import React from 'react'
 export default function Layout({ children }) {
   return (
     <div className='layout'>
-      <main className='main'>
-        <PageTransition timeout={300} classNames='page-transition'>
-          {children}
-        </PageTransition>
-      </main>
+      <PageTransition timeout={300} classNames='page-transition'>
+        <main className='main'>{children}</main>
+      </PageTransition>
       <style jsx>{`
         .main {
           margin-top: 0;
+        }
+
+        .main {
+          min-height: calc(100vh - 185px);
+        }
+
+        @media (max-width: 1230px) {
+          .main {
+            min-height: calc(100vh - 235px);
+          }
+        }
+        @media (max-width: 720px) {
+          .main {
+            min-height: calc(100vh - 75px);
+          }
         }
       `}</style>
       <style jsx global>{`

@@ -5,6 +5,7 @@ import { showModal } from '../../redux/actions'
 import CartProductModal from '../CartProductModal'
 import CartItems from './CartItems'
 import CartTotal from './CartTotal'
+import Button from '../Button'
 
 function Cart({ isCartVisible }) {
   const [mounted, setMounted] = useState(false)
@@ -38,9 +39,9 @@ function Cart({ isCartVisible }) {
           </div>
           <div className='cart-footer'>
             <CartTotal cartData={cartData} />
-            <button type='button' className='cart-checkout' onClick={checkoutHandler}>
-              <span>CHECKOUT</span>
-            </button>
+            <div className='cart-checkout'>
+              <Button onClick={checkoutHandler}>CHECKOUT</Button>
+            </div>
           </div>
         </div>
       </div>
@@ -68,21 +69,8 @@ function Cart({ isCartVisible }) {
           padding: 30px 30px 0;
         }
         .cart-checkout {
-          transition: background 0.4s ease;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-          padding: 1.7rem 7rem;
-          border-radius: 30px;
-          background: #000;
-          border: none;
-          color: #fff;
-          font-size: 1.5rem;
-          margin-top: 4rem;
-          letter-spacing: 2px;
-        }
-        .cart-checkout:hover {
-          background: rgba(0, 0, 0, 0.7);
+          max-width: fit-content;
+          margin: 2rem auto;
         }
 
         .my-purchases {
@@ -146,9 +134,6 @@ function Cart({ isCartVisible }) {
         @media (max-width: 440px) {
           .cart {
             width: 100%;
-          }
-          .cart-checkout {
-            font-size: 4vw;
           }
         }
         @media (max-width: 720px) {

@@ -7,7 +7,7 @@ const CartItems = ({ cartData, lastModified }) => {
       {cartData?.map(item => {
         return (
           <CartItem
-            key={item.id + item.selected?.charAt(0)}
+            key={item.id + item.selected[0]}
             product={item}
             lastModified={
               lastModified && item.id == lastModified.id && item.selected === lastModified.selected

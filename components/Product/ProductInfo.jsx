@@ -26,15 +26,15 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           style={{ color: '#000', padding: '0 0 1rem', fontSize: '2.4rem' }}
           onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}
         >
-          <Link href={`/product/${slug}`}>{title}</Link>
+          <Link href={`/product/${slug}?name=${title}`}>{title}</Link>
         </h2>
       )}
       <ProductPrice price={price} optionPrice={optionPrice} type={type} />
       <div className='product-categories'>
-        {categories?.map(item => (
-          <Link key={item.slug} href={`/category/${item.slug}`} passHref>
+        {categories?.map(ctg => (
+          <Link key={ctg.slug} href={`/category/${ctg.slug}?name=${ctg.name}`} passHref>
             <a className='product-category' onClick={() => dispatch({ type: RECOMMENDED_PRODUCT_MODAL_HIDE })}>
-              {item.name}
+              {ctg.name}
             </a>
           </Link>
         ))}

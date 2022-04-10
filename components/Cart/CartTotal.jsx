@@ -8,7 +8,7 @@ export default function CartTotal() {
     <div className='cart-total' onMouseOver={() => setHovered(!isHovered)} onMouseOut={() => setHovered(!isHovered)}>
       <div className='cart-total-label'>TOTAL: </div>
       <div className='cart-total-price'>
-        <TotalPrice onHover={isHovered} />
+        <TotalPrice isHovered={isHovered} />
       </div>
       <style jsx>
         {`

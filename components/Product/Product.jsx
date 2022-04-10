@@ -77,7 +77,7 @@ export default function Product({ product, loading, pdctName }) {
     <section className='product' type={type}>
       {pdctName && (
         <Head>
-          <title>{pdctName || 'dr1ver.shop - stickers shop by dr1verrr'} - dr1ver.shop</title>
+          <title>{pdctName || 'dr1ver.shop - stickers shop by dr1verrr'} — dr1ver.shop</title>
         </Head>
       )}
 

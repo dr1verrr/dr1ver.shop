@@ -71,7 +71,7 @@ function Products({ slug, ctgName }) {
   return (
     <section className='product-page' ref={productPage}>
       <Head>
-        <title>{slug === 'all' ? 'All stickers' : ctgName} - dr1ver.shop</title>
+        <title>{slug === 'all' ? 'All stickers' : ctgName} — dr1ver.shop</title>
       </Head>
       {loading && (
         <div className='spinner-wrapper spinner-top'>
@@ -178,7 +178,7 @@ function Products({ slug, ctgName }) {
 
         .product-page {
           position: relative;
-          min-height: 100vh;
+          min-height: inherit;
           background: #fafafc;
           opacity: 1;
           padding-bottom: 150px;
