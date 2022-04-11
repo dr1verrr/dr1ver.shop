@@ -77,10 +77,18 @@ export default function ProductRecommended({ categories, productSlug }) {
                   <div className='product-image'>
                     <Image src={product.image.url} width={120} height={120} quality={65} alt='' />
                   </div>
-                  <div className='product-price'>
-                    <div className='product-price-inner'>
-                      <ProductPrice price={product.price} isDuplicated={true} />
-                    </div>
+                  <div className='price'>
+                    <ProductPrice
+                      price={product.price}
+                      isDuplicated={true}
+                      style={{
+                        padding: '0.2rem',
+                        fontSize: '1.5rem',
+                        margin: '1rem 0 1.5rem',
+                        minWidth: '120px',
+                        maxWidth: '120px',
+                      }}
+                    />
                   </div>
                   <div className='product-title'>{product.title}</div>
                 </div>
@@ -98,6 +106,10 @@ export default function ProductRecommended({ categories, productSlug }) {
           justify-content: center;
           padding: 0 2.5rem 10rem;
           min-height: 455.5px;
+        }
+
+        .price {
+          padding: 0;
         }
 
         @keyframes modal {
@@ -161,10 +173,6 @@ export default function ProductRecommended({ categories, productSlug }) {
           opacity: 0.6;
         }
 
-        .product-price-inner {
-          transform: scale(0.6);
-        }
-
         .product-title {
           font-size: 1.4rem;
         }
@@ -175,6 +183,7 @@ export default function ProductRecommended({ categories, productSlug }) {
           display: flex;
           flex-direction: column;
           align-items: center;
+          min-width: 150px;
         }
 
         .recommended-product:hover {
@@ -221,7 +230,7 @@ export default function ProductRecommended({ categories, productSlug }) {
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .recommended {
             padding-top: 5rem;
           }

@@ -1,8 +1,15 @@
 import React from 'react'
 
-export default function ProductButton({ children, isDisabled, progress, btnType, cart }) {
+export default function ProductButton({ children, isDisabled, progress, btnType, cart, style }) {
   return (
-    <button type='submit' className='product-add' disabled={isDisabled} btntype={`${btnType}`} cart={`${cart}`}>
+    <button
+      type='submit'
+      className='product-add'
+      disabled={isDisabled}
+      btntype={`${btnType}`}
+      cart={`${cart}`}
+      style={style || {}}
+    >
       <span>{children}</span>
       <div className='icon product-add-arrow icon__animated'>
         <svg className='arrow' xmlns='http://www.w3.org/2000/svg'>

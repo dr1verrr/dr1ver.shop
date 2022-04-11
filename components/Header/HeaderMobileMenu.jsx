@@ -34,7 +34,7 @@ export default function HeaderMobileMenu() {
           margin: 0 0.5rem;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .header-mobile-menu-icon {
             position: relative;
             display: flex;

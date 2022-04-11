@@ -1,11 +1,14 @@
 import { PageTransition } from 'next-page-transitions'
 import React from 'react'
+import { Transition } from 'react-transition-group'
 
-export default function Layout({ children }) {
+export default function Layout({ children, router }) {
   return (
     <div className='layout'>
       <PageTransition timeout={300} classNames='page-transition'>
-        <main className='main'>{children}</main>
+        <Transition key={router.asPath} timeout={0}>
+          <main className='main'>{children}</main>
+        </Transition>
       </PageTransition>
       <style jsx>{`
         .main {
@@ -16,12 +19,12 @@ export default function Layout({ children }) {
           min-height: calc(100vh - 185px);
         }
 
-        @media (max-width: 1230px) {
+        @media (max-width: 33px) {
           .main {
             min-height: calc(100vh - 235px);
           }
         }
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .main {
             min-height: calc(100vh - 75px);
           }

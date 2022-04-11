@@ -47,7 +47,13 @@ const Header = memo(({ categories }) => {
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 670px) {
+          .header {
+            font-size: 1.4rem;
+          }
+        }
+
+        @media (max-width: 620px) {
           .container {
             display: flex;
             align-items: center;

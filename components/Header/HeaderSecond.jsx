@@ -39,13 +39,13 @@ export default function HeaderSecond() {
           }
         }
 
-        @media (max-width: 1230px) {
+        @media (max-width: 1120px) {
           .header-second {
             padding-bottom: 5rem;
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .header-second {
             position: static;
             padding: 0;

@@ -82,6 +82,7 @@ const CartItem = ({ product, lastModified }) => {
           z-index: 7;
           border-bottom: 1px solid #e0e3e6;
           display: flex;
+          scroll-margin: 7.5rem;
         }
 
         @keyframes modified {

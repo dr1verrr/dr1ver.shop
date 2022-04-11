@@ -31,8 +31,8 @@ function MyApp({ Component, pageProps, router }) {
           <Cart />
           <AuthModal />
           <Header />
-          <Layout>
-            <Component {...pageProps} key={router.asPath} />
+          <Layout router={router}>
+            <Component {...pageProps} />
           </Layout>
         </AuthProvider>
       </Provider>

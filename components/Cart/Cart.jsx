@@ -136,7 +136,7 @@ function Cart({ isCartVisible }) {
             width: 100%;
           }
         }
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .cart-vision-switcher {
             max-height: 75px;
             border-bottom: 1px solid #e0e3e6;

@@ -21,7 +21,7 @@ export default function HeaderFirst() {
       <Link href='/' passHref>
         <div className='header-logo' animate={`${animation}`}>
           <div className='header-logo-first logo'>
-            <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '112px', maxHeight: '72px' }}>
+            <svg xmlns='http://www.w3.org/2000/svg'>
               <defs>
                 <mask id='mask' x='0' y='0' width='100%' height='100%'>
                   <rect id='overlay' x='0' y='0' width='100%' height='100%' />
@@ -45,7 +45,7 @@ export default function HeaderFirst() {
             </svg>
           </div>
           <div className='header-logo-second logo'>
-            <svg xmlns='http://www.w3.org/2000/svg' style={{ maxWidth: '72px', maxHeight: '72px' }}>
+            <svg xmlns='http://www.w3.org/2000/svg'>
               <g>
                 <text
                   x='3'
@@ -91,24 +91,6 @@ export default function HeaderFirst() {
 
           100% {
             opacity: 1;
-          }
-        }
-
-        @keyframes init {
-          0% {
-            transform: translateY(calc(50vh - 108px)) scale(0);
-          }
-
-          20% {
-            transform: translateY(calc(50vh - 108px)) scale(3);
-          }
-
-          45% {
-            transform: translateY(calc(50vh - 108px)) scale(3);
-          }
-
-          100% {
-            transform: translateY(0) scale(1);
           }
         }
 
@@ -182,11 +164,11 @@ export default function HeaderFirst() {
         }
 
         .header-logo-first {
-          min-width: 112px;
+          width: 112px;
         }
 
         .header-logo-second {
-          min-width: 72px;
+          width: 72px;
         }
 
         .logo {
@@ -243,7 +225,8 @@ export default function HeaderFirst() {
           background: #fff;
           transform-origin: bottom left;
           transform: scaleX(1);
-          animation: strip 4s ease;
+          animation: strip 3.2s;
+          z-index: 900;
         }
 
         .rightStrip {
@@ -264,6 +247,18 @@ export default function HeaderFirst() {
           font-family: 'JetBrains Mono';
         }
 
+        .header-logo svg {
+          max-height: 72px;
+        }
+
+        .header-logo-first svg {
+          max-width: 112px;
+        }
+
+        .header-logo-second svg {
+          max-width: 70px;
+        }
+
         .header-logo[animate='false'] {
           z-index: 300;
         }
@@ -272,52 +267,70 @@ export default function HeaderFirst() {
           letter-spacing: 2px;
         }
 
+        @keyframes init {
+          0% {
+            transform: translateY(calc(50vh - 74px)) scale(0);
+          }
+
+          20% {
+            transform: translateY(calc(50vh - 74px)) scale(3);
+          }
+
+          45% {
+            transform: translateY(calc(50vh - 74px)) scale(3);
+          }
+
+          90% {
+            transform: translateY(0) scale(1);
+          }
+        }
+
         @keyframes init-mobile {
           0% {
-            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(0);
+            transform: translate(calc(50vw - 72.5px), calc(50vh - 36px)) scale(0);
           }
 
           25% {
-            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(2.2);
+            transform: translate(calc(50vw - 72.5px), calc(50vh - 36px)) scale(2);
           }
 
           50% {
-            transform: translate(calc(50vw - 10px), calc(50vh + 55px)) scale(2.2);
+            transform: translate(calc(50vw - 72.5px), calc(50vh - 36px)) scale(2);
           }
 
-          100% {
-            transform: translate(0) scale(1);
+          90% {
+            transform: translate(0) scale(0.6);
           }
         }
 
         @keyframes init-mobile-1 {
           0% {
-            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(0);
+            transform: translate(calc(50vw - 76.15px), calc(50vh - 50.4px)) scale(0);
           }
 
           25% {
-            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(2);
+            transform: translate(calc(50vw - 76.15px), calc(50vh - 50.4px)) scale(1.4);
           }
 
           50% {
-            transform: translate(calc(50vw - 40px), calc(50vh + 72px)) scale(2);
+            transform: translate(calc(50vw - 76.15px), calc(50vh - 50.4px)) scale(1.4);
           }
 
-          100% {
-            transform: translate(0) scale(1);
+          90% {
+            transform: translate(0) scale(0.6);
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .header-logo {
+            transform: scale(0.6);
             animation: init-mobile 2.5s;
+            margin-left: -20px;
           }
 
           .header-first {
-            transform: scale(0.7);
-            margin-left: -25px;
             padding: 0;
-            padding-left: 10px;
+            width: calc(113.4px + 20px);
           }
         }
 
@@ -325,15 +338,6 @@ export default function HeaderFirst() {
           .header-logo {
             animation: init-mobile-1 2.5s;
           }
-        }
-
-        @media (max-width: 420px) {
-          .header-logo {
-            font-size: 1.6rem;
-          }
-        }
-
-        .logo {
         }
       `}</style>
     </div>

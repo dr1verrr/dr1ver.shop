@@ -73,7 +73,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           transition: opacity 0.25s;
           cursor: pointer;
           font-weight: 500;
-          padding: 0.2rem 1rem;
+          padding: 0 1rem;
           border-radius: 30px;
           background: #ccc;
           color: #000;
@@ -102,7 +102,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           margin-left: 12px;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 960px) {
           .product-info {
             display: flex;
             flex-direction: column;
@@ -122,7 +122,6 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
 
         @media (max-width: 920px) {
           .product-description {
-            font-size: calc(1.4rem + 0.35vw);
             line-height: 1.75em;
           }
         }
@@ -133,7 +132,7 @@ const ProductInfo = memo(({ info: { Custom_field, description, categories, id, t
           }
 
           .product-description {
-            font-size: calc(1.5rem + 0.3vw);
+            font-size: calc(1.4rem + 0.3vw);
           }
         }
       `}</style>

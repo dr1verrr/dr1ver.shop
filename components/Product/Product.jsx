@@ -184,6 +184,8 @@ export default function Product({ product, loading, pdctName }) {
           background: #e2e7ec;
           border: 1px solid transparent;
           color: #797b8c;
+          width: 36px;
+          height: 36px;
         }
 
         .product[type='productModal'] .product-option {
@@ -277,10 +279,6 @@ export default function Product({ product, loading, pdctName }) {
           padding: 0 0.5rem 0;
           position: relative;
           min-height: calc(100vh - 185px);
-        }
-
-        .product-title {
-          margin-bottom: 3rem;
         }
 
         .product-image-link {
@@ -415,7 +413,13 @@ export default function Product({ product, loading, pdctName }) {
           flex-direction: column;
         }
 
-        @media (max-width: 1230px) {
+        @media (min-height: 961px) {
+          .product-title {
+            margin-bottom: 3.5rem;
+          }
+        }
+
+        @media (max-width: 1120px) {
           .product {
             min-height: calc(100vh - 235px);
           }
@@ -426,9 +430,20 @@ export default function Product({ product, loading, pdctName }) {
             padding: 0;
           }
         }
-        @media (max-width: 720px) {
+        @media (max-width: 960px) {
           .product-inner {
             flex-direction: column;
+            align-items: center;
+          }
+
+          .product-image {
+            max-height: 350px;
+            max-width: 350px;
+          }
+
+          .product-image::before {
+            width: 50%;
+            height: 50%;
           }
 
           .product {

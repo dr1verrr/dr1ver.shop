@@ -115,10 +115,12 @@ function Products({ slug, ctgName }) {
                         </div>
                         <a className='product-link'></a>
                         <div className='product-button-wrapper'>
-                          <ProductButton>Read more</ProductButton>
+                          <ProductButton style={{ letterSpacing: '1px', width: '220px', height: '50px' }}>
+                            Read more
+                          </ProductButton>
                         </div>
                       </div>
-                      <button className='product-button'>{product.title}</button>
+                      <button className='product-name'>{product.title}</button>
                     </div>
                   </Link>
                 )
@@ -135,27 +137,26 @@ function Products({ slug, ctgName }) {
 
       <style jsx>{`
         .product-wrapper {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          display: flex;
+          flex-wrap: wrap;
           padding-bottom: 10rem;
-          grid-gap: 3rem;
-          height: 100%;
+          margin: -35px -17.5px;
         }
 
-        .product-button {
+        .product-name {
           position: relative;
           display: block;
           margin-top: 2rem;
           text-align: center;
           border: 2px solid #f1f3f5;
-          padding: 1.5rem;
+          height: 58px;
           border-radius: 30px;
           transition: background 0.4s ease, color 0.4s ease;
           letter-spacing: 2px;
-          font-size: 2rem;
+          font-size: 1.8rem;
           cursor: pointer;
           overflow: hidden;
-          background: transparent;
+          background: #fff;
           word-break: break-all;
         }
 
@@ -188,13 +189,11 @@ function Products({ slug, ctgName }) {
           transition: opacity 0.4s ease;
           opacity: 0;
           visibility: hidden;
-          transform: scale(0.5);
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
           white-space: nowrap;
-          font-size: 1.5rem;
         }
 
         .product-inner {
@@ -213,7 +212,6 @@ function Products({ slug, ctgName }) {
           margin: 0 auto;
           max-width: 1360px;
           pointer-events: all;
-          padding: 0 15px;
         }
         .product-price {
           pointer-events: none;
@@ -225,7 +223,7 @@ function Products({ slug, ctgName }) {
           flex-wrap: wrap-reverse;
           align-items: center;
           justify-content: center;
-          padding: 0.75rem 2.5rem 0.75rem;
+          padding: 0.4rem 2.5rem 0.4rem;
           grid-gap: 0.4rem;
           max-width: 85%;
           color: #fff;
@@ -250,8 +248,8 @@ function Products({ slug, ctgName }) {
           filter: drop-shadow(0 0 20px rgba(0, 60, 120, 0.06));
           padding: 2.5rem;
           text-align: left;
+          width: 430px;
           height: 450px;
-          width: 100%;
         }
         .product-image {
           position: absolute;
@@ -274,112 +272,97 @@ function Products({ slug, ctgName }) {
           width: 100%;
           height: 100%;
         }
+
+        .product-inner {
+          margin: 35px 17.5px;
+        }
+
         .product-inner:hover .product-link {
           visibility: visible;
           background: #000;
           opacity: 0.5;
         }
-        .product-inner:hover .product-button {
+        .product-inner:hover .product-name {
           background: #000;
           color: #fff;
         }
 
         @media (max-width: 1600px) {
-          .product-inner * {
-            font-size: inherit;
-          }
-
           .container {
-            max-width: 85vw;
+            width: 85vw;
           }
 
-          .product-inner {
+          .product {
+            width: calc(28.33333vw - 23.33333px);
+            height: calc(29.65116vw - 24.4186px);
+          }
+
+          .product-price {
             font-size: calc(1.5814vw - 1.30233px);
           }
         }
 
         @media (max-width: 1280px) {
-          .product-inner * {
-            font-size: inherit;
+          .container {
+            width: 895px;
           }
 
-          .product-inner {
+          .product-price {
             font-size: 2.4rem;
           }
-        }
 
-        @media (max-width: 1280px) {
-          .product-wrapper {
-            grid-template-columns: repeat(2, 1fr);
+          .product {
+            width: 430px;
+            height: 450px;
           }
         }
 
         @media (max-width: 1024px) {
           .container {
-            padding: 0 30px;
-          }
-
-          .product-inner * {
-            font-size: inherit;
+            width: 87.5vw;
           }
 
           .product {
+            width: calc(43.75vw - 17.5px);
             height: calc(45.78488vw - 18.31395px);
           }
 
-          .product-inner {
+          .product-price {
             font-size: calc(2.44186vw - 0.97674px);
           }
         }
 
-        @media (max-width: 770px) {
-          .product-wrapper {
-            grid-template-columns: 1fr;
-          }
-
-          .product-inner * {
-            font-size: inherit;
-          }
-
-          .product-inner {
+        @media (max-width: 768px) {
+          .product-price {
             font-size: 2.4rem;
+          }
+
+          .container {
+            width: 430px;
           }
 
           .product {
             height: 450px;
+            width: 430px;
           }
 
-          .product-wrapper {
-            max-width: 450px;
-            margin: 0 auto;
-          }
           .product-image {
             max-width: 100%;
           }
         }
 
         @media (max-width: 480px) {
-          .product-inner {
+          .container {
+            width: 90vw;
+          }
+
+          .product-price {
             font-size: 5.1vw;
           }
 
-          .product-inner * {
-            font-size: inherit;
-          }
-
-          .product-button-wrapper {
-            transform: translate(-50%, -50%) scale(0.85);
-          }
-
           .product {
+            width: 90vw;
             height: 94.18605vw;
-          }
-        }
-
-        @media (max-width: 920px) {
-          .product-inner:hover .product-button-wrapper {
-            visibility: hidden;
-            opacity: 0;
           }
         }
       `}</style>

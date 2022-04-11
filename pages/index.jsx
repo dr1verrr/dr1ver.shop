@@ -108,12 +108,12 @@ export default function Home() {
             object-fit: fill;
           }
         }
-        @media (max-width: 1230px) {
+        @media (max-width: 1120px) {
           .home-page-inner {
             height: calc(100vh - 235px);
           }
         }
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .home-page-inner {
             height: calc(100vh - 75px);
           }

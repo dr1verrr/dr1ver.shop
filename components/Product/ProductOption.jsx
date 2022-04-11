@@ -47,6 +47,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
       </div>
       <style jsx>{`
         input {
+          all: unset;
           display: block;
           color: #797b8c;
           position: relative;
@@ -56,11 +57,12 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           border: 2px solid #797b8c;
           background: transparent;
           border-radius: 50%;
-          width: 38px;
-          height: 38px;
+          width: 34px;
+          height: 34px;
           margin-bottom: 1rem;
           margin-right: 0.5rem;
           font-size: 1.6rem;
+          text-align: center;
         }
 
         .label {
@@ -76,7 +78,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
 
         .cart .product-option {
           background: #e2e7ec;
-          border: none;
+          border: 2px solid transparent;
         }
 
         .cart .product-label {
@@ -121,7 +123,7 @@ function ProductOption({ fld, cart, actionType, option, setOption }) {
           gap: 0;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 960px) {
           .input-wrapper {
             justify-content: center;
           }

@@ -126,13 +126,10 @@ function ProductCounter({ count, actionType }) {
           background: rgba(255, 255, 255, 0.1);
         }
 
-        @media (max-width: 920px) {
+        @media (max-width: 960px) {
           button:hover {
             background: transparent;
           }
-        }
-
-        @media (max-width: 720px) {
           .product-count {
             margin-right: 0;
           }

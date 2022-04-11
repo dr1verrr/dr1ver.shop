@@ -53,13 +53,13 @@ export default function HeaderMenuWrapper({ children }) {
           height: 15px;
         }
 
-        @media (max-width: 1230px) {
+        @media (max-width: 1120px) {
           .header-menu-wrapper {
             width: 100%;
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .header-menu-wrapper {
             display: ${isMenuActive ? 'block' : 'none'};
             position: fixed;

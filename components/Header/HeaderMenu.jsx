@@ -64,13 +64,13 @@ export default function HeaderMenu() {
           }
         }
 
-        @media (max-width: 1230px) {
+        @media (max-width: 1120px) {
           .header-menu {
             width: 100%;
           }
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 620px) {
           .header-menu {
             flex-direction: column;
             overflow-y: auto;

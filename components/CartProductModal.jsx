@@ -64,7 +64,7 @@ const CartProductModal = memo(({ productModal }) => {
 
                 <div className='product-info'>
                   <div className='product-title link-hover'>
-                    <Link href={`/product/${product.slug}`}>
+                    <Link href={`/product/${product.slug}?name=${product.title}`}>
                       <a href='' onClick={hideModals}>
                         {product.title}
                       </a>
