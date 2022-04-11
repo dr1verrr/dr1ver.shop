@@ -34,7 +34,9 @@ const AuthProvider = ({ children }) => {
 
         if (user) {
           setUser(user)
-          if (authType === 'login') dispatch({ type: CART_UPDATE, payload: { cartData: user.cartdata || [] } })
+          if (authType === 'login') {
+            dispatch({ type: CART_UPDATE, payload: { cartData: Array.isArray(user.cartdata) ? user.cartdata : [] } })
+          }
           return user
         }
       }
