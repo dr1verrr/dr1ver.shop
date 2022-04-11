@@ -75,10 +75,6 @@ const ProfileCart = () => {
     }
   }, [cartData])
 
-  useEffect(() => {
-    if (filtered.length) window.scrollTo(0, 0)
-  }, [filtered])
-
   return (
     <div className='user-cart'>
       <div className='user-cart-title'>My purchases</div>
