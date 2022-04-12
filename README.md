@@ -1,7 +1,8 @@
 This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 # Next.js ecommerce pet-project
- ![screely-1649754286967](https://user-images.githubusercontent.com/67706933/162924730-13e991f6-2111-4a4f-851a-82ffcd1822fc.png)![screely-1649754547400](https://user-images.githubusercontent.com/67706933/162924811-0eee4fd6-fc98-4f80-ab06-ce6fa7877d20.png)
+ ![screely-1649754286967](https://user-images.githubusercontent.com/67706933/162924730-13e991f6-2111-4a4f-851a-82ffcd1822fc.png)![screely-1649754547400](https://user-images.githubusercontent.com/67706933/162924811-0eee4fd6-fc98-4f80-ab06-ce6fa7877d20.png)![screely-1649754814439](https://user-images.githubusercontent.com/67706933/162925333-bd125618-bf78-43c7-b5b7-42e485090206.png)
+
 
 
 
