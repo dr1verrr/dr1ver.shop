@@ -3,19 +3,15 @@ This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-
 # Next.js ecommerce pet-project
  ![screely-1649754286967](https://user-images.githubusercontent.com/67706933/162924730-13e991f6-2111-4a4f-851a-82ffcd1822fc.png)![screely-1649755054774](https://user-images.githubusercontent.com/67706933/162926213-030253fe-9143-4b86-95b4-7a7a959334bd.png)![screely-1649755198220](https://user-images.githubusercontent.com/67706933/162926722-aa16c3fb-d113-463d-8052-18b66e51eb84.png)
 
-
-
-
-
-
-
 This is an ecommerce project that uses Next.js, React.js, Redux.js
 
 * Authentication via Email (uses JWT)
 * User data management - Update/Remove/Add products to cart
 * Session support with secure HTTP Only cookies
 
-You can see a live demo at **https://dr1ver-shop.vercel.app/**
+## :eye_speech_bubble: Live demo
+
+Check live demo [**here**](https://dr1ver-shop.vercel.app/)
 
 ### !!! At the first time can take a long time to connect to database. Then will be without delay
 
