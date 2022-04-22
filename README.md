@@ -1,6 +1,7 @@
 This is a [Next.js](https://nextjs.org/) pet-project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ### Next.js ecommerce pet-project
+![160891572-c78b6959-7eee-4b10-86f0-3f38606954b8](https://user-images.githubusercontent.com/67706933/164778228-af3eff73-8d54-4133-9a9c-20c5c4ca6b38.gif)
  ![screely-1649754286967](https://user-images.githubusercontent.com/67706933/162924730-13e991f6-2111-4a4f-851a-82ffcd1822fc.png)![screely-1649755054774](https://user-images.githubusercontent.com/67706933/162926213-030253fe-9143-4b86-95b4-7a7a959334bd.png)![screely-1649755198220](https://user-images.githubusercontent.com/67706933/162926722-aa16c3fb-d113-463d-8052-18b66e51eb84.png)
 
 This is an ecommerce project that uses Next.js, React.js, Redux.js
