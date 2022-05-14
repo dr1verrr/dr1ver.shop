@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import dynamic from 'next/dynamic'
 import { Fragment } from 'react'
 import { Provider } from 'react-redux'
 import AuthModal from '../components/AuthModal'
@@ -6,11 +7,14 @@ import Cart from '../components/Cart/CartWrapper'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/Layout'
-import Mask from '../components/Mask'
-import Modal from '../components/Modal'
 import AuthProvider from '../contexts/auth'
 import store from '../redux/store'
 import '../styles/globals.css'
+
+const Mask = dynamic(() => import('../components/Mask'))
+const Modal = dynamic(() => import('../components/Modal'))
+const Cart = dynamic(() => import('../components/Cart'))
+const AuthModal = dynamic(() => import('../components/AuthModal'))
 
 //Fix window.scrollTo (in firefox it's not working)
 
